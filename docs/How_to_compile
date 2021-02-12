@@ -1,0 +1,16 @@
+Please follow below steps to build the library for IMX8MQ
+
+1. Setup the SDK on your host PC and set the environment in current terminal.
+
+2. Run below commands from API/ directory
+  $ mkdir out 
+  $ cd out
+  $ cmake ..
+  $ make
+ 
+3. Combined shared library will be created at path -->  "out/modules/hardware/${product_name}/${product_name}.so".
+4. All header files will be add at path --> "out/modules/hardware/header/"
+5. Individual module library is created at path --> "out/modules/hardware/${product_name}/src/${module_name}/${module_name}.so"
+
+6. To make clean, 
+  $ rm -rf out 
