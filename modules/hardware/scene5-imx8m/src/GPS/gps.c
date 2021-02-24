@@ -32,8 +32,8 @@
 
 
 /*
-   open_port()
-   Open GPS serial link
+	open_port()
+	Open GPS serial link
 
 */
 
@@ -60,8 +60,8 @@ int state_gps(int filedescriptor){
 
 /*
 
-char* read_data_gprmc(int filedescriptor)
-output full GPRMC of 1 trame
+	char* read_data_gprmc(int filedescriptor)
+	output full GPRMC of 1 trame
 
 */
 
@@ -70,8 +70,8 @@ char* read_data_gprmc(int filedescriptor){
 
 /*
 
-char* read_data_gprmc_parse(int filedescriptor, int gprmc_index)
-extract part of GPRMC of 1 trame
+	char* read_data_gprmc_parse(int filedescriptor, int gprmc_index)
+	extract part of GPRMC of 1 trame
 
 */
 

@@ -1,5 +1,6 @@
 Repo for module wise API development and distribution.
 
+/////
 Modules included:
 
  BLUETOOTH
@@ -9,3 +10,11 @@ Modules included:
  RS485
  WATCHDOG
  GPS
+
+/////
+Dependent libraries
+
+ BLUEZ
+ LIBNM
+ Wireless tools
+ GLIB

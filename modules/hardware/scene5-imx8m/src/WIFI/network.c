@@ -12,7 +12,6 @@
 
 #include <common.h>
 #include <network.h>
-#include <iwlib.h>
 #include <vector.h>
 #include <sys/wait.h>
 
@@ -408,10 +407,10 @@ bool wifi_clean_ssid_preferred_list()
 {
     vector v;
 	vector_init(&v);
-	WiFi_getPreferredList(&v);
+	wifi_get_ssid_preferred_list(&v);
     int i;
 	for(i=0;i<vector_count(&v);i++){
-		if(WiFi_removeFromPreferredList(vector_get(&v,i)))
+		if(wifi_remove_from_ssid_preferred_list(vector_get(&v,i)))
         {
             return false;
         }
@@ -493,18 +492,37 @@ int WiFi_useDHCP(){
     return 0;
 }
 /*
-    Select mode Client/Access Point
-    wifi_mode()
-
+ *   Select mode Client/Access Point
+     wifi_mode(bool mode)
 */
 bool wifi_mode(bool mode){
-    if(mode){
+    char cmd[255];
+    char ret[1024]="";
+    char ret2[1024]="";
+    sprintf(cmd, "nmcli dev | grep wifi | awk '{print $1}'");
+    if(!runCommand(cmd,ret,1024)) {
+        printf("fail to change the mode to Access point\n");
+        return false;
+    }  
+    if(mode){         
+        char cmd2[25];
+        sprintf(cmd, "nmcli dev wifi hotspot ifname %s ssid Trunexa password '123459090'",ret);
+        if(!runCommand(cmd,ret2,1024)) {
+            printf("fail to change the mode to Access point\n");
+            return false;
+        }           
         return true;
     }
     else{
-        return false;
+        char cmd[255];
+        char ret3[1024]="";
+        sprintf(cmd, "nmcli device disconnect %s",ret);
+        if(!runCommand(cmd,ret3,1024)) {
+            printf("fail to change the mode to client\n");
+            return false;
+        }   
+        return true;        
     }
-
 }
 
 bool wifi_set_ssid_lock(char *ssid,bool enable ){

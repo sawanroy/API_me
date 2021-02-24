@@ -1,21 +1,29 @@
 
 PROJECT(SCENCE5_IMX8)
 
-include_directories(
-    hdr/SIM/
-    hdr/RS485/
-    hdr/RS232/
-    hdr/GPS/
-    hdr/SIM/
-    hdr/WATCHDOG/
-    hdr/GPIO/
-    hdr/BLUETOOTH/
-    ${CMAKE_SOURCE_DIR}/modules/handler/libgpio/hdr/
-    ${CMAKE_SOURCE_DIR}/modules/handler/serial/hdr/
-    ${CMAKE_SOURCE_DIR}/modules/handler/usb/hdr/
-    )
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GLIB REQUIRED glib-2.0)
+link_directories(${GLIB_LIBRARY_DIRS})
 
-add_library(${PROJECT_NAME} SHARED
+PKG_SEARCH_MODULE(LIBNM REQUIRED libnm)
+PKG_CHECK_MODULES(LIBNM libnm>=1.0)
+
+
+PKG_SEARCH_MODULE(NM-CORE_INCLUDE_DIRS  libnm-core)
+PKG_CHECK_MODULES(NM-CORE_INCLUDE_DIRS libnm-core)
+LINK_DIRECTORIES(${LIBNM_LIBRARY_DIRS})
+ADD_DEFINITIONS(${LIBNM_CFLAGS})
+
+# configure libnm variable for config.h file
+IF( LIBNM_FOUND )
+    SET(USE_LIBNM 1)
+ELSE()
+    SET(USE_LIBNM 0)
+ENDIF()
+
+
+
+add_library( ${PROJECT_NAME} SHARED
     src/RS485/rs485.c
     src/RS232/rs232.c
     src/GPS/gps.c
@@ -23,34 +31,32 @@ add_library(${PROJECT_NAME} SHARED
     src/WATCHDOG/watchdog.c
     src/GPIO/gpio.c
     src/BLUETOOTH/bluetooth.c
+    src/WIFI/network.c
+    src/WIFI/common.c
+    src/WIFI/main.c
    
 
 	
     ) 
-    file(COPY  ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/SIM/sim.h
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/header/)
+target_include_directories(${PROJECT_NAME} PUBLIC
 
-    file(COPY  ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/RS485/rs485.h
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/header/)
-
-    file(COPY  ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/RS232/rs232.h
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/header/)
-
-    file(COPY  ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/GPS/gps.h
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/header/)
-
-    file(COPY  ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/WATCHDOG/watchdog.h
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/header/)
-
-    file(COPY  ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/GPIO/gpio.h
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/header/)
-
-    file(COPY  ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/BLUETOOTH/bluetooth.h
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/header/)
-    file(COPY  ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/WIFI/network.h
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/header/)
-    file(COPY  ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/WIFI/common.h
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/header/)
+$<BUILD_INTERFACE: ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/WIFI/ >
+$<INSTALL_INTERFACE:/modules/hardware/scene5-imx8m/hdr/WIFI/>  # <prefix>/include/mylib
+$<BUILD_INTERFACE: ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/WATCHDOG/ >
+$<INSTALL_INTERFACE:/modules/hardware/scene5-imx8m/hdr/WATCHDOG/ >  # <prefix>/include/mylib
+$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/SIM/>
+$<INSTALL_INTERFACE:/modules/hardware/scene5-imx8m/hdr/SIM/ >  # <prefix>/include/mylib
+$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/RS485/>
+$<INSTALL_INTERFACE:/modules/hardware/scene5-imx8m/hdr/RS485/ >  # <prefix>/include/mylib
+$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/RS232/>
+$<INSTALL_INTERFACE:/modules/hardware/scene5-imx8m/hdr/RS232/ >  # <prefix>/include/mylib
+$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/GPS/>
+$<INSTALL_INTERFACE:/modules/hardware/scene5-imx8m/hdr/GPS/ >  # <prefix>/include/mylib
+$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/GPIO/>
+$<INSTALL_INTERFACE:/modules/hardware/scene5-imx8m/hdr/GPIO >  # <prefix>/include/mylib
+$<BUILD_INTERFACE: ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/BLUETOOTH>
+$<INSTALL_INTERFACE:/modules/hardware/scene5-imx8m/hdr/BLUETOOTH>  # <prefix>/include/mylib
+)
 
 
     TARGET_LINK_LIBRARIES(
@@ -58,4 +64,7 @@ add_library(${PROJECT_NAME} SHARED
         LIBGPIO
         USB
         SERIAL
+        ${GLIB_LIBRARIES}
+    ${LIBNM_LIBRARIES}
+    ${LIBNM_GLIB_LIBRARIES}
     )

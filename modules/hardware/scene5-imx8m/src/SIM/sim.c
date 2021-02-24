@@ -309,3 +309,32 @@ char* get_imei(){
 	}
 }
 
+/*
+
+	send_sms(char* phone_no, char* message)
+	This function send the sms.
+
+ */
+
+bool send_sms(char* phone_no, char* message) {
+	unsigned char cmd[]="AT+CMGF=1\r\n";
+	unsigned char cmd2[50];
+	sprintf(cmd2,"AT+CMGS=%s\r\n %s \x1a or \032 ",phone_no,message);
+
+	int len = sizeof(cmd);
+	tcflush(fd, TCIOFLUSH);
+	char *imei = malloc(20);
+	if(USB_write(fd, cmd, len)){
+		tcflush(fd, TCIOFLUSH);
+
+		if((size=USB_read(fd,imei,bsize))<0){
+			return -1;
+		}
+		else{		
+			return imei;
+		}
+	}
+	else{
+		return -1;
+	}
+}

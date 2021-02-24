@@ -38,24 +38,24 @@ int system(const char *command);
 *	Internal function used  
 */
 
-int vector_count(vector1 *v) {
+int vector_count_bt(vector1 *v) {
 	return v->count;
 }
 
-void *vector_get(vector1 *v, int index) {
+void *vector_get_bt(vector1 *v, int index) {
 	if (index >= v->count) {
 		return NULL;
 	}
 	return v->data[index];
 }
 
-void vector_init(vector1 *v) {
+void vector_init_bt(vector1 *v) {
 	v->data = NULL;
 	v->size = 0;
 	v->count = 0;
 }
 
-void vector_add(vector1*v, void *e) {
+void vector_add_bt(vector1*v, void *e) {
 	if (v->size == 0) {
 		v->size = 10;
 		v->data = (char**)malloc(sizeof(char**) * v->size);
@@ -71,11 +71,11 @@ void vector_add(vector1*v, void *e) {
 	v->count++;
 }
 
-void vector_free(vector1 *v) {
+void vector_free_bt(vector1 *v) {
 	free(v->data);
 }
 
-int match(char *a, char *b) {
+int match_bt(char *a, char *b) {
 	int position = 0;
 	char *x, *y;
 	x = a;
@@ -170,6 +170,29 @@ bool BT_visibilityOff(){
 	}
 	/* close */
 	pclose(fp);		       		
+	return true;
+}
+
+bool runCommand_bt( const char* cmd, char* output,int size){
+	memset(output,'\0', size);
+	FILE* fp = popen(cmd,"r");
+    if(!fp)
+    {
+		printf("opening pipe failed\n");
+        return false;
+    }
+    while( NULL != fread(output, size , sizeof(char), fp))
+    {
+    }
+	if(!feof(fp)){
+		printf("error happend while reading output\n");
+		return false;
+	}
+	int status= pclose(fp);
+	if(status<0){
+		printf("command exist status%d\n",status);
+		return false;
+	}
 	return true;
 }
 
@@ -301,7 +324,7 @@ bool bluetooth_pair_to_device(unsigned char *deviceName, int size ) {
 				/* Read the output a line at a time - output it. */
 				while (fgets(path, sizeof(path)-1, fp) != NULL) {    
 				}
-				if((n=match(path, (char*) deviceName)==0)){
+				if((n=match_bt(path, (char*) deviceName)==0)){
 				}
 				else {
 					pclose(fp);
@@ -318,7 +341,7 @@ bool bluetooth_pair_to_device(unsigned char *deviceName, int size ) {
 				/* Read the output a line at a time - output it. */
 				while (fgets(path, sizeof(path)-1, fp) != NULL) {    
 				}
-				if((n=match(path, (char*) str1)==0)){
+				if((n=match_bt(path, (char*) str1)==0)){
 					pclose(fp);
 					return false;
 				}
@@ -358,7 +381,7 @@ bool bluetooth_unpair_to_device(unsigned char *deviceName, int size ) {
 	while (fgets(path, sizeof(path)-1, fp) != NULL) {    
 	}
 	printf("yus :%s", path);
-	if((n=match(path, (char*) deviceName)==0)){
+	if((n=match_bt(path, (char*) deviceName)==0)){
 		flag=1;
 	}
 	else {
@@ -377,7 +400,7 @@ bool bluetooth_unpair_to_device(unsigned char *deviceName, int size ) {
 		/* Read the output a line at a time - output it. */
 		while (fgets(path, sizeof(path)-1, fp) != NULL) {    
 		}
-		if((n=match(path, (char*) str1)==0)){		
+		if((n=match_bt(path, (char*) str1)==0)){		
 		}
 		else {
 			pclose(fp);
@@ -425,7 +448,7 @@ int bluetooth_scan( vector1* v ) {
 			Bt_scanResult *res = (Bt_scanResult*)malloc(sizeof(Bt_scanResult));
         	res->dev_numb = i;
         	res->dev_name = strdup(name);
-        	vector_add(v, res);					
+        	vector_add_bt(v, res);					
 		}
     }
     free( ii );
@@ -491,22 +514,22 @@ struct bluetoothconfig bluetooth_get_config(){
 	char ret[1024]="";
 	char cmd[255];
     conf.radioOn = sprintf(cmd, "rfkill list bluetooth | grep Soft | awk '{print $3}'");
-    if(!runCommand(cmd,ret,2048)){
+    if(!runCommand_bt(cmd,ret,2048)){
         //return NULL;
     }
 	//read bluetooth is enable or not 
 	conf.enabled= sprintf(cmd, "echo 'show' | bluetoothctl | grep Powered | awk '{print $2}'");
-    if(!runCommand(cmd,ret,2048)){
+    if(!runCommand_bt(cmd,ret,2048)){
     	//return NULL;
     }
 	//discoverable state
 	conf.discoverable=sprintf(cmd,"echo 'show' | bluetoothctl | grep Discoverable | awk '{print $2}'");
-	 if(!runCommand(cmd,ret,2048)){
+	 if(!runCommand_bt(cmd,ret,2048)){
     	//return NULL;
     }
 	//bluetooth device name
 	conf.name=sprintf(cmd,"echo 'show' | bluetoothctl | grep Name | awk '{print $2}'");
-	 if(!runCommand(cmd,ret,2048)){
+	 if(!runCommand_bt(cmd,ret,2048)){
         //return NULL;
     }
 	return conf;
@@ -523,7 +546,7 @@ bool bluetooth_connect_to_device(char *name){
 	char ret[1024]="";
 	char cmd[255];
 	sprintf(cmd, "echo 'connect %s ' | bluetoothctl",name);
-    if(!runCommand(cmd,ret,2048)){
+    if(!runCommand_bt(cmd,ret,2048)){
 		return false;
     }
 	return true;

@@ -10,14 +10,9 @@ PKG_CHECK_MODULES(LIBNM libnm>=1.0)
 PKG_SEARCH_MODULE(NM-CORE_INCLUDE_DIRS  libnm-core)
 PKG_CHECK_MODULES(NM-CORE_INCLUDE_DIRS libnm-core)
 
-include_directories(
-       
-    ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/WIFI/
-    ${NM-UTIL_INCLUDE_DIRS}
-    ${LIBNM_INCLUDE_DIRS}
-    ${LIBNM_INCLUDE_DIRS}
-    ${GLIB_INCLUDE_DIRS}
-)
+
+find_package(libiw30)
+
 LINK_DIRECTORIES(${LIBNM_LIBRARY_DIRS})
 ADD_DEFINITIONS(${LIBNM_CFLAGS})
 
@@ -32,12 +27,21 @@ add_library(${PROJECT_NAME} SHARED
     common.c
     network.c
     main.c
+    vector.c
 
+
+)
+
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+$<BUILD_INTERFACE: ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/WIFI/ >
+$<INSTALL_INTERFACE:/modules/hardware/scene5-imx8m/hdr/WIFI/>  # <prefix>/include/mylib
 )
     
 target_link_libraries(${PROJECT_NAME} 
     ${GLIB_LIBRARIES}
     ${LIBNM_LIBRARIES}
     ${LIBNM_GLIB_LIBRARIES}
+    #libiw::libiw
    
     )

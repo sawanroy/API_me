@@ -26,6 +26,7 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <linux/watchdog.h>
+#include <stdbool.h>
  
 /*
 
@@ -68,12 +69,37 @@ return -1;
 }
 
 }
+/*
+  get the time left of watchdog timer
+   get_timer()
 
+*/
 
 int get_timer(){
+	int fd;
+	fd = open("/dev/watchdog",O_RDWR);		
+	if(fd<0)					
+	{
+		return fd;
+	}
+
+	if(write(fd, "V", 1)<0)				
+	{
+		close(fd);
+		return -1;
+	}
+	int timeleft;
+	
+	if(ioctl(fd,WDIOC_GETTIMELEFT, &timeleft)){
+		printf("The timeout was is %d seconds\n", timeleft);
+	}
+	else{
+		printf("Error while getting time left");
+	}
+        
 
 	//gets the current watchdog time count 
-	return 0;
+	return timeleft;
 
 };
 
@@ -81,7 +107,7 @@ int get_timer(){
 /*
 
 	Watchdog_setTime(int interval)
-	reset the time to 0
+	
 
 */
 
@@ -119,14 +145,40 @@ return 0;
 	enables or disables the watchdog
 */
 
-int Watchdog_trigger()
-{
-int fd;
-	fd = open("/dev/watchdog",O_RDWR);			
-	if(fd<0)						
+bool wd_enable(bool state){
+	int fd;
+	fd = open("/dev/watchdog",O_RDWR);		
+	if(fd<0)					
 	{
+		return fd;
+	}
+
+	if(write(fd, "V", 1)<0)				
+	{
+		close(fd);
 		return -1;
 	}
-	close(fd);						
-return 0;								
+	int oneshot = 0;
+	if(state){
+		   int flags = WDIOS_ENABLECARD;
+			int ret = ioctl(fd, WDIOC_SETOPTIONS, &flags);
+			if (!ret)
+				printf("Watchdog card disabled.\n");
+			else {
+				printf("WDIOS_DISABLECARD error");
+				oneshot = 1;
+}
+		return true;
+	}
+	else{
+		int flags = WDIOS_DISABLECARD;
+		int	ret = ioctl(fd, WDIOC_SETOPTIONS, &flags);
+			if (!ret)
+				printf("Watchdog card enabled.\n");
+			else {
+				printf("WDIOS_ENABLECARD error ");
+				oneshot = 1;
+}
+		return true;
+	}
 }

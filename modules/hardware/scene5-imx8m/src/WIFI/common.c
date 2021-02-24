@@ -12,9 +12,9 @@
 
 #include <glib.h>
 #include <stdio.h>
-#include <NetworkManager.h>
 #include <common.h>
-#include <iwlib.h>
+
+
 char interfaceName[255] = "";
 
 NMClient* getClient(){
@@ -52,7 +52,7 @@ int get_info(int			skfd,
 	 char *			ifname,
 	 struct wireless_info *	info)
 {
-  struct iwreq		wrq;
+  struct iwreq	wrq;
 
   memset((char *) info, 0, sizeof(struct wireless_info));
 

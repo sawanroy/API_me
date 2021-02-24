@@ -45,7 +45,7 @@ int write_value_to_output_gpio(int pinnumber, bool state) {
 	}
 	if(!gpio_set_dir(pinnumber,1)) {
 		if(state==true) {	  	
-			if(!gpio_set_state(pinnumber,1)) {
+			if(!gpio_set_value(pinnumber,1)) {
 				return 0;
 			}
 			else {
@@ -53,7 +53,7 @@ int write_value_to_output_gpio(int pinnumber, bool state) {
 			}                     
 		}
 		else {
-			if(!gpio_set_state(pinnumber,0)) {
+			if(!gpio_set_value(pinnumber,0)) {
 				return 0;
 			}
 			else {	

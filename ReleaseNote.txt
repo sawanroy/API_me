@@ -1,2 +1,5 @@
 Version 1.0:
-  Initial draft version 
+  Initial draft version
+
+Version 1.0.1:
+  Doxygen added and target include directories used. 
