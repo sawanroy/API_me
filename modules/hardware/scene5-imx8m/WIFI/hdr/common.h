@@ -18,6 +18,7 @@
 #include <glib.h>
 #include <NetworkManager.h>
 #include <string.h>
+#include <iwlib.h>
 
 
 extern NMClient* getClient();

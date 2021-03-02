@@ -1,5 +1,6 @@
 PROJECT(WIFI)
 find_package(PkgConfig REQUIRED)
+include(CheckIncludeFiles)
 pkg_search_module(GLIB REQUIRED glib-2.0)
 
 PKG_SEARCH_MODULE(LIBNM REQUIRED libnm)
@@ -9,6 +10,20 @@ PKG_SEARCH_MODULE(NM-CORE_INCLUDE_DIRS libnm-core)
 PKG_CHECK_MODULES(NM-CORE_INCLUDE_DIRS libnm-core)
 
 add_definitions(${LIBNM_CFLAGS})
+
+
+    # set(CMAKE_REQUIRED_DEFINITIONS -D_GNU_SOURCE)
+    # check_include_files(iwlib.h IWLIB_H)
+    # if(NOT IWLIB_H)
+    #     message(FATAL_ERROR "Unable to find iwlib.h")
+    # endif(NOT IWLIB_H)
+    # find_library(IWLIB_LIB NAMES iw)
+    # if(NOT IWLIB_LIB)
+    #     message(FATAL_ERROR "Unable to find libiw.so")
+    # endif(NOT IWLIB_LIB)
+    # set(conky_libs ${conky_libs} ${IWLIB_LIB})
+    # check_function_exists(iw_sockets_open IWLIB_SOCKETS_OPEN_FUNC)
+
 
 # configure libnm variable for config.h file
 IF( LIBNM_FOUND )
@@ -39,6 +54,7 @@ target_include_directories(
     
 target_link_libraries(
     ${PROJECT_NAME} 
+    IWLIB
     ${GLIB_LIBRARIES}
     ${LIBNM_LIBRARIES}
     ${LIBNM_GLIB_LIBRARIES}

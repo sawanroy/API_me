@@ -10,7 +10,7 @@ OPTION(COMBINE 					"build the combined library" OFF)
 
 #SELECT MODULES
 OPTION(BLUETOOTH				"Compile library for bluetooth " ON)
-OPTION(WIFI					"Compile library for wifi " OFF)
+OPTION(WIFI					"Compile library for wifi " ON)
 OPTION(RS232					"Compile library for rs232 " ON)
 OPTION(RS485					"Compile library for rs485 " ON)
 OPTION(GPIO					"Compile library for gpio " ON)
@@ -58,7 +58,7 @@ ENDIF()
 ADD_SUBDIRECTORY(modules/handler/usb)
 ADD_SUBDIRECTORY(modules/handler/libgpio)
 ADD_SUBDIRECTORY(modules/handler/serial)
-
+ADD_SUBDIRECTORY(modules/handler/iwlib)
 IF(COMBINE)
 	file(GLOB SRC modules/hardware/${IMX_MODEL}/*/src/*.c)
 	add_library(${IMX_MODEL} SHARED ${SRC})

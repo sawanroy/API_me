@@ -10,10 +10,8 @@
 ***************************************************************************
 */
 
-#include <glib.h>
-#include <stdio.h>
-#include <common.h>
 
+#include <common.h>
 
 char interfaceName[255] = "";
 
@@ -45,7 +43,7 @@ int getIfname()
 		printf("cannot find wireless interface, forgot root?\n");
 		return -1;
 	}
-	return 1;
+	return 1; 
 }
 //-----------------------------------------------------------------------------------------------------
 int get_info(int			skfd,
@@ -190,7 +188,7 @@ NMAccessPoint *findApOnDevice (NMDevice *device, GByteArray *bssid, const char *
     char ret[1024];
     if(!runCommand("wpa_cli scan",ret,1024)){
         printf("scan failed\n");
-        return 10600;
+        return -1;
     }
 	aps = nm_device_wifi_get_access_points (NM_DEVICE_WIFI (device));
 	printf("Found %d APs\n", aps->len);

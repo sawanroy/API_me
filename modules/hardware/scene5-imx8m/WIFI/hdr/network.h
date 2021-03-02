@@ -18,6 +18,10 @@
 #ifndef HEX_NETWORK_H
 #define HEX_NETWORK_H
 #include <vector.h>
+#include <common.h>
+#include <vector.h>
+#include <sys/wait.h>
+//#include <sys/wait.h>
 /**
  * Structure for list of wifi  
 */
@@ -111,7 +115,7 @@ int WiFi_getSignalStrength(char* SSID, int* strength);
    scan the wifi networks and gives the list of network presrent.
  * @param[out] v typedef varaiable for list of ssid.
 */
-int wifi_scan(vector* v)
+int wifi_scan(vector* v);
 
 /*!
  * Reconnect to the currently connected network if it was disconnected.

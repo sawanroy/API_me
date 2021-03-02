@@ -10,10 +10,8 @@
 ***************************************************************************
 */
 
-#include <common.h>
 #include <network.h>
-#include <vector.h>
-#include <sys/wait.h>
+
 
 static void __attribute__ ((constructor)) \
 lib_init(void);
@@ -23,7 +21,7 @@ static void lib_init(void) {
   if(geteuid() != 0)
   {
     return;
-    /* Tell user to run app as root, then exit */ 
+    /* Tell user to run  app as root, then exit */ 
   } 
     char ret[1024];
     if(!runCommand("wpa_cli scan",ret,1024)){
@@ -35,9 +33,7 @@ static void lib_init(void) {
     return;
 }
 /*
-
     wifi_activation(bool state)
-
 */
 bool wifi_activation(bool state){
     NMClient* client = getClient();
