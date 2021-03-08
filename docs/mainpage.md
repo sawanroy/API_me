@@ -48,7 +48,7 @@ Revision History
 ------------------------------------------------ | ------------------------------------------------------- | ------------------------------------------------------------
 1.0                                              | 12 feb 2021                                             |  initail draft
 1.0.1                                            | 24 feb 2021                                             |  doxygen added and target include directories used
-
+1.0.1                                            | 08 march 2021                                           | Cmake structure updated and IWLIB added for WIFI
 
 
 
