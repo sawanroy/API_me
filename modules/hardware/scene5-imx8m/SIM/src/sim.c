@@ -34,7 +34,7 @@ unsigned char *buf;
 int size;
 
 int SIM_openPort(){
-    fd=USB_open(SIM_PORT, SIM_Baud_Rate);
+    fd=USB_open(SIM_PORT_AT, SIM_Baud_Rate);
 	if(fd<0){
 		return -1;
 	}
@@ -204,10 +204,10 @@ bool connect_to_internet(){
   	FILE *fp;
  	int n;
   	char path[1035];
-  	const char* str1 = "Device 'ttyUSB4' successfully activated"; 
+  	const char* str1 = "Device 'eth1' successfully activated"; 
   	char cmd[50];
   	/* Open the command for reading. */
-  	sprintf(cmd,"nmcli device connect ttyUSB%d",SIM_PORT);
+  	sprintf(cmd,"nmcli device connect eth1%d",SIM_PORT);
   	fp = popen(cmd,"r");
   	if (fp == NULL) {
     	exit(1);
@@ -232,26 +232,35 @@ get_signal_strength()
 
 This function gets the strengh of the signal (in dbm)
 
-*/
+/*
+
 
 unsigned int get_signal_strength(){
 	unsigned char cmd[]="AT+CSQ\r\n";
 	int len = sizeof(cmd);
 	char* sig_strenght;
+	SIM_openPort();
 	tcflush(fd, TCIOFLUSH);
+	
+
 	if(USB_write(fd, cmd, len)){
 		
 		if((size=USB_read(fd,sig_strenght,bsize))<0) {
+			SIM_closePort();
 			return false;
 		}
 		else{
 			int signal = atoi(sig_strenght);
+			SIM_closePort();
 			return signal;
 		}
 	}
 	else{
+		SIM_closePort();
 		return false;
-	}			
+
+	}	
+
 }
 
 /*
@@ -266,18 +275,25 @@ char* get_imsi(){
 	unsigned char cmd[]="AT+CIMI\r\n";
 	char *imsi = malloc(20);	
 	int len = sizeof(cmd);
+	SIM_openPort();
 	tcflush(fd, TCIOFLUSH);
+	
+	
 	if(USB_write(fd, cmd, len)){
 		
 		if((size=USB_read(fd,imsi,bsize))<0){
-			return -1;
+			SIM_closePort();
+			return "error while reading";
 		}
 		else{
+			printf("%s",imsi);
+			SIM_closePort();
 			return imsi;
 		}
 	}
 	else{
-		return -1;
+		SIM_closePort();
+		return "error while writing";
 	}
 }
 
@@ -292,20 +308,26 @@ This function gets the IMEI
 char* get_imei(){
 	unsigned char cmd[]="AT+CGSN\r\n";
 	int len = sizeof(cmd);
+	SIM_openPort();
 	tcflush(fd, TCIOFLUSH);
 	char *imei = malloc(20);
+	
+	
 	if(USB_write(fd, cmd, len)){
 		tcflush(fd, TCIOFLUSH);
 
 		if((size=USB_read(fd,imei,bsize))<0){
-			return -1;
+			SIM_closePort();
+			return "error while reading";
 		}
-		else{		
+		else{
+			SIM_closePort();		
 			return imei;
 		}
 	}
 	else{
-		return -1;
+		SIM_closePort();
+		return "error while writing";
 	}
 }
 

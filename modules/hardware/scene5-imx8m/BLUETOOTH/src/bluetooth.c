@@ -56,20 +56,23 @@ void vector_init_bt(vector1 *v) {
 }
 
 void vector_add_bt(vector1*v, void *e) {
-	if (v->size == 0) {
+		if (v->size == 0) {
 		v->size = 10;
-		v->data = (char**)malloc(sizeof(char**) * v->size);
-		memset(v->data, '\0', sizeof(char) * v->size);
+		v->data = malloc(sizeof(void*) * v->size);
+		memset(v->data, '\0', sizeof(void) * v->size);
 	}
+
 	// condition to increase v->data:
 	// last slot exhausted
 	if (v->size == v->count) {
 		v->size *= 2;
-		v->data = (char**)realloc(v->data, sizeof(char**) * v->size);
+		v->data = realloc(v->data, sizeof(void*) * v->size);
 	}
-	v->data[v->count] = (char*)e;
+
+	v->data[v->count] = e;
 	v->count++;
 }
+
 
 void vector_free_bt(vector1 *v) {
 	free(v->data);
@@ -175,24 +178,19 @@ bool BT_visibilityOff(){
 
 bool runCommand_bt( const char* cmd, char* output,int size){
 	memset(output,'\0', size);
+	int n;
+ 	char path[1035];
 	FILE* fp = popen(cmd,"r");
-    if(!fp)
-    {
-		printf("opening pipe failed\n");
-        return false;
-    }
-    while( NULL != fread(output, size , sizeof(char), fp))
-    {
-    }
-	if(!feof(fp)){
-		printf("error happend while reading output\n");
-		return false;
-	}
-	int status= pclose(fp);
-	if(status<0){
-		printf("command exist status%d\n",status);
-		return false;
-	}
+	if (fp == NULL) {
+    		exit(-1);
+  		}
+
+     		/* Read the output a line at a time - output it. */
+  		while (fgets(path, sizeof(path)-1, fp) != NULL) {
+			  printf("%s",path);
+			  strcpy(output,path);
+		  }
+		  
 	return true;
 }
 
@@ -513,26 +511,46 @@ struct bluetoothconfig bluetooth_get_config(){
 	struct bluetoothconfig conf;
 	char ret[1024]="";
 	char cmd[255];
-    conf.radioOn = sprintf(cmd, "rfkill list bluetooth | grep Soft | awk '{print $3}'");
+     sprintf(cmd, "rfkill list bluetooth | grep Soft | awk '{print $3}'");
     if(!runCommand_bt(cmd,ret,2048)){
         //return NULL;
     }
+	if(ret == "no"){
+		conf.radioOn=true;
+	}
+	else{
+		conf.radioOn=false;
+	}
 	//read bluetooth is enable or not 
-	conf.enabled= sprintf(cmd, "echo 'show' | bluetoothctl | grep Powered | awk '{print $2}'");
+	sprintf(cmd, "echo 'show' | bluetoothctl | grep Powered | awk '{print $2}'");
     if(!runCommand_bt(cmd,ret,2048)){
     	//return NULL;
     }
+	if(ret == "yes"){
+		conf.enabled=true;
+	}
+	else{
+		conf.enabled=false;
+	}
 	//discoverable state
-	conf.discoverable=sprintf(cmd,"echo 'show' | bluetoothctl | grep Discoverable | awk '{print $2}'");
+	sprintf(cmd,"echo 'show' | bluetoothctl | grep Discoverable | awk '{print $2}'");
 	 if(!runCommand_bt(cmd,ret,2048)){
     	//return NULL;
     }
+	if(ret == "yes"){
+		conf.discoverable=true;
+	}
+	else{
+		conf.discoverable=false;
+	}
 	//bluetooth device name
-	conf.name=sprintf(cmd,"echo 'show' | bluetoothctl | grep Name | awk '{print $2}'");
+	sprintf(cmd,"echo 'show' | bluetoothctl | grep Name | awk '{print $2}'");
 	 if(!runCommand_bt(cmd,ret,2048)){
         //return NULL;
     }
-	return conf;
+	if(ret){
+		conf.name=ret;
+	}
 }
 
 /*

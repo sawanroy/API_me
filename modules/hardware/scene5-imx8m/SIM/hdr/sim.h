@@ -27,7 +27,7 @@
 
 struct apn		
 {
-	/**@{*/
+	
 	char apn_name[20];                          /**<	Acess point name */
 	char Proxy[20];                             /**<	proxy url */
 	int  Port;                                  /**<	port number */
@@ -42,7 +42,7 @@ struct apn
 	char apnType[20];                           /**<	type of data which must use this APN configuration */
 	char apnProtocol[20];                       /**<	protocol to be used to access internet (ipv4 ipv6) */
 	char apnRoamingProtocol[20];                /**<	protocol to be used to access internet via cellular data(ipv4 ipv6) */
-    /*@}*/
+    
 };
 
  /**

@@ -18,19 +18,34 @@
 #ifndef libgps_h__
 #define libgps_h__
 
-#define GPS_PORT 3                                        /**<  "/dev/ttyAMA3" */ 
-#define GPS_Baud_Rate 9600                                /**< set baudrate */
+#define GPS_PORT 1                                          /**<  "/dev/ttymxc1" */ 
+#define GPS_Baud_Rate 115200                                /**< set baudrate */
+
+typedef struct {
+   int degrees;
+   int mins;
+   int minFrac;
+   char* quadrasphere;
+} DMData;
+
+typedef struct {
+   DMData latDM;
+   DMData longDM;
+   DMData time;
+   int quality;
+   int numSats;
+   int checkSum;
+   int hdop;
+   int alt;
+   char altval;
+   char Gpsval;
+} GPSData;
 
 /*! \addtogroup GPS
 	Additional documentation for group 'GPS'
       @{
 */
 
-/*! 
-  Open GPS serial link 
-  @return file descriptor 
-*/
-int open_port();
 /*!
   State of GPS
   @param[in] filedescriptor  FD of opened port
@@ -40,7 +55,7 @@ int state_gps(int filedescriptor);
   Output full GPRMC of 1 frame 
   @param[in] filedescriptor FD of opened port
 */                                      
-char* read_data_gprmc(int filedescriptor);
+char* read_data_gprmc(int filedescriptor, char *buf2);
 /*!
   Extract part of GPRMC of 1 frame
   @param[in] filedescriptor  FD of opened port
@@ -53,7 +68,7 @@ char* read_data_gprmc_parse(int filedescriptor, int gprmc_index);
   @param[in] filedescriptor  FD of opened port
   @return gprmc parse data
 */       
-char* read_data_gpgga(int filedescriptor);
+char* read_data_gpgga(int filedescriptor, unsigned char *buf2);
 /*!
   Extract part of GPGGA of 1 frame
   @param[in] filedescriptor FD of opened port

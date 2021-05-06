@@ -1,7 +1,4 @@
-/*!
-  @file 
-  @brief API refrence for wifi access 
-*/
+
 /*
 ***************************************************************************
 *
@@ -21,7 +18,12 @@
 #include <common.h>
 #include <vector.h>
 #include <sys/wait.h>
-//#include <sys/wait.h>
+
+/*!
+  @file 
+  @brief API refrence for wifi access 
+*/
+
 /**
  * Structure for list of wifi  
 */

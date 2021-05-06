@@ -1,5 +1,5 @@
 var structwifiinfo =
 [
-    [ "password", "d4/dbc/structwifiinfo.html#a6c486bb45986d4df500914f8c809629e", null ],
-    [ "ssid", "d4/dbc/structwifiinfo.html#ae538c17cb9c8fffddaffcf1f0e8fecf4", null ]
+    [ "password", "d4/dbc/structwifiinfo.html#a35d2754c9d583d09098880e3a26226b1", null ],
+    [ "ssid", "d4/dbc/structwifiinfo.html#a6a70ad56c89eef86e3a5dedc50fad9c4", null ]
 ];

@@ -188,7 +188,7 @@ NMAccessPoint *findApOnDevice (NMDevice *device, GByteArray *bssid, const char *
     char ret[1024];
     if(!runCommand("wpa_cli scan",ret,1024)){
         printf("scan failed\n");
-        return -1;
+        return (NMAccessPoint *)-1;
     }
 	aps = nm_device_wifi_get_access_points (NM_DEVICE_WIFI (device));
 	printf("Found %d APs\n", aps->len);
@@ -226,25 +226,20 @@ NMAccessPoint *findApOnDevice (NMDevice *device, GByteArray *bssid, const char *
 }
 //-----------------------------------------------------------------------------------------------------
 bool runCommand( const char* cmd, char* output,int size){
-	memset(output,'\0', size);
+		memset(output,'\0', size);
+	int n;
+ 	char path[1035];
 	FILE* fp = popen(cmd,"r");
-    if(!fp)
-    {
-		printf("opening pipe failed\n");
-        return false;
-    }
-    while( NULL != fread(output, size , sizeof(char), fp))
-    {
-    }
-	if(!feof(fp)){
-		printf("error happend while reading output\n");
-		return false;
-	}
-	int status= pclose(fp);
-	if(status<0){
-		printf("command exist status%d\n",status);
-		return false;
-	}
+	if (fp == NULL) {
+    		exit(-1);
+  		}
+
+     		/* Read the output a line at a time - output it. */
+  		while (fgets(path, sizeof(path)-1, fp) != NULL) {
+			  printf("%s",path);
+			  strcpy(output,path);
+		  }
+		  
 	return true;
 }
 //-----------------------------------------------------------------------------------------------------

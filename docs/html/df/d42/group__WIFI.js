@@ -10,6 +10,7 @@ var group__WIFI =
     [ "wifi_get_ssid_preferred_list", "df/d42/group__WIFI.html#gaecde380d1e76e69ce1161e31c16e0424", null ],
     [ "WiFi_getSignalStrength", "df/d42/group__WIFI.html#ga6dc93078498234509b1da17d83922226", null ],
     [ "wifi_mode", "df/d42/group__WIFI.html#ga4df39d7003dc5fb7e8eda1c6d3d263ca", null ],
+    [ "wifi_reconnect", "df/d42/group__WIFI.html#gac2062f21a8c2021715817afffcf0bc5b", null ],
     [ "wifi_remove_from_ssid_preferred_list", "df/d42/group__WIFI.html#ga848f0063817fa7674a05847acdd6a886", null ],
     [ "wifi_scan", "df/d42/group__WIFI.html#ga64f6aa080e79d53786f24e1d90fc9c23", null ],
     [ "wifi_set_defaultpower_mode", "df/d42/group__WIFI.html#ga536762bceeac953aa63eb02001847103", null ],

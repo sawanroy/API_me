@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['open_5fport_43',['open_port',['../d1/d24/group__GPS.html#gabe553924eef0ba8079dc745caf1f348c',1,'open_port():&#160;gps.c'],['../d1/d24/group__GPS.html#gabe553924eef0ba8079dc745caf1f348c',1,'open_port():&#160;gps.c']]],
-  ['other_44',['other',['../dd/d0d/structbluetooth__devices.html#a1154c1b46290a9264685ebe5a00a32e0',1,'bluetooth_devices']]]
+  ['name_48',['name',['../dd/d0d/structbluetooth__devices.html#a9a5493ee019c2fdc1206dbbe60e1b676',1,'bluetooth_devices::name()'],['../d5/d63/structbluetoothconfig.html#a0a40cdf50c1e45b7d969d37d856db4d4',1,'bluetoothconfig::name()']]]
 ];

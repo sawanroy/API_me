@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector.h>
+#include <string.h>
 void vector_init(vector *v)
 {
 	v->data = NULL;

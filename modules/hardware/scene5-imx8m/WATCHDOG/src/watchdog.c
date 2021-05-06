@@ -158,7 +158,7 @@ bool wd_enable(bool state){
 		close(fd);
 		return -1;
 	}
-	int oneshot = 0;
+	
 	if(state){
 		   int flags = WDIOS_ENABLECARD;
 			int ret = ioctl(fd, WDIOC_SETOPTIONS, &flags);
@@ -166,7 +166,6 @@ bool wd_enable(bool state){
 				printf("Watchdog card disabled.\n");
 			else {
 				printf("WDIOS_DISABLECARD error");
-				oneshot = 1;
 }
 		return true;
 	}
@@ -177,7 +176,7 @@ bool wd_enable(bool state){
 				printf("Watchdog card enabled.\n");
 			else {
 				printf("WDIOS_ENABLECARD error ");
-				oneshot = 1;
+			
 }
 		return true;
 	}

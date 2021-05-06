@@ -25,8 +25,7 @@ static void lib_init(void) {
   } 
     char ret[1024];
     if(!runCommand("wpa_cli scan",ret,1024)){
-        printf("scan failed\n");
-        return 10600;
+        return ;
     }
     /* leave some time for the scan to finish */
     usleep(1000000);
@@ -197,7 +196,7 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
     if(!client)
     return false;
     NMConnection *connection=nm_simple_connection_new();
-    NMSettingWireless* s_wifi = nm_setting_wireless_new();
+    NMSettingWireless* s_wifi = (NMSettingWireless *) nm_setting_wireless_new();
     if(!connection )
     return false;
     //check for access point
@@ -215,7 +214,7 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
     // printf("bssid:%s\n",bssid);
     // return;
     /*Connection Setting*/
-    NMSettingConnection *s_con = nm_setting_connection_new();
+    NMSettingConnection *s_con =(NMSettingConnection *)nm_setting_connection_new();
     if(!s_con)
     {
         printf("cannot create new connection\n");
@@ -360,7 +359,7 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
 		s_con = nm_connection_get_setting_connection (connection);
 		if (s_con) {
 			const char* id = nm_setting_connection_get_id (s_con);
-            vector_add(SSIDs, id);
+            vector_add(SSIDs, (char *)id);
 		}
         else{
             return 10600;
