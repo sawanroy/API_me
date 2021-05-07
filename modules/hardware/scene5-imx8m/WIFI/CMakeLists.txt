@@ -6,8 +6,8 @@ pkg_search_module(GLIB REQUIRED glib-2.0)
 PKG_SEARCH_MODULE(LIBNM REQUIRED libnm)
 PKG_CHECK_MODULES(LIBNM libnm>=1.0)
 
-PKG_SEARCH_MODULE(NM-CORE_INCLUDE_DIRS libnm-core)
-PKG_CHECK_MODULES(NM-CORE_INCLUDE_DIRS libnm-core)
+#PKG_SEARCH_MODULE(NM-CORE_INCLUDE_DIRS libnm-core)
+#PKG_CHECK_MODULES(NM-CORE_INCLUDE_DIRS libnm-core)
 
 add_definitions(${LIBNM_CFLAGS})
 
@@ -44,11 +44,11 @@ add_library(
 target_include_directories(
     ${PROJECT_NAME} 
     PUBLIC
-    hdr
-    PRIVATE
+    hdr/
+    ${GLIB_INCLUDE_DIRS}
     ${NM-UTIL_INCLUDE_DIRS}
     ${LIBNM_INCLUDE_DIRS}
-    ${GLIB_INCLUDE_DIRS}
+    PRIVATE
     USB
 )
     

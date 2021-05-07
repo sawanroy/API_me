@@ -232,7 +232,7 @@ get_signal_strength()
 
 This function gets the strengh of the signal (in dbm)
 
-/*
+*/
 
 
 unsigned int get_signal_strength(){
@@ -246,25 +246,22 @@ unsigned int get_signal_strength(){
 	if(USB_write(fd, cmd, len)){
 		
 		if((size=USB_read(fd,sig_strenght,bsize))<0) {
-			SIM_closePort();
 			return false;
 		}
 		else{
 			int signal = atoi(sig_strenght);
-			SIM_closePort();
 			return signal;
 		}
 	}
 	else{
-		SIM_closePort();
 		return false;
 
 	}	
 
 }
 
-/*
 
+/*
 char* get_imsi()
 
 This function gets the IMSI
@@ -282,17 +279,14 @@ char* get_imsi(){
 	if(USB_write(fd, cmd, len)){
 		
 		if((size=USB_read(fd,imsi,bsize))<0){
-			SIM_closePort();
 			return "error while reading";
 		}
 		else{
 			printf("%s",imsi);
-			SIM_closePort();
 			return imsi;
 		}
 	}
 	else{
-		SIM_closePort();
 		return "error while writing";
 	}
 }
@@ -317,16 +311,13 @@ char* get_imei(){
 		tcflush(fd, TCIOFLUSH);
 
 		if((size=USB_read(fd,imei,bsize))<0){
-			SIM_closePort();
 			return "error while reading";
 		}
 		else{
-			SIM_closePort();		
 			return imei;
 		}
 	}
 	else{
-		SIM_closePort();
 		return "error while writing";
 	}
 }

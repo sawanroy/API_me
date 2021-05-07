@@ -1,12 +1,11 @@
  PROJECT(LIBGPIO)
 
- include_directories(hdr/
- 
- )
 
- add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME} SHARED
  	src/libgpio.c
      )
+     
+target_include_directories(${PROJECT_NAME} PUBLIC hdr/)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
 $<BUILD_INTERFACE: ${CMAKE_SOURCE_DIR}/modules/handler/libgpio/hdr/ >

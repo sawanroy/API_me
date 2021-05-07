@@ -46,6 +46,8 @@ typedef struct {
       @{
 */
 
+int open_port();
+
 /*!
   State of GPS
   @param[in] filedescriptor  FD of opened port

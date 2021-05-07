@@ -9,10 +9,10 @@ PKG_SEARCH_MODULE(LIBNM REQUIRED libnm)
 PKG_CHECK_MODULES(LIBNM libnm>=1.0)
 
 
-PKG_SEARCH_MODULE(NM-CORE_INCLUDE_DIRS  libnm-core)
-PKG_CHECK_MODULES(NM-CORE_INCLUDE_DIRS libnm-core)
-LINK_DIRECTORIES(${LIBNM_LIBRARY_DIRS})
-ADD_DEFINITIONS(${LIBNM_CFLAGS})
+#PKG_SEARCH_MODULE(NM-CORE_INCLUDE_DIRS  libnm-core)
+#PKG_CHECK_MODULES(NM-CORE_INCLUDE_DIRS libnm-core)
+#LINK_DIRECTORIES(${LIBNM_LIBRARY_DIRS})
+#ADD_DEFINITIONS(${LIBNM_CFLAGS})
 
 # configure libnm variable for config.h file
 IF( LIBNM_FOUND )
@@ -33,13 +33,10 @@ add_library( ${PROJECT_NAME} SHARED
     src/BLUETOOTH/bluetooth.c
     src/WIFI/network.c
     src/WIFI/common.c
-    src/WIFI/main.c
-   
-
-	
+    src/WIFI/main.c 
     ) 
 target_include_directories(${PROJECT_NAME} PUBLIC
-
+hdr/
 $<BUILD_INTERFACE: ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/WIFI/ >
 $<INSTALL_INTERFACE:/modules/hardware/scene5-imx8m/hdr/WIFI/>  # <prefix>/include/mylib
 $<BUILD_INTERFACE: ${CMAKE_SOURCE_DIR}/modules/hardware/scene5-imx8m/hdr/WATCHDOG/ >

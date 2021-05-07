@@ -26,9 +26,9 @@ void close_port(){
                 exit(errno);
         }
 }
-int set_time(rtc_tm){
+int set_time(struct rtc_time time){
         open_port();
-        retval = ioctl(fd, RTC_SET_TIME, &rtc_tm);
+        retval = ioctl(fd, RTC_SET_TIME, &time);
         if (retval == -1) {
                 perror("RTC_SET_TIME ioctl");
                 exit(errno);
@@ -37,6 +37,7 @@ int set_time(rtc_tm){
         return 0;
 }
 struct rtc_time get_time(){
+        struct rtc_time rtc_tm;
         open_port();
         /* Read the RTC time/date */
         retval = ioctl(fd, RTC_RD_TIME, &rtc_tm);
@@ -50,10 +51,10 @@ struct rtc_time get_time(){
         close_port();
         return rtc_tm;
 }
-void set_Alarm(rtc_tm){
+void set_Alarm(struct rtc_time time){
     open_port();
 
-        retval = ioctl(fd, RTC_ALM_SET, &rtc_tm);
+        retval = ioctl(fd, RTC_ALM_SET, &time);
         if (retval == -1) {
                 if (errno == ENOTTY) {
                         fprintf(stderr,

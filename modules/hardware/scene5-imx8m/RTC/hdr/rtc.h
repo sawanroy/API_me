@@ -2,19 +2,19 @@
 #ifndef rtc_h__
 #define rtc_h__
 
+#include "/usr/include/linux/rtc.h"
 
 static const char default_rtc[] = "/dev/rtc0";
 
 int i, fd, retval, irqcount = 0;
 unsigned long tmp, data;
-struct rtc_time rtc_tm;
 const char *rtc = default_rtc;
 /*!
    Set the time to rtc
    @return 
 
 */
-int set_time(rtc_tm);
+int set_time(struct rtc_time rtc_tm);
 /*!
 struct rtc_time {
 	int tm_sec;
