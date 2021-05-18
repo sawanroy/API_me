@@ -40,7 +40,9 @@ bool wifi_activation(bool state){
     return false;
 
     if(getIfname()<1){
+        printf("failed to get the ifname ");
         return false;
+
     }
     char cmd[255];
     char ret[1024];
@@ -104,8 +106,8 @@ bool wifi_get_defaultpower_mode(){
     wifi_connect_network(struct wifiinfo credentials)
 
 */
-int wifi_connect_network(struct wifiinfo credentials){
-    wifi_disconnect_network();
+int wifi_connect_network(struct wifiinfo credentials) {
+    wifi_disconnect_network(); 
     NMClient* client = getClient();
     if(!client)
     return 10600;
@@ -120,6 +122,7 @@ int wifi_connect_network(struct wifiinfo credentials){
         return 10600;
     }
     char cmd[255];
+    char cmd2[255];
     sprintf(cmd, "wpa_cli scan_results | awk -F \" \" ' {print $5 }' - | grep -E '^%s$'", credentials.ssid);
     if(!runCommand(cmd,ret,1024)){
         printf("scan result failed\n");
@@ -129,34 +132,35 @@ int wifi_connect_network(struct wifiinfo credentials){
         printf("network not in range");
         return 10605;
     }
-    if(!runCommand("wpa_cli add_network | tail -1",ret,1024)){
+    sprintf(cmd2, "nmcli d wifi connect %s password %s ",credentials.ssid,credentials.password);
+    if(!runCommand(cmd2,ret,1024)){
         printf("adding network failed\n");
         return 10600;
     }
-    int networkId = atoi(ret);
-    sprintf(cmd, "wpa_cli set_network %d ssid '\"%s\"'",networkId,credentials.ssid);
-    // printf(cmd);
-    if(!runCommand(cmd,ret,1024)){
-        printf("set ssid failed\n");
-        return 10600;
-    }
-    sprintf(cmd, "wpa_cli set_network %d psk '\"%s\"'",networkId,credentials.password);
-    // printf(cmd);
-    if(!runCommand(cmd,ret,1024)){
-        printf("set password failed\n");
-        return 10600;
-    }
-    sprintf(cmd, "sh -c 'wpa_cli enable_network %d && wpa_cli select_network %d' | grep 'FAIL'", networkId,networkId);
-    //printf(cmd);
-    if(!runCommand(cmd,ret,1024)){
-        printf("enabling network failed, check password\n");
-        return 10602;
-    }
-    printf(ret);
-    if(strlen(ret)){
-        printf("enabling network failed, check password\n");
-        return 10602;
-    }
+    // int networkId = atoi(ret);
+    // sprintf(cmd, "wpa_cli set_network %d ssid '\"%s\"'",networkId,credentials.ssid);
+    // // printf(cmd);
+    // if(!runCommand(cmd,ret,1024)){
+    //     printf("set ssid failed\n");
+    //     return 10600;
+    // }
+    // sprintf(cmd, "wpa_cli set_network %d psk '\"%s\"'",networkId,credentials.password);
+    // // printf(cmd);
+    // if(!runCommand(cmd,ret,1024)){
+    //     printf("set password failed\n");
+    //     return 10600;
+    // }
+    // sprintf(cmd, "sh -c 'wpa_cli enable_network %d && wpa_cli select_network %d' | grep 'FAIL'", networkId,networkId);
+    // //printf(cmd);
+    // if(!runCommand(cmd,ret,1024)){
+    //     printf("enabling network failed, check password\n");
+    //     return 10602;
+    // }
+    // printf(ret);
+    // if(strlen(ret)){
+    //     printf("enabling network failed, check password\n");
+    //     return 10602;
+    // }
     return 0;
 }
 /*
@@ -172,10 +176,10 @@ bool wifi_disconnect_network(){
     if(getIfname()<0){
         return false;
     }
+    printf("InterfaceName %s",interfaceName);
     NMDevice *device = nm_client_get_device_by_iface (client,interfaceName);
     NMDeviceState state = nm_device_get_state(device);
-    if(state != NM_DEVICE_STATE_ACTIVATED)
-    {
+    if(state != NM_DEVICE_STATE_ACTIVATED) {
         return false;
     }
     if(!nm_device_disconnect(device, NULL, NULL)){
@@ -188,8 +192,7 @@ bool wifi_disconnect_network(){
     wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
 
 */
-bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
-{
+bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials) {
     bool wep_passphrase = true; //key:false, phrase:true
 
     NMClient* client = getClient();
@@ -263,7 +266,8 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
 
 
 */
-int wifi_getsignal_strength(char* SSID){
+int wifi_getsignal_strength(char* SSID) {
+    printf("SSID %s",SSID);
     NMClient* client = getClient();
     int strength;
     if(!client)
@@ -285,11 +289,11 @@ int wifi_getsignal_strength(char* SSID){
         return 10600;
     }
     if(strlen(ret)==0){
-        printf("network not in range");
+        printf("network not in range\n");
         return 10600;
     }
     int dBm;
-    sscanf(ret,"%3d%s", &dBm,ret);
+    sscanf(ret,"%3d%s\n", &dBm,ret);
     strength = dbmToQuality(dBm);
     return strength;
 }
@@ -298,8 +302,7 @@ int wifi_getsignal_strength(char* SSID){
     wifi_scan(vector* v)
 
 */
-int wifi_scan(vector* v)
-{
+int wifi_scan(vector* v) {
     NMClient* client = getClient();
     if(!client)
     return 10600;
@@ -419,11 +422,18 @@ wifi_reconnect()
 
 */
 bool wifi_reconnect(){
+    NMClient* client = getClient();
+    if(!client) {
+        return false;
+    }
     if(getIfname()<0){
         return false;
     }
+    printf("InterfaceName %s",interfaceName);
     char ret[1024]="";
-    if(!runCommand("wpa_cli reconnect | grep -o 'OK'", ret, 1024)){
+    char cmd[255];
+    sprintf(cmd, "nmcli device connect %s",interfaceName);
+    if(!runCommand(cmd,ret,1024)){
         return false;
     }
     if(strlen(ret)==0){
@@ -528,3 +538,4 @@ bool wifi_set_ssid_lock(char *ssid,bool enable ){
         return false;
     }
 }
+
