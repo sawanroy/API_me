@@ -111,7 +111,7 @@ bool wifi_clean_ssid_preferred_list();
  * 
  * @return strenght of signal  
 */
-int WiFi_getSignalStrength(char* SSID, int* strength);
+int wifi_getsignal_strength(char* SSID);
 /*!
  * @warning This function allocates memories for the structure, it is your responsibility to free those memory
    scan the wifi networks and gives the list of network presrent.

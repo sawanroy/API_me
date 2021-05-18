@@ -28,7 +28,7 @@
 struct apn		
 {
 	
-	char apn_name[20];                          /**<	Acess point name */
+	char *apn_name;                          /**<	Acess point name */
 	char Proxy[20];                             /**<	proxy url */
 	int  Port;                                  /**<	port number */
 	char username[20];                          /**<	username */
@@ -120,4 +120,5 @@ bool send_sms(char* phone_no, char* message);
   @}
 */
 #endif
+
 
