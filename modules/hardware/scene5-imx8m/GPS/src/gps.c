@@ -112,23 +112,19 @@ int state_gps(int filedescriptor) {
 
 */
 
-char* read_data_gprmc(int filedescriptor, char *buf2) {
-   unsigned char *buf[255];
-   int size=sizeof(buf);
-   int Timeout=100000;
-   if(filedescriptor>0)
-	{
+char* read_data_gprmc(int filedescriptor) { 
+    char *buf_temp = malloc(60);
+    unsigned char *buf[2000];
+    int size=sizeof(buf);
+    int Timeout=10000;
+    if(filedescriptor>0) {
 		int usbrd;
 		usbrd=serial_read(filedescriptor, buf, size,Timeout);
-		printf("serial_read %d\n",usbrd);
-   }  
-   FILE * fPtr;
-     fPtr = fopen("/tmp/gprmc.txt", "w");
-
-
+    }  
+    FILE * fPtr;
+    fPtr = fopen("/tmp/gprmc.txt", "w");
     /* fopen() return NULL if last operation was unsuccessful */
-    if(fPtr == NULL)
-    {
+    if(fPtr == NULL) {
         /* File not created hence exit */
         printf("Unable to create file.\n");
         exit(EXIT_FAILURE);
@@ -136,32 +132,31 @@ char* read_data_gprmc(int filedescriptor, char *buf2) {
     fputs(buf, fPtr);
     fclose(fPtr);
     FILE * fP;
-     fP = fopen("/tmp/gprmc.txt", "r");
+    fP = fopen("/tmp/gprmc.txt", "r");
 
-   int line_num = 1;
+    int line_num = 1;
 	int find_result = 0;
 	char temp[10000];
 
     while(fgets(temp, 10000, fP ) != NULL){
       // printf("line 2\n%s",temp);
 		if((strstr(temp, "$GPRMC")) != NULL) {
-
 			printf("A match found on line: %d\n", line_num);
 			printf("\n%s\n", temp);
-         strcpy(buf2,temp);
+         strcpy(buf_temp,temp);
 			find_result++;
 		}
 		line_num++;
        
     }
-    printf("\n%s\n", buf2);
+    printf("\n%s\n", buf_temp);
 	if(find_result == 0) {
 		printf("\n didnt get the data \n");
       return -1;
 	}  
    fclose(fP);
    int del = remove("/tmp/gprmc.txt");
-
+    return buf_temp;
 }
 
 /*
@@ -172,85 +167,45 @@ char* read_data_gprmc(int filedescriptor, char *buf2) {
 */
 
 char* read_data_gprmc_parse(int filedescriptor, int gprmc_index){
-   char buf2[1000];
+   char *buf_tmp = malloc(100);
    int i;
    char *str1;
    char *gpsdata[14][14];
-   read_data_gprmc(filedescriptor, buf2);
+   buf_tmp = read_data_gprmc(filedescriptor);
    char *original;
-   original = strdup(buf2);
-   while ((str1 = strsep(&original,","))!= NULL) 
-{
+   original = strdup(buf_tmp);
+   while ((str1 = strsep(&original,","))!= NULL) {
    // loop[i] = strdup(str1);
     strcpy(gpsdata[i], str1);
     printf("Token %d: %s \n", i,str1);
     i++;
 }
-// for (i =0 ;i<=14 ; i++){
+    printf("GPS return data %s ", gpsdata[gprmc_index]);
+    strcpy(buf_tmp,gpsdata[gprmc_index]);
+    return buf_tmp;
 
-//     printf("%s data \n ",gpsdata[i]);
-// }
 
-switch (gprmc_index)
-{
-    case 0: printf("%s data \n ",gpsdata[0]);// $GPRMC
-            return gpsdata[0];
-        break;
-    case 1: printf("%s data \n ",gpsdata[1]);// Time
-        break;
-    case 2: printf("%s data \n ",gpsdata[2]);// Latiude
-        break;
-    case 3: printf("%s data \n ",gpsdata[3]);// 
-        break;
-    case 4: printf("%s data \n ",gpsdata[4]);// 
-        break;
-    case 5: printf("%s data \n ",gpsdata[5]);// 
-        break;
-    case 6: printf("%s data \n ",gpsdata[6]);// 
-        break;
-    case 7: printf("%s data \n ",gpsdata[7]);// 
-        break;    
-    case 8: printf("%s data \n ",gpsdata[8]);// 
-        break;
-    case 9:printf("%s data \n ",gpsdata[9]); // 
-        break;
-    case 10:printf("%s data \n ",gpsdata[10]); // 
-        break;
-    case 11:printf("%s data \n ",gpsdata[11]); // 
-        break;
-    case 12:printf("%s data \n ",gpsdata[12]); // 
-        break;
-    case 13:printf("%s data \n ",gpsdata[13]); // 
-        break;
-     case 14:printf("%s data \n ",gpsdata[14]); // 
-        break;                          
-    default: printf("Out of range");// code to be executed if n doesn't match any cases
 }
-}
+
 /*
 	char* read_data_gpgga(int filedescriptor)
 	output full GPGGA of 1 trame
 
 */
 
-char* read_data_gpgga(int filedescriptor, unsigned char *buf2) {
-     unsigned char *buf[255];
-   int size=sizeof(buf);
-   int Timeout=100000;
-   FILE *fPtr;
-   if(filedescriptor>0)
-	{
+char* read_data_gpgga(int filedescriptor) {
+    unsigned char *buf_tmp = malloc(100);
+    unsigned char *buf[2000];
+    int size=sizeof(buf);
+    int Timeout=100000;
+    FILE *fPtr;
+    if(filedescriptor>0) {
 		int usbrd;
 		usbrd=serial_read(filedescriptor, buf, size,Timeout);
-		printf("serial_read %d\n",usbrd);
-   }  
-   
-     fPtr = fopen("/tmp/gpgga.txt", "w");
-
-
+    }  
+    fPtr = fopen("/tmp/gpgga.txt", "w");
     /* fopen() return NULL if last operation was unsuccessful */
-    if(fPtr == NULL)
-    {
+    if(fPtr == NULL) {
         /* File not created hence exit */
         printf("Unable to create file.\n");
         exit(EXIT_FAILURE);
@@ -258,34 +213,28 @@ char* read_data_gpgga(int filedescriptor, unsigned char *buf2) {
     fputs(buf, fPtr);
     fclose(fPtr);
     FILE * fP;
-     fP = fopen("/tmp/gpgga.txt", "r");
-
-   int line_num = 1;
+    fP = fopen("/tmp/gpgga.txt", "r");
+    int line_num = 1;
 	int find_result = 0;
 	char temp[10000];
 
-    while(fgets(temp, 10000, fP ) != NULL){
+    while(fgets(temp, 10000, fP ) != NULL) {
       // printf("line 2\n%s",temp);
 		if((strstr(temp, "$GPGGA")) != NULL) {
-
-         
-			printf("A match found on line: %d\n", line_num);
-			printf("\n%s\n", temp);
-         strcpy(buf2,temp);
+            strcpy(buf_tmp,temp);
 			find_result++;
 		}
-		line_num++;
-       
+		line_num++;   
     }
 
 	if(find_result == 0) {
-		printf("\n didnt get the data \n");
-      return -1;
+		printf("\n didnt get the data, check for port  \n");
+        return -1;
 	}  
    fclose(fP);
-   int del = remove("/tmp/gpgga.txt");
-   
-}
+   int del = remove("/tmp/gpgga.txt");   
+   return buf_tmp;
+} 
 
 /*
 
@@ -295,61 +244,27 @@ char* read_data_gpgga(int filedescriptor, unsigned char *buf2) {
 */
 
 char* read_data_gpgga_parse(int filedescriptor, int gpgga_index) {
-   char buf2[1000];
-   char *str1;
-   int i;
-   char *gpsdata[14][14];
-   read_data_gpgga(filedescriptor, buf2);
-   char *original;
-        original = strdup(buf2);
-   while ((str1 = strsep(&original,","))!= NULL) 
-{
-   // loop[i] = strdup(str1);
-    strcpy(gpsdata[i], str1);
-    printf("Token %d: %s \n", i,str1);
-    i++;
-}
-// for (i =0 ;i<=14 ; i++){
+    char *buf_tmp = malloc(100);
+    char *str1;
+    int i;
+    char *gpsdata[14][14];
+    buf_tmp = read_data_gpgga(filedescriptor);
+    char *original;
+    original = strdup(buf_tmp);
+    
+    while ((str1 = strsep(&original,","))!= NULL) {
+    // loop[i] = strdup(str1);
+        strcpy(gpsdata[i], str1);
+        printf("Token %d: %s \n", i,str1);
+        i++;
+    }
+    printf("GPS return data %s ", gpsdata[gpgga_index]);
+    strcpy(buf_tmp,gpsdata[gpgga_index]);
+    return buf_tmp;
 
-//     printf("%s data \n ",gpsdata[i]);
-// }
-
-switch (gpgga_index)
-{
-    case 0: printf("%s data \n ",gpsdata[0]);// code to be executed if n = 1;
-        break;
-    case 1: printf("%s data \n ",gpsdata[1]);// code to be executed if n = 2;
-        break;
-    case 2: printf("%s data \n ",gpsdata[2]);// code to be executed if n = 1;
-        break;
-    case 3: printf("%s data \n ",gpsdata[3]);// code to be executed if n = 2;
-        break;
-    case 4: printf("%s data \n ",gpsdata[4]);// code to be executed if n = 1;
-        break;
-    case 5: printf("%s data \n ",gpsdata[5]);// code to be executed if n = 2;
-        break;
-    case 6: printf("%s data \n ",gpsdata[6]);// code to be executed if n = 1;
-        break;
-    case 7: printf("%s data \n ",gpsdata[7]);// code to be executed if n = 2;
-        break;    
-    case 8: printf("%s data \n ",gpsdata[8]);// code to be executed if n = 1;
-        break;
-    case 9:printf("%s data \n ",gpsdata[9]); // code to be executed if n = 2;
-        break;
-    case 10:printf("%s data \n ",gpsdata[10]); // code to be executed if n = 2;
-        break;
-    case 11:printf("%s data \n ",gpsdata[11]); // code to be executed if n = 2;
-        break;
-    case 12:printf("%s data \n ",gpsdata[12]); // code to be executed if n = 2;
-        break;
-    case 13:printf("%s data \n ",gpsdata[13]); // code to be executed if n = 2;
-        break;
-     case 14:printf("%s data \n ",gpsdata[14]); // code to be executed if n = 2;
-        break;                          
-    default: printf("Out of range");// code to be executed if n doesn't match any cases
-}
 
 }
+
 
 /*
 

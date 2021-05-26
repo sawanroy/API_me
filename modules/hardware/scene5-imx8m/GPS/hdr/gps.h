@@ -45,9 +45,11 @@ typedef struct {
 	Additional documentation for group 'GPS'
       @{
 */
-
+/*!
+  Open GPS serial link
+  @return File Descriptor of open port
+*/
 int open_port();
-
 /*!
   State of GPS
   @param[in] filedescriptor  FD of opened port
@@ -57,7 +59,7 @@ int state_gps(int filedescriptor);
   Output full GPRMC of 1 frame 
   @param[in] filedescriptor FD of opened port
 */                                      
-char* read_data_gprmc(int filedescriptor, char *buf2);
+char* read_data_gprmc(int filedescriptor);
 /*!
   Extract part of GPRMC of 1 frame
   @param[in] filedescriptor  FD of opened port
@@ -70,7 +72,7 @@ char* read_data_gprmc_parse(int filedescriptor, int gprmc_index);
   @param[in] filedescriptor  FD of opened port
   @return gprmc parse data
 */       
-char* read_data_gpgga(int filedescriptor, unsigned char *buf2);
+char* read_data_gpgga(int filedescriptor);
 /*!
   Extract part of GPGGA of 1 frame
   @param[in] filedescriptor FD of opened port
