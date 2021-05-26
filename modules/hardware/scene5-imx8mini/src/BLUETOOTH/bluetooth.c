@@ -28,6 +28,7 @@
 #include <bluetooth.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <vector.h>
 
 #define Success 0
 #define Failure -107000
@@ -38,42 +39,6 @@ int system(const char *command);
 *	Internal function used  
 */
 
-int vector_count(vector1 *v) {
-	return v->count;
-}
-
-void *vector_get(vector1 *v, int index) {
-	if (index >= v->count) {
-		return NULL;
-	}
-	return v->data[index];
-}
-
-void vector_init(vector1 *v) {
-	v->data = NULL;
-	v->size = 0;
-	v->count = 0;
-}
-
-void vector_add(vector1*v, void *e) {
-	if (v->size == 0) {
-		v->size = 10;
-		v->data = (char**)malloc(sizeof(char**) * v->size);
-		memset(v->data, '\0', sizeof(char) * v->size);
-	}
-	// condition to increase v->data:
-	// last slot exhausted
-	if (v->size == v->count) {
-		v->size *= 2;
-		v->data = (char**)realloc(v->data, sizeof(char**) * v->size);
-	}
-	v->data[v->count] = (char*)e;
-	v->count++;
-}
-
-void vector_free(vector1 *v) {
-	free(v->data);
-}
 
 int match(char *a, char *b) {
 	int position = 0;
@@ -391,12 +356,12 @@ bool bluetooth_unpair_to_device(unsigned char *deviceName, int size ) {
 
 /*
 *
-*	int bluetooth_scan( vector1* v )
+*	int bluetooth_scan( vector* v )
 *	Scan for bluetooth devices
 *
 */
 
-int bluetooth_scan( vector1* v ) {
+int bluetooth_scan( vector* v ) {
     inquiry_info *ii = NULL;
     int max_rsp, num_rsp;
     int dev_id, sock, len, flags;

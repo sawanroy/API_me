@@ -24,11 +24,6 @@
 
 #define DEV_NAME vcan0
 
-int fileDesc;                  /**< File descriptor*/
-struct sockaddr_can addr;  /**< transport protocol class address information (e.g. ISOTP) stucture defined in linux/can.h */
-struct can_frame frame;    /**< struct can_frame - basic CAN frame structure structure defined in linux/can.h  */
-        
-
 /**
  *opens the can node 
  *@return true and false

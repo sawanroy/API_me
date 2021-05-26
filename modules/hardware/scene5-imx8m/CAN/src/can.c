@@ -20,6 +20,10 @@
 #include <sys/socket.h>
 #include <can.h>
 
+int fileDesc;              /**< File descriptor*/
+struct sockaddr_can addr;  /**< transport protocol class address information (e.g. ISOTP) stucture defined in linux/can.h */
+struct can_frame frame; 
+
 bool enable_can(){
     struct ifreq ifr;          /**< Bluetooth MAC address */
     if ((fileDesc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {

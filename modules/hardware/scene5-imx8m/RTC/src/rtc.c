@@ -10,11 +10,13 @@
 #include <stdint.h>
 #include <rtc.h>
 
+int fd, retval, irqcount = 0;
+
 void open_port(){
-            fd = open(rtc, O_RDONLY);
+        fd = open(default_rtc, O_RDONLY);
 
         if (fd ==  -1) {
-                perror(rtc);
+                perror(default_rtc);
                 exit(errno);
         }
 
@@ -22,7 +24,7 @@ void open_port(){
 }
 void close_port(){
      if ( close(fd)) {
-                perror(rtc);
+                perror(default_rtc);
                 exit(errno);
         }
 }

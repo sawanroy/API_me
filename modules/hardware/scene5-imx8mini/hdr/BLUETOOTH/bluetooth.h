@@ -20,12 +20,6 @@ typedef struct{
     char *dev_name;
 } Bt_scanResult;
 
-typedef struct vector_ {
-    char* data;
-    int size;
-    int count;
-} vector1;
-
 struct authpin{
     char* target;               /* target device */
     int pin;                    /* pincode */
@@ -55,6 +49,6 @@ bool bluetooth_unpair_to_device(unsigned char *deviceName, int size );          
 bool bluetooth_set_config(struct bluetoothconfig conf);                                                 /* Configure Bluetooth */
 struct bluetoothconfig bluetooth_get_config();                                                          /* Get Bluetotth configuration */
 bool bluetooth_connect_to_device(char *name);                                                           /* Connect the device to another by bluetooth */
-int bluetooth_scan( vector1* v );                                                                       /* Scan for bluetooth devices */
+int bluetooth_scan( vector* v );                                                                       /* Scan for bluetooth devices */
 
 #endif

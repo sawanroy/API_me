@@ -19,12 +19,7 @@
 #ifndef libbluetooth_h__
 #define libbluetooth_h__
 #include <stdbool.h>
-
-typedef struct vector_ {
-    char* data;
-    int size;
-    int count;
-} vector1;
+#include "../../WIFI/hdr/vector.h"
 
 /**
  *Structure for bluetooth scan results
@@ -127,7 +122,7 @@ bool bluetooth_connect_to_device(char *name);
   @param[in] v typedef type strcture variable 
   @return true and false 
  */                                                         
-int bluetooth_scan( vector1* v );       
+int bluetooth_scan(vector* v );       
 
 /*! 
    @}

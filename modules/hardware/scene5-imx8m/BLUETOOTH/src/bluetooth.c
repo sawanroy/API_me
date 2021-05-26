@@ -39,11 +39,11 @@ struct bluetoothconfig conf;
 *	Internal function used  
 */
 
-int vector_count_bt(vector1 *v) {
+int vector_count_bt(vector *v) {
 	return v->count;
 }
 
-void *vector_get_bt(vector1 *v, int index) {
+void *vector_get_bt(vector *v, int index) {
 	if (index >= v->count) {
 		return;
 	}
@@ -51,13 +51,13 @@ void *vector_get_bt(vector1 *v, int index) {
 	return v->data[index];
 }
 
-void vector_init_bt(vector1 *v) {
+void vector_init_bt(vector *v) {
 	v->data = NULL;
 	v->size = 0;
 	v->count = 0;
 }
 
-void vector_add_bt(vector1 *v, void *e) {
+void vector_add_bt(vector *v, void *e) {
 		if (v->size == 0) {
 		v->size = 30;
 		v->data = malloc(sizeof(void*) * v->size);
@@ -75,7 +75,7 @@ void vector_add_bt(vector1 *v, void *e) {
 	v->count++;
 }
 
-void vector_free_bt(vector1 *v) {
+void vector_free_bt(vector *v) {
 	free(v->data);
 }
 
@@ -417,12 +417,12 @@ bool bluetooth_unpair_to_device(unsigned char *deviceName, int size ) {
 
 /*
 *
-*	int bluetooth_scan( vector1* v )
+*	int bluetooth_scan( vector* v )
 *	Scan for bluetooth devices
 *
 */
 
-int bluetooth_scan( vector1* v ) {
+int bluetooth_scan( vector* v ) {
     inquiry_info *ii = NULL;
     int max_rsp, num_rsp;
     int dev_id, sock, len, flags;

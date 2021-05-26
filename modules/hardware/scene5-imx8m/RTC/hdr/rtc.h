@@ -6,9 +6,6 @@
 
 static const char default_rtc[] = "/dev/rtc0";
 
-int i, fd, retval, irqcount = 0;
-unsigned long tmp, data;
-const char *rtc = default_rtc;
 /*!
    Set the time to rtc
    @return 
