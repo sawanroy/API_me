@@ -128,7 +128,7 @@ bool wifi_reconnect();
  * @param[in] SSID variable character type variable
  * @param[in] value variable bool type variable
 */
-int WiFi_setSSIDLock(char* SSID, bool value);
+bool wifi_set_ssid_lock(char *ssid,bool enable );
 /*!
  * Set static WiFi IP address
  * @param[in] ipaddress  character type variable
