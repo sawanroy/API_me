@@ -231,13 +231,13 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">#define IW_EV_QUAL_PK_LEN   (IW_EV_LCP_PK_LEN + sizeof(struct iw_quality))</span></div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="preprocessor">#define IW_EV_POINT_PK_LEN  (IW_EV_LCP_PK_LEN + 4)</span></div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
-<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="../../d1/def/structiw__pk__event.html">  139</a></span>&#160;<span class="keyword">struct </span><a class="code" href="../../d1/def/structiw__pk__event.html">iw_pk_event</a></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="keyword">struct </span>iw_pk_event</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;{</div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    __u16       len;            <span class="comment">/* Real lenght of this stuff */</span></div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    __u16       cmd;            <span class="comment">/* Wireless IOCTL */</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keyword">union </span>iwreq_data    u;      <span class="comment">/* IOCTL fixed payload */</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keyword">union </span><a class="code" href="../../de/dc7/unioniwreq__data.html">iwreq_data</a>    u;      <span class="comment">/* IOCTL fixed payload */</span></div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;} __attribute__ ((packed));</div>
-<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="../../d1/d25/structiw__pk__point.html">  145</a></span>&#160;<span class="keyword">struct  </span><a class="code" href="../../d1/d25/structiw__pk__point.html">iw_pk_point</a></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="keyword">struct  </span>iw_pk_point</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;{</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;  <span class="keywordtype">void</span> __user   *pointer;   <span class="comment">/* Pointer to the data  (in user space) */</span></div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;  __u16     length;     <span class="comment">/* number of fields or size in bytes */</span></div>
@@ -251,12 +251,12 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="comment">/* Shortcuts */</span></div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>iw_statistics    iwstats;</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>iw_range     iwrange;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>iw_param     iwparam;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>iw_freq      iwfreq;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>iw_quality   iwqual;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>iw_priv_args iwprivargs;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="../../d9/d59/structiw__statistics.html">iw_statistics</a>    <a class="code" href="../../d9/d59/structiw__statistics.html">iwstats</a>;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="../../d2/dc6/structiw__range.html">iw_range</a>     <a class="code" href="../../d2/dc6/structiw__range.html">iwrange</a>;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="../../d1/d40/structiw__param.html">iw_param</a>     <a class="code" href="../../d1/d40/structiw__param.html">iwparam</a>;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="../../df/dca/structiw__freq.html">iw_freq</a>      <a class="code" href="../../df/dca/structiw__freq.html">iwfreq</a>;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="../../d8/d76/structiw__quality.html">iw_quality</a>   <a class="code" href="../../d8/d76/structiw__quality.html">iwqual</a>;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="../../d8/d38/structiw__priv__args.html">iw_priv_args</a> <a class="code" href="../../d8/d38/structiw__priv__args.html">iwprivargs</a>;</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>sockaddr     sockaddr;</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="comment">/* Structure for storing all wireless information for each device</span></div>
@@ -267,7 +267,7 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;{</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;  <span class="keywordtype">char</span>      name[IFNAMSIZ + 1]; <span class="comment">/* Wireless/protocol name */</span></div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  <span class="keywordtype">int</span>       has_nwid;</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;  iwparam   nwid;           <span class="comment">/* Network ID */</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;  <a class="code" href="../../d1/d40/structiw__param.html">iwparam</a>   nwid;           <span class="comment">/* Network ID */</span></div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;  <span class="keywordtype">int</span>       has_freq;</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;  <span class="keywordtype">double</span>    freq;           <span class="comment">/* Frequency/channel */</span></div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;  <span class="keywordtype">int</span>       freq_flags;</div>
@@ -289,28 +289,28 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;  <span class="keyword">struct </span><a class="code" href="../../d2/ded/structwireless__config.html">wireless_config</a>    b;  <span class="comment">/* Basic information */</span></div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;  <span class="keywordtype">int</span>       has_sens;</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;  iwparam   sens;           <span class="comment">/* sensitivity */</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;  <a class="code" href="../../d1/d40/structiw__param.html">iwparam</a>   sens;           <span class="comment">/* sensitivity */</span></div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;  <span class="keywordtype">int</span>       has_nickname;</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;  <span class="keywordtype">char</span>      nickname[IW_ESSID_MAX_SIZE + 1]; <span class="comment">/* NickName */</span></div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;  <span class="keywordtype">int</span>       has_ap_addr;</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;  sockaddr  ap_addr;        <span class="comment">/* Access point address */</span></div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;  <span class="keywordtype">int</span>       has_bitrate;</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  iwparam   bitrate;        <span class="comment">/* Bit rate in bps */</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  <a class="code" href="../../d1/d40/structiw__param.html">iwparam</a>   bitrate;        <span class="comment">/* Bit rate in bps */</span></div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;  <span class="keywordtype">int</span>       has_rts;</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  iwparam   rts;            <span class="comment">/* RTS threshold in bytes */</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  <a class="code" href="../../d1/d40/structiw__param.html">iwparam</a>   rts;            <span class="comment">/* RTS threshold in bytes */</span></div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;  <span class="keywordtype">int</span>       has_frag;</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;  iwparam   frag;           <span class="comment">/* Fragmentation threshold in bytes */</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;  <a class="code" href="../../d1/d40/structiw__param.html">iwparam</a>   frag;           <span class="comment">/* Fragmentation threshold in bytes */</span></div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;  <span class="keywordtype">int</span>       has_power;</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;  iwparam   power;          <span class="comment">/* Power management parameters */</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;  <a class="code" href="../../d1/d40/structiw__param.html">iwparam</a>   power;          <span class="comment">/* Power management parameters */</span></div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;  <span class="keywordtype">int</span>       has_txpower;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;  iwparam   txpower;        <span class="comment">/* Transmit Power in dBm */</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;  <a class="code" href="../../d1/d40/structiw__param.html">iwparam</a>   txpower;        <span class="comment">/* Transmit Power in dBm */</span></div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;  <span class="keywordtype">int</span>       has_retry;</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;  iwparam   retry;          <span class="comment">/* Retry limit or lifetime */</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;  <a class="code" href="../../d1/d40/structiw__param.html">iwparam</a>   retry;          <span class="comment">/* Retry limit or lifetime */</span></div>
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
 <div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;  <span class="comment">/* Stats */</span></div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;  iwstats   stats;</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;  <a class="code" href="../../d9/d59/structiw__statistics.html">iwstats</a>   stats;</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;  <span class="keywordtype">int</span>       has_stats;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;  iwrange   range;</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;  <a class="code" href="../../d2/dc6/structiw__range.html">iwrange</a>   range;</div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;  <span class="keywordtype">int</span>       has_range;</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;  <span class="comment">/* Auth params for WPA/802.1x/802.11i */</span></div>
@@ -337,9 +337,9 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;  <span class="comment">/* Other information */</span></div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;  <span class="keyword">struct </span><a class="code" href="../../d2/ded/structwireless__config.html">wireless_config</a>    b;  <span class="comment">/* Basic information */</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;  iwstats   stats;          <span class="comment">/* Signal strength */</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;  <a class="code" href="../../d9/d59/structiw__statistics.html">iwstats</a>   stats;          <span class="comment">/* Signal strength */</span></div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;  <span class="keywordtype">int</span>       has_stats;</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;  iwparam   maxbitrate;     <span class="comment">/* Max bit rate in bps */</span></div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;  <a class="code" href="../../d1/d40/structiw__param.html">iwparam</a>   maxbitrate;     <span class="comment">/* Max bit rate in bps */</span></div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;  <span class="keywordtype">int</span>       has_maxbitrate;</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;} <a class="code" href="../../dc/dea/structwireless__scan.html">wireless_scan</a>;</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160; </div>
@@ -397,11 +397,11 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="keywordtype">int</span></div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    iw_get_range_info(<span class="keywordtype">int</span>       skfd,</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;              <span class="keyword">const</span> <span class="keywordtype">char</span> *  ifname,</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;              iwrange * range);</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;              <a class="code" href="../../d2/dc6/structiw__range.html">iwrange</a> * range);</div>
 <div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="keywordtype">int</span></div>
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    iw_get_priv_info(<span class="keywordtype">int</span>        skfd,</div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;             <span class="keyword">const</span> <span class="keywordtype">char</span> *   ifname,</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;             iwprivargs **  ppriv);</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;             <a class="code" href="../../d8/d38/structiw__priv__args.html">iwprivargs</a> **  ppriv);</div>
 <div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;<span class="keywordtype">int</span></div>
 <div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    iw_get_basic_config(<span class="keywordtype">int</span>         skfd,</div>
 <div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span> *    ifname,</div>
@@ -417,9 +417,9 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="comment">/* -------------------- FREQUENCY SUBROUTINES --------------------- */</span></div>
 <div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="keywordtype">void</span></div>
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    iw_float2freq(<span class="keywordtype">double</span>    in,</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;              iwfreq *  out);</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;              <a class="code" href="../../df/dca/structiw__freq.html">iwfreq</a> *  out);</div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="keywordtype">double</span></div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    iw_freq2float(<span class="keyword">const</span> iwfreq *    in);</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    iw_freq2float(<span class="keyword">const</span> <a class="code" href="../../df/dca/structiw__freq.html">iwfreq</a> *    in);</div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="keywordtype">void</span></div>
 <div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    iw_print_freq_value(<span class="keywordtype">char</span> *  buffer,</div>
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;                <span class="keywordtype">int</span>     buflen,</div>
@@ -432,11 +432,11 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;              <span class="keywordtype">int</span>   freq_flags);</div>
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="keywordtype">int</span></div>
 <div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    iw_freq_to_channel(<span class="keywordtype">double</span>           freq,</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;               <span class="keyword">const</span> <span class="keyword">struct</span> iw_range *  range);</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;               <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="../../d2/dc6/structiw__range.html">iw_range</a> *  range);</div>
 <div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="keywordtype">int</span></div>
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    iw_channel_to_freq(<span class="keywordtype">int</span>              channel,</div>
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;               <span class="keywordtype">double</span> *         pfreq,</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;               <span class="keyword">const</span> <span class="keyword">struct</span> iw_range *  range);</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;               <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="../../d2/dc6/structiw__range.html">iw_range</a> *  range);</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;<span class="keywordtype">void</span></div>
 <div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    iw_print_bitrate(<span class="keywordtype">char</span> * buffer,</div>
 <div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;             <span class="keywordtype">int</span>    buflen,</div>
@@ -449,19 +449,19 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="keywordtype">void</span></div>
 <div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    iw_print_txpower(<span class="keywordtype">char</span> *         buffer,</div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;             <span class="keywordtype">int</span>            buflen,</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;             <span class="keyword">struct</span> iw_param *  txpower);</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;             <span class="keyword">struct</span> <a class="code" href="../../d1/d40/structiw__param.html">iw_param</a> *  txpower);</div>
 <div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="comment">/* -------------------- STATISTICS SUBROUTINES -------------------- */</span></div>
 <div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="keywordtype">int</span></div>
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    iw_get_stats(<span class="keywordtype">int</span>        skfd,</div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;             <span class="keyword">const</span> <span class="keywordtype">char</span> *   ifname,</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;             iwstats *      stats,</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;             <span class="keyword">const</span> iwrange *    range,</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;             <a class="code" href="../../d9/d59/structiw__statistics.html">iwstats</a> *      stats,</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;             <span class="keyword">const</span> <a class="code" href="../../d2/dc6/structiw__range.html">iwrange</a> *    range,</div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;             <span class="keywordtype">int</span>        has_range);</div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="keywordtype">void</span></div>
 <div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    iw_print_stats(<span class="keywordtype">char</span> *       buffer,</div>
 <div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;               <span class="keywordtype">int</span>      buflen,</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;               <span class="keyword">const</span> iwqual *   qual,</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;               <span class="keyword">const</span> iwrange *  range,</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;               <span class="keyword">const</span> <a class="code" href="../../d8/d76/structiw__quality.html">iwqual</a> *   qual,</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;               <span class="keyword">const</span> <a class="code" href="../../d2/dc6/structiw__range.html">iwrange</a> *  range,</div>
 <div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;               <span class="keywordtype">int</span>      has_range);</div>
 <div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;<span class="comment">/* --------------------- ENCODING SUBROUTINES --------------------- */</span></div>
 <div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;<span class="keywordtype">void</span></div>
@@ -557,7 +557,7 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;                 <span class="keywordtype">int</span>            len);</div>
 <div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;<span class="keywordtype">int</span></div>
 <div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    iw_extract_event_stream(<span class="keyword">struct</span> <a class="code" href="../../df/d2c/structstream__descr.html">stream_descr</a> *   stream,</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;                <span class="keyword">struct</span> iw_event *   iwe,</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;                <span class="keyword">struct</span> <a class="code" href="../../d8/d8b/structiw__event.html">iw_event</a> *   iwe,</div>
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;                <span class="keywordtype">int</span>         we_version);</div>
 <div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;<span class="comment">/* --------------------- SCANNING SUBROUTINES --------------------- */</span></div>
 <div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;<span class="keywordtype">int</span></div>
@@ -599,7 +599,7 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;iw_set_ext(<span class="keywordtype">int</span>          skfd,       <span class="comment">/* Socket to the kernel */</span></div>
 <div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;       <span class="keyword">const</span> <span class="keywordtype">char</span> *     ifname,     <span class="comment">/* Device name */</span></div>
 <div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;       <span class="keywordtype">int</span>          request,    <span class="comment">/* WE ID */</span></div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;       <span class="keyword">struct</span> iwreq *   pwrq)       <span class="comment">/* Fixed part of the request */</span></div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;       <span class="keyword">struct</span> <a class="code" href="../../d6/d28/structiwreq.html">iwreq</a> *   pwrq)       <span class="comment">/* Fixed part of the request */</span></div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;{</div>
 <div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;  <span class="comment">/* Set device name */</span></div>
 <div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;  strncpy(pwrq-&gt;ifr_name, ifname, IFNAMSIZ);</div>
@@ -615,7 +615,7 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;iw_get_ext(<span class="keywordtype">int</span>          skfd,       <span class="comment">/* Socket to the kernel */</span></div>
 <div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;       <span class="keyword">const</span> <span class="keywordtype">char</span> *     ifname,     <span class="comment">/* Device name */</span></div>
 <div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;       <span class="keywordtype">int</span>          request,    <span class="comment">/* WE ID */</span></div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;       <span class="keyword">struct</span> iwreq *   pwrq)       <span class="comment">/* Fixed part of the request */</span></div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;       <span class="keyword">struct</span> <a class="code" href="../../d6/d28/structiwreq.html">iwreq</a> *   pwrq)       <span class="comment">/* Fixed part of the request */</span></div>
 <div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;{</div>
 <div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;  <span class="comment">/* Set device name */</span></div>
 <div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;  strncpy(pwrq-&gt;ifr_name, ifname, IFNAMSIZ);</div>
@@ -691,14 +691,21 @@ $(document).ready(function(){initNavTree('d4/d75/iwlib_8h_source.html','../../')
 <div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160; </div>
 <div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;<span class="preprocessor">#endif  </span><span class="comment">/* IWLIB_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="astructiw__event_html"><div class="ttname"><a href="../../d8/d8b/structiw__event.html">iw_event</a></div><div class="ttdef"><b>Definition:</b> wireless.h:1098</div></div>
+<div class="ttc" id="astructiw__freq_html"><div class="ttname"><a href="../../df/dca/structiw__freq.html">iw_freq</a></div><div class="ttdef"><b>Definition:</b> wireless.h:697</div></div>
 <div class="ttc" id="astructiw__modul__descr_html"><div class="ttname"><a href="../../d4/ddb/structiw__modul__descr.html">iw_modul_descr</a></div><div class="ttdef"><b>Definition:</b> iwlib.h:279</div></div>
-<div class="ttc" id="astructiw__pk__event_html"><div class="ttname"><a href="../../d1/def/structiw__pk__event.html">iw_pk_event</a></div><div class="ttdef"><b>Definition:</b> iwlib.h:140</div></div>
-<div class="ttc" id="astructiw__pk__point_html"><div class="ttname"><a href="../../d1/d25/structiw__pk__point.html">iw_pk_point</a></div><div class="ttdef"><b>Definition:</b> iwlib.h:146</div></div>
+<div class="ttc" id="astructiw__param_html"><div class="ttname"><a href="../../d1/d40/structiw__param.html">iw_param</a></div><div class="ttdef"><b>Definition:</b> wireless.h:670</div></div>
+<div class="ttc" id="astructiw__priv__args_html"><div class="ttname"><a href="../../d8/d38/structiw__priv__args.html">iw_priv_args</a></div><div class="ttdef"><b>Definition:</b> wireless.h:1080</div></div>
+<div class="ttc" id="astructiw__quality_html"><div class="ttname"><a href="../../d8/d76/structiw__quality.html">iw_quality</a></div><div class="ttdef"><b>Definition:</b> wireless.h:708</div></div>
+<div class="ttc" id="astructiw__range_html"><div class="ttname"><a href="../../d2/dc6/structiw__range.html">iw_range</a></div><div class="ttdef"><b>Definition:</b> wireless.h:964</div></div>
+<div class="ttc" id="astructiw__statistics_html"><div class="ttname"><a href="../../d9/d59/structiw__statistics.html">iw_statistics</a></div><div class="ttdef"><b>Definition:</b> wireless.h:883</div></div>
+<div class="ttc" id="astructiwreq_html"><div class="ttname"><a href="../../d6/d28/structiwreq.html">iwreq</a></div><div class="ttdef"><b>Definition:</b> wireless.h:943</div></div>
 <div class="ttc" id="astructstream__descr_html"><div class="ttname"><a href="../../df/d2c/structstream__descr.html">stream_descr</a></div><div class="ttdef"><b>Definition:</b> iwlib.h:264</div></div>
 <div class="ttc" id="astructwireless__config_html"><div class="ttname"><a href="../../d2/ded/structwireless__config.html">wireless_config</a></div><div class="ttdef"><b>Definition:</b> iwlib.h:173</div></div>
 <div class="ttc" id="astructwireless__info_html"><div class="ttname"><a href="../../df/d27/structwireless__info.html">wireless_info</a></div><div class="ttdef"><b>Definition:</b> iwlib.h:194</div></div>
 <div class="ttc" id="astructwireless__scan__head_html"><div class="ttname"><a href="../../dd/d6b/structwireless__scan__head.html">wireless_scan_head</a></div><div class="ttdef"><b>Definition:</b> iwlib.h:256</div></div>
 <div class="ttc" id="astructwireless__scan_html"><div class="ttname"><a href="../../dc/dea/structwireless__scan.html">wireless_scan</a></div><div class="ttdef"><b>Definition:</b> iwlib.h:236</div></div>
+<div class="ttc" id="aunioniwreq__data_html"><div class="ttname"><a href="../../de/dc7/unioniwreq__data.html">iwreq_data</a></div><div class="ttdef"><b>Definition:</b> wireless.h:905</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

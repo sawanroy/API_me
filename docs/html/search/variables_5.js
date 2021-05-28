@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['other_201',['other',['../dd/d0d/structbluetooth__devices.html#ae4cf4a46d022f2a77bc24a9314a3897a',1,'bluetooth_devices']]]
+  ['other_239',['other',['../dd/d0d/structbluetooth__devices.html#a1154c1b46290a9264685ebe5a00a32e0',1,'bluetooth_devices']]]
 ];
