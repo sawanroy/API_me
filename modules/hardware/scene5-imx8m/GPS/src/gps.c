@@ -54,7 +54,7 @@ int open_port() {
 */
 char* state_gps(int filedescriptor) {
     unsigned char *buf_tmp = malloc(100);
-    unsigned char *buf[2000];
+    unsigned char *buf[5000];
     int size=sizeof(buf);
     int Timeout=100000;
     if(filedescriptor>0) {
@@ -113,7 +113,7 @@ char* state_gps(int filedescriptor) {
 
 char* read_data_gprmc(int filedescriptor) { 
     char *buf_temp = malloc(60);
-    unsigned char *buf[2000];
+    unsigned char *buf[5000];
     int size=sizeof(buf);
     int Timeout=10000;
     if(filedescriptor>0) {
