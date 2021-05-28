@@ -53,8 +53,9 @@ int open_port();
 /*!
   State of GPS
   @param[in] filedescriptor  FD of opened port
+  @return character return the string of satate
 */                                                        
-int state_gps(int filedescriptor);
+char* state_gps(int filedescriptor);
 /*!
   Output full GPRMC of 1 frame 
   @param[in] filedescriptor FD of opened port

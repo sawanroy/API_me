@@ -52,13 +52,12 @@ int open_port() {
 	State of GPS
 
 */
-int state_gps(int filedescriptor) {
-    char *buf2;
-    unsigned char *buf[255];
-   int size=sizeof(buf);
-   int Timeout=100000;
-   if(filedescriptor>0)
-	{
+char* state_gps(int filedescriptor) {
+    unsigned char *buf_tmp = malloc(100);
+    unsigned char *buf[2000];
+    int size=sizeof(buf);
+    int Timeout=100000;
+    if(filedescriptor>0) {
 		int usbrd;
 		usbrd=serial_read(filedescriptor, buf, size,Timeout);
 		printf("serial_read %d\n",usbrd);
@@ -77,9 +76,9 @@ int state_gps(int filedescriptor) {
     fputs(buf, fPtr);
     fclose(fPtr);
     FILE * fP;
-     fP = fopen("/tmp/status.txt", "r");
+    fP = fopen("/tmp/status.txt", "r");
 
-   int line_num = 1;
+    int line_num = 1;
 	int find_result = 0;
 	char temp[10000];
 
@@ -89,20 +88,20 @@ int state_gps(int filedescriptor) {
 
 			printf("A match found on line: %d\n", line_num);
 			printf("\n%s\n", temp);
-         strcpy(buf2,temp);
+            strcpy(buf_tmp,temp);
 			find_result++;
 		}
 		line_num++;
        
     }
-    printf("\n%s\n", buf2);
+    printf("\n%s\n", buf_tmp);
 	if(find_result == 0) {
 		printf("\n didnt get the data \n");
       return -1;
 	}  
    fclose(fP);
    int del = remove("/tmp/status.txt");
-    return 0;
+    return buf_tmp;
 }
 
 /*
@@ -143,7 +142,7 @@ char* read_data_gprmc(int filedescriptor) {
 		if((strstr(temp, "$GPRMC")) != NULL) {
 			printf("A match found on line: %d\n", line_num);
 			printf("\n%s\n", temp);
-         strcpy(buf_temp,temp);
+            strcpy(buf_temp,temp);
 			find_result++;
 		}
 		line_num++;
@@ -195,7 +194,7 @@ char* read_data_gprmc_parse(int filedescriptor, int gprmc_index){
 
 char* read_data_gpgga(int filedescriptor) {
     unsigned char *buf_tmp = malloc(100);
-    unsigned char *buf[2000];
+    unsigned char *buf[5000];
     int size=sizeof(buf);
     int Timeout=100000;
     FILE *fPtr;
@@ -217,7 +216,7 @@ char* read_data_gpgga(int filedescriptor) {
     int line_num = 1;
 	int find_result = 0;
 	char temp[10000];
-
+    
     while(fgets(temp, 10000, fP ) != NULL) {
       // printf("line 2\n%s",temp);
 		if((strstr(temp, "$GPGGA")) != NULL) {
@@ -231,9 +230,10 @@ char* read_data_gpgga(int filedescriptor) {
 		printf("\n didnt get the data, check for port  \n");
         return -1;
 	}  
-   fclose(fP);
-   int del = remove("/tmp/gpgga.txt");   
-   return buf_tmp;
+    printf("\n%s\n",buf_tmp);
+    fclose(fP);
+    int del = remove("/tmp/gpgga.txt");   
+    return buf_tmp;
 } 
 
 /*
@@ -285,6 +285,5 @@ int close_port(int filedescriptor) {
 	else {
 		return -1;
 	}
-   return 0;
 }
 	
