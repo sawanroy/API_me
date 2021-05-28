@@ -60,7 +60,6 @@ char* state_gps(int filedescriptor) {
     if(filedescriptor>0) {
 		int usbrd;
 		usbrd=serial_read(filedescriptor, buf, size,Timeout);
-		printf("serial_read %d\n",usbrd);
    }  
    FILE * fPtr;
      fPtr = fopen("/tmp/status.txt", "w");
@@ -85,16 +84,12 @@ char* state_gps(int filedescriptor) {
     while(fgets(temp, 10000, fP ) != NULL){
       // printf("line 2\n%s",temp);
 		if((strstr(temp, "$PSTMANTENNASTATUS")) != NULL) {
-
-			printf("A match found on line: %d\n", line_num);
-			printf("\n%s\n", temp);
             strcpy(buf_tmp,temp);
 			find_result++;
 		}
 		line_num++;
        
     }
-    printf("\n%s\n", buf_tmp);
 	if(find_result == 0) {
 		printf("\n didnt get the data \n");
       return -1;
@@ -140,15 +135,12 @@ char* read_data_gprmc(int filedescriptor) {
     while(fgets(temp, 10000, fP ) != NULL){
       // printf("line 2\n%s",temp);
 		if((strstr(temp, "$GPRMC")) != NULL) {
-			printf("A match found on line: %d\n", line_num);
-			printf("\n%s\n", temp);
             strcpy(buf_temp,temp);
 			find_result++;
 		}
 		line_num++;
        
     }
-    printf("\n%s\n", buf_temp);
 	if(find_result == 0) {
 		printf("\n didnt get the data \n");
       return -1;
