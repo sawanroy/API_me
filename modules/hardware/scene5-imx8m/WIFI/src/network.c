@@ -31,6 +31,7 @@ static void lib_init(void) {
     usleep(1000000);
     return;
 }
+
 /*
     wifi_activation(bool state)
 */
@@ -132,35 +133,11 @@ int wifi_connect_network(struct wifiinfo credentials) {
         printf("network not in range");
         return 10605;
     }
-    sprintf(cmd2, "nmcli d wifi connect %s password %s ",credentials.ssid,credentials.password);
+    sprintf(cmd2, "nmcli d wifi connect '%s' password '%s' ",credentials.ssid,credentials.password);
     if(!runCommand(cmd2,ret,1024)){
         printf("adding network failed\n");
         return 10600;
     }
-    // int networkId = atoi(ret);
-    // sprintf(cmd, "wpa_cli set_network %d ssid '\"%s\"'",networkId,credentials.ssid);
-    // // printf(cmd);
-    // if(!runCommand(cmd,ret,1024)){
-    //     printf("set ssid failed\n");
-    //     return 10600;
-    // }
-    // sprintf(cmd, "wpa_cli set_network %d psk '\"%s\"'",networkId,credentials.password);
-    // // printf(cmd);
-    // if(!runCommand(cmd,ret,1024)){
-    //     printf("set password failed\n");
-    //     return 10600;
-    // }
-    // sprintf(cmd, "sh -c 'wpa_cli enable_network %d && wpa_cli select_network %d' | grep 'FAIL'", networkId,networkId);
-    // //printf(cmd);
-    // if(!runCommand(cmd,ret,1024)){
-    //     printf("enabling network failed, check password\n");
-    //     return 10602;
-    // }
-    // printf(ret);
-    // if(strlen(ret)){
-    //     printf("enabling network failed, check password\n");
-    //     return 10602;
-    // }
     return 0;
 }
 /*
@@ -213,10 +190,6 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials) {
         printf("Cannot find the AP nearby");
         return false;
     }
-    // const char* bssid = nm_access_point_get_bssid(ap);
-    // printf("bssid:%s\n",bssid);
-    // return;
-    /*Connection Setting*/
     NMSettingConnection *s_con =(NMSettingConnection *)nm_setting_connection_new();
     if(!s_con)
     {
@@ -348,8 +321,11 @@ int wifi_scan(vector* v) {
     wifi_get_ssid_preferred_list(vector* SSIDs)
 
 */
-int wifi_get_ssid_preferred_list(vector* SSIDs)
-{
+int wifi_get_ssid_preferred_list(vector* SSIDs) {   
+    char *cmd[255];
+    char ret[1024];
+    int comp;
+    //char *ssid_tmp = malloc(50);
     NMClient* client = getClient();
     if(!client)
     return 10600;
@@ -362,12 +338,26 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
 		s_con = nm_connection_get_setting_connection (connection);
 		if (s_con) {
 			const char* id = nm_setting_connection_get_id (s_con);
-            vector_add(SSIDs, (char *)id);
+            //strcpy(ssid_tmp,id);
+            sprintf(cmd, "nmcli -f NAME,TYPE con show | grep '%s' | awk '{print $NF}'",id);
+            if(!runCommand(cmd,ret,1024)) {
+                printf("fail to change the mode to client\n");
+               // free(ssid_tmp);
+                return false;
+            }
+            comp = strcmp(ret,"wifi");
+            if(comp>=1) {
+                vector_add(SSIDs,id);
+                printf("filter ssid - %s \n",id);
+            }
+            
 		}
         else{
+          //  free(ssid_tmp);
             return 10600;
         }
     }
+   // free(ssid_tmp);
     return 0;
 }
 /*
@@ -510,12 +500,58 @@ bool wifi_mode(bool mode){
         return false;
     }  
     if(mode){         
-        char cmd2[25];
-        sprintf(cmd, "nmcli dev wifi hotspot ifname %s ssid Trunexa password '123459090'",ret);
+        sprintf(cmd, "nmcli con add type wifi ifname %s mode ap con-name HOTSPOT ssid SENCE5",interfaceName);
         if(!runCommand(cmd,ret2,1024)) {
             printf("fail to change the mode to Access point\n");
             return false;
-        }           
+        }
+        sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless.band bg");
+        if(!runCommand(cmd,ret2,1024)) {
+            printf("fail to change the mode to Access point\n");
+            return false;
+        }
+        sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless.channel 1");
+        if(!runCommand(cmd,ret2,1024)) {
+            printf("fail to change the mode to Access point\n");
+            return false;
+        }
+        sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.key-mgmt wpa-psk");
+        if(!runCommand(cmd,ret2,1024)) {
+            printf("fail to change the mode to Access point\n");
+            return false;
+        }
+        sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.proto rsn");
+        if(!runCommand(cmd,ret2,1024)) {
+            printf("fail to change the mode to Access point\n");
+            return false;
+        }
+        sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.group ccmp");
+        if(!runCommand(cmd,ret2,1024)) {
+            printf("fail to change the mode to Access point\n");
+            return false;
+        } 
+        sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.pairwise ccmp");
+        if(!runCommand(cmd,ret2,1024)) {
+            printf("fail to change the mode to Access point\n");
+            return false;
+        } 
+        sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.psk 11223344");
+        if(!runCommand(cmd,ret2,1024)) {
+            printf("fail to change the mode to Access point\n");
+            return false;
+        }
+
+        sprintf(cmd, "nmcli con modify HOTSPOT ipv4.method shared");
+        if(!runCommand(cmd,ret2,1024)) {
+            printf("fail to change the mode to Access point\n");
+            return false;
+        } 
+
+        sprintf(cmd, "nmcli con up HOTSPOT");
+        if(!runCommand(cmd,ret2,1024)) {
+            printf("fail to change the mode to Access point\n");
+            return false;
+        }             
         return true;
     }
     else{
@@ -530,12 +566,126 @@ bool wifi_mode(bool mode){
     }
 }
 
-bool wifi_set_ssid_lock(char *ssid,bool enable ){
-    if(enable){
-        return true;
+int search_autoconnect(){
+    int ret;
+    char cmd[255];
+    char ret3[1024]="";
+    int count1 = 0;
+    printf("line 1");
+    char re[]="yes";
+    vector a;
+    vector_init(&a);
+    printf("line 2");
+    wifi_get_ssid_preferred_list(&a);
+    printf("line 3");
+    for(int i=0;i< a.count;i++) {
+    char* ssid =a.data[i];
+    printf("%s \n",ssid);
+    sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect: | awk '{print $2}' ",ssid);
+        if(!runCommand(cmd,ret3,1024)) {
+            printf("fail to change the mode to client\n");
+            return -1;
+        }
+        printf("ret value - %s\n",ret3);
+        int cc = strcmp(ret3,re);
+        printf("ddd - %d",cc);
+        if(cc >= 0){
+            count1++;
+            printf("counter value - %d \n",count1);
+        }
+
     }
-    else{
-        return false;
-    }
+    return count1;
 }
+
+ int string_parser(char *str23){
+    char cmd[255];
+    char ret[1024]="";
+    char *str1 = malloc(50);
+    int j=0;
+    int camp = 0;
+    char *wifi = "wifi";
+    printf("recevied ssid - %s",str23);
+    sprintf(cmd, "nmcli con show | grep '%s'",str23);
+    if(!runCommand(cmd,ret,2048)){
+        printf("scan result failed\n");
+        free(str1);
+        return 10600;
+    }
+    char *original = malloc(50);
+    original = strdup(ret);
+    printf("original %s",original);
+    while ((str1 = strsep(&original," "))!= NULL) {
+    // loop[i] = strdup(str1);
+       // strcpy(gpsdata[i], str1);
+        printf("Token %d: %s \n", j,str1);
+        j++;
+        camp = strcmp(str1,wifi);
+       
+        if(camp == 1){
+             free(original);
+            free(str1);
+            return 0;
+        }
+    }
+    free(original);
+    free(str1);
+    fflush(cmd);
+    return -1;
+
+
+ }
+
+bool wifi_set_ssid_lock(char *ssid_lock,bool enable ) {
+    char cmd[255];
+    char ret3[1024]="";
+   // char *ssid_tmp= (char *)malloc(50);
+    char *ssid = (char *)malloc(50);
+    char *wifi = "wifi";
+
+    if(enable) {
+        int cc = search_autoconnect();
+        if(cc < 1) {
+            printf("Setting up the ssid ");
+        }
+          else {
+            printf("Setting no");
+            vector a;
+            vector_init(&a);
+            wifi_get_ssid_preferred_list(&a);
+            for(int i=0;i< a.count;i++) {
+                ssid =a.data[i];
+                int str = strcmp(ssid_lock,ssid);
+                if(str>1){
+                    printf("ssid - %s \n",ssid);
+                    sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect no",ssid);
+                    if(!runCommand(cmd,ret3,1024)) {
+                        printf("fail to change the mode to client\n");
+                        return false;
+                    }
+                }
+                else{
+                    printf("no need to change the autoconnect state");
+                }   
+            }
+        }
+
+    } else {
+        vector a;
+        vector_init(&a);
+        wifi_get_ssid_preferred_list(&a);
+        for(int i=0;i< a.count;i++) {
+            ssid =a.data[i];
+            sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes",ssid);
+            if(!runCommand(cmd,ret3,1024)) {
+                printf("fail to change the mode to client\n");
+                return false;
+            }
+            else{
+                printf("no need to change the autoconnect state");
+            }    
+        }
+    }
+} 
+
 

@@ -91,7 +91,7 @@ bool wifi_disconnect_network();
 bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials);
 /*!
  * Get SSID preferred list
- * @param[in] SSIDs structure type variable.
+ * @param[out] SSIDs structure type variable.
 */
 int wifi_get_ssid_preferred_list(vector* SSIDs);
 /*!
