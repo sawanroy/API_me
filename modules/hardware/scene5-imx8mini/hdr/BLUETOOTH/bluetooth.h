@@ -20,19 +20,19 @@ typedef struct{
     char *dev_name;
 } Bt_scanResult;
 
-struct authpin{
+typedef struct {
     char* target;               /* target device */
     int pin;                    /* pincode */
-};
+} authpin;
 
-struct bluetooth_devices{
+typedef struct{
     char* mac;                  /* Bluetooth MAC address */
     char* name;                 /* Bluetooth Name */
     char* other;                /* Other infos */
 
-};
+} bluetooth_devices;
 
-struct bluetoothconfig{
+typedef struct{
     bool radioOn;               /* Enable Bluetooth radio device */
     bool enabled;               /* Enable Bluetooth connections  */
     char* name;                 /* Device name */   
@@ -40,7 +40,7 @@ struct bluetoothconfig{
     int discoverableTimeout;    /* Set the time in seconds after which other devices can discover this device over Bluetooth */
     int maxPaired;              /* Set the limit for the maximum number of Bluetooth devices that can be paired with */
 
-};
+} bluetoothconfig;
 
 bool bluetooth_on();                                                                                    /* Activate Bluetooth */                                                                            
 bool bluetooth_off();                                                                                   /* Disable Bluetooth */ 

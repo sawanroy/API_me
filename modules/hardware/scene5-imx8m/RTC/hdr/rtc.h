@@ -31,5 +31,5 @@ struct rtc_time get_time();
  void set_Alarm()
  to set the Alarm for RTC
 */
-void set_Alarm();
+void set_Alarm(struct rtc_time time);
 #endif
