@@ -138,9 +138,11 @@ bool wifi_set_ssid_lock(char *ssid,bool enable );
 */
 bool wifi_set_static_ip_Address(char* ipaddress, char* subnetmask, char* gateway, char* dns);
 /*!
- * Use DHCP to get IP for WiFi
+ * Use DHCP to enable or disable dhcp for ip address
+   @param[in] enable bool type variable
+   @return return 0 and -1 
 */
-int WiFi_useDHCP();
+int WiFi_usedhcp(bool enable);
 
 /*! 
 	Switch the wifi mode into client or access point.
