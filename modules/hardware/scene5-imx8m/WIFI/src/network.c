@@ -34,6 +34,35 @@ static void lib_init(void)
     return;
 }
 
+
+bool wifi_ssid_lock_check()
+{
+	//int ret;
+    char cmd[255];
+    char ret[1024]="";
+    int count1 = 0;
+    vector a;
+    vector_init(&a);
+    wifi_get_ssid_preferred_list(&a);
+    for(int i=0;i< a.count;i++) 
+    {
+        char* ssid =a.data[i];
+        sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority: | awk '{print $2}' ",ssid);
+        if(!runCommand(cmd,ret,1024)) 
+        {
+            return false;
+        }
+        if(atoi(ret) == 2)
+        {
+            //lock is set
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
 /*
     wifi_activation(bool state)
 */
@@ -209,13 +238,26 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
     if(!connection)
     {
         printf("connection does not exist\n");
-        sprintf(cmd, "nmcli con add ifname '%s' type wifi con-name '%s' connection.autoconnect-priority 1 ssid '%s' wifi-sec.key-mgmt wpa-psk wifi-sec.psk '%s'",interfaceName,credentials.ssid,credentials.ssid,credentials.password);
-        printf("%s\n",cmd);
-        if(!runCommand(cmd,ret,1024))
+
+        if(wifi_ssid_lock_check())
         {
-            printf("adding network failed\n");
-            return 10600;
+        	sprintf(cmd, "nmcli con add ifname '%s' type wifi con-name '%s' connection.autoconnect no connection.autoconnect-priority 1 ssid '%s' wifi-sec.key-mgmt wpa-psk wifi-sec.psk '%s'",interfaceName,credentials.ssid,credentials.ssid,credentials.password);
+            if(!runCommand(cmd,ret,1024))
+            {
+                 printf("fail to remove from preffered list\n");
+                 return false;
+            }
         }
+        else
+        {
+	        sprintf(cmd, "nmcli con add ifname '%s' type wifi con-name '%s' connection.autoconnect-priority 1 ssid '%s' wifi-sec.key-mgmt wpa-psk wifi-sec.psk '%s'",interfaceName,credentials.ssid,credentials.ssid,credentials.password);
+	        printf("%s\n",cmd);
+	        if(!runCommand(cmd,ret,1024))
+	        {
+	            printf("adding network failed\n");
+	            return 10600;
+	        }
+	    }
     
     }
     else
@@ -223,7 +265,7 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
         sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",credentials.ssid);
         if(!runCommand(cmd,ret,1024))
         {
-            printf("connection not in preferred list\n");
+            printf("command failure\n");
             return false;
         }
         if(atoi(ret)>=1)
@@ -235,12 +277,24 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
         else
         {
             //ssid is in connection list but not in preffered list.
-            sprintf(cmd, "nmcli con modify '%s' connection.autoconnect on connection.autoconnect-priority 1",credentials.ssid);
-            if(!runCommand(cmd,ret,1024))
+            if(wifi_ssid_lock_check())
             {
-                 printf("fail to remove from preffered list\n");
-                 return false;
+            	sprintf(cmd, "nmcli con modify '%s' connection.autoconnect off connection.autoconnect-priority 1",credentials.ssid);
+	            if(!runCommand(cmd,ret,1024))
+	            {
+	                 printf("fail to remove from preffered list\n");
+	                 return false;
+	            }
             }
+            else
+            {
+	            sprintf(cmd, "nmcli con modify '%s' connection.autoconnect on connection.autoconnect-priority 1",credentials.ssid);
+	            if(!runCommand(cmd,ret,1024))
+	            {
+	                 printf("fail to remove from preffered list\n");
+	                 return false;
+	            }
+	        }
             printf("Connection added to preffered list\n");   
 
         }
@@ -410,14 +464,20 @@ bool wifi_remove_from_ssid_preferred_list(char* SSID)
         printf("connection does not exist\n");
         return false;
     }
-    
+   
     sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",SSID);
     if(!runCommand(cmd,ret,1024))
     {
-        printf(" connection not in preferred list\n");
+        printf("command failure\n");
         return false;
-    }   
-    if(atoi(ret)>=1)
+    } 
+    if(atoi(ret)==2)
+    {
+    	//SSID is locked. Cannot remove
+    	printf("SSID is locked. Disbale lock first\n");
+    	return false;
+    }  
+    else if(atoi(ret)==1)
     {
         sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s' | cut -d\: -f1", interfaceName);
         if(!runCommand(cmd,ret,1024))
@@ -682,95 +742,120 @@ bool wifi_mode(bool mode)
     }
 }
 
-int search_autoconnect()
-{
-    int ret;
-    char cmd[255];
-    char ret3[1024]="";
-    int count1 = 0;
-    char re[]="yes";
-    vector a;
-    vector_init(&a);
-    wifi_get_ssid_preferred_list(&a);
-    for(int i=0;i< a.count;i++) 
-    {
-        char* ssid =a.data[i];
-        sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect: | awk '{print $2}' ",ssid);
-        if(!runCommand(cmd,ret3,1024)) 
-        {
-            return -1;
-        }
-        int cc = strcmp(ret3,re);
-        if(cc >= 0)
-        {
-            count1++;
-            printf("counter value - %d \n",count1);
-        }
-    }
-    return count1;
-}
+// int search_autoconnect()
+// {
+//     int ret;
+//     char cmd[255];
+//     char ret3[1024]="";
+//     int count1 = 0;
+//     char re[]="yes";
+//     vector a;
+//     vector_init(&a);
+//     wifi_get_ssid_preferred_list(&a);
+//     for(int i=0;i< a.count;i++) 
+//     {
+//         char* ssid =a.data[i];
+//         sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect: | awk '{print $2}' ",ssid);
+//         if(!runCommand(cmd,ret3,1024)) 
+//         {
+//             return -1;
+//         }
+//         int cc = strcmp(ret3,re);
+//         if(cc >= 0)
+//         {
+//             count1++;
+//             printf("counter value - %d \n",count1);
+//         }
+//     }
+//     return count1;
+// }
+
+
 
 bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
 {
     char cmd[255];
-    char ret3[1024]="";
+    char ret[1024];
     char *ssid = (char *)malloc(50);
     char *wifi = "wifi";
-    if(enable) 
-    {
-        int count = search_autoconnect();
-        if(count < 1) 
-        {
-            printf("already ssid locked ");
-            free(ssid);
-            return -1;
-        }
-        else 
-        {
-            vector a;
-            vector_init(&a);
-            wifi_get_ssid_preferred_list(&a);
-            for(int i=0;i< a.count;i++)
-            {
-                ssid =a.data[i];
-                int str = strcmp(ssid_lock,ssid);
-                if(str>1)
-                {
-                    sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect no",ssid);
-                   if(!runCommand(cmd,ret3,1024)) 
-                    {
-                        free(ssid);
-                        return false;
-                    }
-                }
-                else
-                {
-                    printf("no need to change the autoconnect state");
-                }   
-            }
-        }
+    int status=0;
+    int idx=0;
 
-    } 
-    else 
+    vector a;
+    vector_init(&a);
+    wifi_get_ssid_preferred_list(&a);
+    for(idx=0;idx< a.count;idx++)
     {
-        vector a;
-        vector_init(&a);
-        wifi_get_ssid_preferred_list(&a);
-        for(int i=0;i< a.count;i++)
-        {
-            ssid =a.data[i];
-            sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes",ssid);
-            if(!runCommand(cmd,ret3,1024))
-            {
-                printf("fail to change the mode to client\n");
-                return false;
-            }
-            else
-            {
-                printf("no need to change the autoconnect state");
-            }    
-        }
+    	ssid =a.data[idx];
+    	if(strcmp(ssid_lock,ssid) == 0)
+    	{
+    		status = 1;
+    		break;
+    	}
     }
+    if(status)
+    {
+
+		if(enable) 
+		{
+		    //int count = search_autoconnect();
+		    if(wifi_ssid_lock_check() == true) 
+		    {
+		        printf("already ssid locked ");
+		        free(ssid);
+		        return false;
+		    }
+		    else 
+		    {
+		        for(int j=0;j< a.count;j++)
+		        {
+		            ssid =a.data[j];
+		          
+            		if(idx==j)
+            		{
+            			sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes connection.autoconnect-priority 2",ssid);
+                		if(!runCommand(cmd,ret,1024)) 
+               			{
+                    		free(ssid);
+                    		return false;
+                		}
+            		}
+            		else
+            		{
+            			sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect no",ssid);
+                		if(!runCommand(cmd,ret,1024)) 
+                		{
+	                        free(ssid);
+	                        return false;
+                		}
+            		}
+		                
+		        }
+
+		    }
+
+		} 
+		else 
+		{
+		    for(int j=0;j< a.count;j++)
+		    {
+		        ssid =a.data[j];
+		        sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes connection.autoconnect-priority 1",ssid);
+		        if(!runCommand(cmd,ret,1024))
+		        {
+		            printf("Command failed\n");
+		            return false;
+		        }   
+		    }
+		}
+	}
+	else
+	{
+		printf("SSID not avaible in preferred list\n");
+		return false;
+	}
+
+	return true;
 } 
 
 
