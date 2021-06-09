@@ -191,72 +191,61 @@ bool wifi_disconnect_network()
 
 */
 bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials) 
-{
-    bool wep_passphrase = true; //key:false, phrase:true
+{   
+    char cmd[526];
+    char ret[1024];
+    
     NMClient* client = getClient();
     if(!client)
         return false;
-    NMConnection *connection=nm_simple_connection_new();
-    NMSettingWireless* s_wifi = (NMSettingWireless *) nm_setting_wireless_new();
-    if(!connection )
-        return false;
-    //check for access point
+
     if(getIfname()<0)
     {
         return false;
     }
-    NMDevice *device = nm_client_get_device_by_iface (client,interfaceName);
-     NMAccessPoint* ap = findApOnDevice(device,NULL, credentials.ssid);
-    if(ap==NULL){
-        printf("Cannot find the AP nearby");
-        return false;
-    }
-    NMSettingConnection *s_con =(NMSettingConnection *)nm_setting_connection_new();
-    if(!s_con)
+
+    //Check if given ssid exist in connection list
+    NMRemoteConnection* connection = nm_client_get_connection_by_id(client, credentials.ssid);
+    if(!connection)
     {
-        printf("cannot create new connection\n");
-        return false;
-    }
-    nm_connection_add_setting(connection, NM_SETTING(s_con));
-    char* uuid = nm_utils_uuid_generate();
-    g_object_set (s_con,
-        NM_SETTING_CONNECTION_ID, credentials.ssid,
-        NM_SETTING_CONNECTION_UUID, uuid,
-        NM_SETTING_CONNECTION_AUTOCONNECT, TRUE,
-       // NM_SETTING_CONNECTION_AUTOCONNECT_PRIORITY,1,
-        NM_SETTING_CONNECTION_TYPE, NM_SETTING_WIRELESS_SETTING_NAME,
-        NULL
-    );
-    g_free (uuid);
-    /* Wifi setting*/
-    NM80211ApFlags ap_flags             = nm_access_point_get_flags(ap);
-    NM80211ApSecurityFlags ap_wpa_flags = nm_access_point_get_wpa_flags(ap);
-    NM80211ApSecurityFlags ap_rsn_flags = nm_access_point_get_rsn_flags(ap);
-    /* Set password for WEP or WPA-PSK. */
-    if (ap_flags & NM_802_11_AP_FLAGS_PRIVACY) 
-    {
-        /* Ask for missing password when one is expected and '--ask' is used */
-        NMSettingWirelessSecurity *s_wsec = (NMSettingWirelessSecurity *) nm_setting_wireless_security_new ();
-        nm_connection_add_setting (connection, NM_SETTING (s_wsec));
-        if (ap_wpa_flags == NM_802_11_AP_SEC_NONE && ap_rsn_flags == NM_802_11_AP_SEC_NONE) 
+        printf("connection does not exist\n");
+        sprintf(cmd, "nmcli con add ifname '%s' type wifi con-name '%s' connection.autoconnect-priority 1 ssid '%s' wifi-sec.key-mgmt wpa-psk wifi-sec.psk '%s'",interfaceName,credentials.ssid,credentials.ssid,credentials.password);
+        printf("%s\n",cmd);
+        if(!runCommand(cmd,ret,1024))
         {
-            /* WEP */
-            nm_setting_wireless_security_set_wep_key (s_wsec, 0, credentials.password);
-            g_object_set (G_OBJECT (s_wsec),
-            NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
-            wep_passphrase ? NM_WEP_KEY_TYPE_PASSPHRASE: NM_WEP_KEY_TYPE_KEY,
-            NULL);
+            printf("adding network failed\n");
+            return 10600;
         }
-        else if(!(ap_wpa_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)
-        && !(ap_rsn_flags & NM_802_11_AP_SEC_KEY_MGMT_802_1X)) 
+    
+    }
+    else
+    {
+        sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",credentials.ssid);
+        if(!runCommand(cmd,ret,1024))
         {
-            /* WPA PSK */
-            g_object_set (s_wsec, NM_SETTING_WIRELESS_SECURITY_PSK, credentials.password, NULL);
+            printf("connection not in preferred list\n");
+            return false;
+        }
+        if(atoi(ret)>=1)
+        {
+            //ssid already present in preffered list
+            printf("SSID already added to preffered list\n");
+            return 10603;
+        }
+        else
+        {
+            //ssid is in connection list but not in preffered list.
+            sprintf(cmd, "nmcli con modify '%s' connection.autoconnect on connection.autoconnect-priority 1",credentials.ssid);
+            if(!runCommand(cmd,ret,1024))
+            {
+                 printf("fail to remove from preffered list\n");
+                 return false;
+            }
+            printf("Connection added to preffered list\n");   
+
         }
     }
-    //we don't have callback, so assuming it will be successful with this async operation
-    //network manager only provides async operation for adding connection
-    nm_client_add_and_activate_connection_async(client,connection, device, nm_object_get_path(NM_OBJECT(ap)),NULL, NULL,NULL);
+    
     return true;
 }
 /*
@@ -376,7 +365,6 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
             sprintf(cmd, "nmcli -f NAME,TYPE con show | grep '%s' | awk '{print $NF}'",id);
             if(!runCommand(cmd,ret,1024))
             {
-                printf("fail to change the mode to client\n");
                 return false;
             }
             comp = strcmp(ret,"wifi");
@@ -385,7 +373,6 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
                 sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",id);
                 if(!runCommand(cmd,ret,1024))
                 {
-                    printf("fail to change the mode to client\n");
                     return false;
                 }   
                 if(atoi(ret)>=1){
@@ -401,6 +388,8 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
     }
     return 0;
 }
+
+
 /*
     wifi_remove_from_ssid_preferred_list(char* SSID)
 
@@ -408,21 +397,61 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
 */
 bool wifi_remove_from_ssid_preferred_list(char* SSID)
 {
+    char ret[1024];
+    char cmd[255];
+
     NMClient* client = getClient();
     if(!client)
         return false;
+
     NMRemoteConnection* connection = nm_client_get_connection_by_id(client, SSID);
     if(!connection)
     {
         printf("connection does not exist\n");
         return false;
     }
-    char ret[1024];
-    char cmd[125];
-    sprintf(cmd,"nmcli connection delete id \"%s\"", SSID);
+    
+    sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",SSID);
     if(!runCommand(cmd,ret,1024))
     {
+        printf(" connection not in preferred list\n");
         return false;
+    }   
+    if(atoi(ret)>=1)
+    {
+        sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s' | cut -d\: -f1", interfaceName);
+        if(!runCommand(cmd,ret,1024))
+        {
+             printf("command failed\n");
+            return false;
+        }
+        //connection is from preferred list.
+        if(strcmp(SSID,ret)==0) 
+        {
+            sprintf(cmd, "nmcli con modify '%s' connection.autoconnect off connection.autoconnect-priority 0", SSID);
+            if(!runCommand(cmd,ret,1024))
+            {
+                  printf("fail to remove from preffered list\n");
+                    return false;
+            }
+            printf("connection modified\n"); 
+        }  
+        
+         //Currently not connected to any preferred list ssids.
+        else
+        {
+            sprintf(cmd,"nmcli connection delete id \"%s\"", SSID);
+            if(!runCommand(cmd,ret,1024))
+            {
+                 return false;
+            }
+            printf("connection deleted\n");
+        } 
+
+    }
+    else
+    {
+        printf("connection not found in preferred list\n");
     }
     return true;
 }
@@ -463,7 +492,7 @@ bool wifi_reconnect()
     {
         return false;
     }
-    printf("InterfaceName %s",interfaceName);
+
     char ret[1024]="";
     char cmd[255];
     sprintf(cmd, "nmcli device connect %s",interfaceName);
@@ -669,7 +698,6 @@ int search_autoconnect()
         sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect: | awk '{print $2}' ",ssid);
         if(!runCommand(cmd,ret3,1024)) 
         {
-            printf("fail to change the mode to client\n");
             return -1;
         }
         int cc = strcmp(ret3,re);
@@ -711,7 +739,6 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                     sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect no",ssid);
                    if(!runCommand(cmd,ret3,1024)) 
                     {
-                        printf("fail to change the mode to client\n");
                         free(ssid);
                         return false;
                     }
