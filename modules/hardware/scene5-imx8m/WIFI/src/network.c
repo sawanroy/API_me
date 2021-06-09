@@ -113,59 +113,47 @@ bool wifi_get_defaultpower_mode()
 
 */
 
-int wifi_connect_network(struct wifiinfo credentials) 
+int wifi_connect_network(struct wifiinfo credentials)
 {
-    wifi_disconnect_network();
+    wifi_disconnect_network(); 
     NMClient* client = getClient();
     if(!client)
-    return 10600;
-
-    if(getIfname()<1){
+        return 10600;
+    if(getIfname()<1)
+    {
         return 10600;
     }
     char ret[1024]="";
-
-    if(!runCommand("wpa_cli scan",ret,1024)){
+    if(!runCommand("wpa_cli scan",ret,1024))
+    {
         printf("scan failed\n");
         return 10600;
     }
     char cmd[255];
+    char cmd2[255];
     sprintf(cmd, "wpa_cli scan_results | awk -F \" \" ' {print $5 }' - | grep -E '^%s$'", credentials.ssid);
-    if(!runCommand(cmd,ret,1024)){
+    if(!runCommand(cmd,ret,1024))
+    {
         printf("scan result failed\n");
         return 10600;
     }
-    if(strlen(ret)==0){
+    if(strlen(ret)==0)
+    {
         printf("network not in range");
         return 10605;
     }
-    if(!runCommand("wpa_cli add_network | tail -1",ret,1024)){
+    sprintf(cmd2, "nmcli con add ifname wlan0 type wifi autoconnect off ssid '%s' wifi-sec.key-mgmt wpa-psk wifi-sec.psk '%s'",credentials.ssid,credentials.password);
+    if(!runCommand(cmd2,ret,1024))
+    {
         printf("adding network failed\n");
         return 10600;
     }
-    int networkId = atoi(ret);
-    sprintf(cmd, "wpa_cli set_network %d ssid '\"%s\"'",networkId,credentials.ssid);
-    // printf(cmd);
-    if(!runCommand(cmd,ret,1024)){
-        printf("set ssid failed\n");
+
+    sprintf(cmd2, "nmcli con up '%s'",credentials.ssid);
+    if(!runCommand(cmd2,ret,1024))
+    {
+        printf("adding network failed\n");
         return 10600;
-    }
-    sprintf(cmd, "wpa_cli set_network %d psk '\"%s\"'",networkId,credentials.password);
-    // printf(cmd);
-    if(!runCommand(cmd,ret,1024)){
-        printf("set password failed\n");
-        return 10600;
-    }
-    sprintf(cmd, "sh -c 'wpa_cli enable_network %d && wpa_cli select_network %d' | grep 'FAIL'", networkId,networkId);
-    //printf(cmd);
-    if(!runCommand(cmd,ret,1024)){
-        printf("enabling network failed, check password\n");
-        return 10602;
-    }
-    printf(ret);
-    if(strlen(ret)){
-        printf("enabling network failed, check password\n");
-        return 10602;
     }
     return 0;
 }
@@ -218,7 +206,7 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
         return false;
     }
     NMDevice *device = nm_client_get_device_by_iface (client,interfaceName);
-    NMAccessPoint* ap = findApOnDevice(device,NULL, credentials.ssid);
+     NMAccessPoint* ap = findApOnDevice(device,NULL, credentials.ssid);
     if(ap==NULL){
         printf("Cannot find the AP nearby");
         return false;
@@ -235,6 +223,7 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
         NM_SETTING_CONNECTION_ID, credentials.ssid,
         NM_SETTING_CONNECTION_UUID, uuid,
         NM_SETTING_CONNECTION_AUTOCONNECT, TRUE,
+       // NM_SETTING_CONNECTION_AUTOCONNECT_PRIORITY,1,
         NM_SETTING_CONNECTION_TYPE, NM_SETTING_WIRELESS_SETTING_NAME,
         NULL
     );
@@ -331,7 +320,7 @@ int wifi_scan(vector* v)
         return 10600;
     }
     char cmd[255];
-//    sprintf(cmd, "wpa_cli scan_results | awk -F \" \" 'NR>2 {print $3,$5 }' - ");
+    //sprintf(cmd, "wpa_cli scan_results | awk -F \" \" 'NR>2 {print $3,$5 }' - ");
     sprintf(cmd, "wpa_cli scan_results | awk 'NR>2 {print $3,$5 }' - ");
     if(!runCommand(cmd,ret,2048))
     {
@@ -391,9 +380,18 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
                 return false;
             }
             comp = strcmp(ret,"wifi");
-            if(comp>=1) {
+            if(comp>=1) 
+            {
+                sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",id);
+                if(!runCommand(cmd,ret,1024))
+                {
+                    printf("fail to change the mode to client\n");
+                    return false;
+                }   
+                if(atoi(ret)>=1){
                 vector_add(SSIDs,id);
                 printf("filter ssid - %s \n",id);
+                }
             }
 		}
         else
