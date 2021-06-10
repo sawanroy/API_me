@@ -236,7 +236,6 @@ bool runCommand( const char* cmd, char* output,int size){
 
      		/* Read the output a line at a time - output it. */
   		while (fgets(path, sizeof(path)-1, fp) != NULL) {
-			  printf("%s",path);
 			  strcpy(output,path);
 		  }
 		  
