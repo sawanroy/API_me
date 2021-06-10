@@ -447,7 +447,6 @@ int wifi_scan(vector* v)
     char ret[2048]="";
     char cmd[255];
     char ssid[128]="";
-    char* p = strtok(ret,"\n");
     int count =0;
     int dbm;
     
@@ -469,6 +468,7 @@ int wifi_scan(vector* v)
         printf("network not in range");
         return 10600;
     }
+    char* p = strtok(ret,"\n");
     while(p!=NULL)
     {
         sscanf(p,"%3d %s\n", &dbm,ssid);
