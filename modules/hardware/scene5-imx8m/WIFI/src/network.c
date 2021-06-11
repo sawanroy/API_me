@@ -915,7 +915,6 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                     ssid =a.data[j];              
                     if(idx==j)
                     {
-                        wifi_disconnect_network();
                         sleep(0.3);
                         struct wifiinfo credentials;
                         credentials.ssid = ssid;
@@ -941,15 +940,29 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
         } 
         else 
         {
-            for(int j=0;j< a.count;j++)
+            sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",ssid_lock);
+            if(!runCommand(cmd,ret,1024))
             {
-                ssid =a.data[j];
-                sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes connection.autoconnect-priority 1",ssid);
-                if(!runCommand(cmd,ret,1024))
+                return false;
+            }   
+            if(atoi(ret)==2)
+            {
+                for(int j=0;j< a.count;j++)
                 {
-                    printf("Command failed\n");
-                    return false;
-                }   
+                    ssid =a.data[j];
+                    sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes connection.autoconnect-priority 1",ssid);
+                    if(!runCommand(cmd,ret,1024))
+                    {
+                        printf("Command failed\n");
+                        free(ssid);
+                        return false;
+                    }   
+                }
+            }
+            else
+            {
+                printf("This ssid is not locked\n");
+                return false;
             }
         }
     }
@@ -958,6 +971,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
         printf("SSID not avaible in preferred list\n");
         return false;
     }
+    free(ssid);
     return true;
 } 
 
