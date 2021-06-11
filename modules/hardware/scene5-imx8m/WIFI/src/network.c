@@ -13,29 +13,6 @@
 #include <network.h>
 
 
-static void __attribute__ ((constructor)) \
-lib_init(void);
-
-static void lib_init(void) 
-{
-    /* check root permission */
-    if(geteuid() != 0)
-    {
-        return;
-        /* Tell user to run  app as root, then exit */ 
-    } 
-    char ret[1024];
-    if(!runCommand("wpa_cli scan",ret,1024))
-    {
-        return ;
-    }
-    /* leave some time for the scan to finish */
-    usleep(1000000);
-    return;
-}
-
-
-
 /*
     Internal function
 */
