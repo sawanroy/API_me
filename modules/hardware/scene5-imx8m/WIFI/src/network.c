@@ -44,7 +44,6 @@ bool wifi_ssid_lock_check()
     //int ret;
     char cmd[255];
     char ret[1024]="";
-    int count1 = 0;
     vector a;
     vector_init(&a);
     wifi_get_ssid_preferred_list(&a);
@@ -54,14 +53,17 @@ bool wifi_ssid_lock_check()
         sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority: | awk '{print $2}' ",ssid);
         if(!runCommand(cmd,ret,1024)) 
         {
+            vector_free(&a);
             return false;
         }
         if(atoi(ret) == 2)
         {
             //lock is set
+            vector_free(&a);
             return true;
         }
     }
+    vector_free(&a);
     return false;
 }
 
@@ -283,7 +285,7 @@ bool wifi_disconnect_network()
             break;
         }
     }
-    
+    vector_free(&a);   
     if(status)
     {   
         //if ssid is in preffered list just disconnect it.
@@ -543,7 +545,7 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
                 }   
                 if(atoi(ret)>=1)
                 {
-                    vector_add(SSIDs,id);
+                    vector_add(SSIDs,(void *)id);
                     printf("filter ssid - %s \n",id);
                 }
             }
@@ -789,77 +791,76 @@ bool wifi_mode(bool mode)
         return 10600;
     } 
 
-    char cmd[1024];
+    char cmd[2048];
     char ret[1024]="";
-    char ret2[1024]="";
 
     if(mode)
     {         
         sprintf(cmd, "nmcli con add type wifi ifname %s mode ap con-name HOTSPOT ssid SENCE5",interfaceName);
-        if(!runCommand(cmd,ret2,1024)) 
+        if(!runCommand(cmd,ret,1024)) 
         {
             printf("fail to change the mode to Access point\n");
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless.band bg");
-        if(!runCommand(cmd,ret2,1024)) 
+        if(!runCommand(cmd,ret,1024)) 
         {
             printf("fail to change the mode to Access point\n");
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless.channel 1");
-        if(!runCommand(cmd,ret2,1024))
+        if(!runCommand(cmd,ret,1024))
         {
             printf("fail to change the mode to Access point\n");
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.key-mgmt wpa-psk");
-        if(!runCommand(cmd,ret2,1024))
+        if(!runCommand(cmd,ret,1024))
         {
             printf("fail to change the mode to Access point\n");
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.proto rsn");
-        if(!runCommand(cmd,ret2,1024))
+        if(!runCommand(cmd,ret,1024))
         {
             printf("fail to change the mode to Access point\n");
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.group ccmp");
-        if(!runCommand(cmd,ret2,1024))
+        if(!runCommand(cmd,ret,1024))
         {
             printf("fail to change the mode to Access point\n");
             return false;
         } 
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.pairwise ccmp");
-        if(!runCommand(cmd,ret2,1024))
+        if(!runCommand(cmd,ret,1024))
         {
             printf("fail to change the mode to Access point\n");
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.psk 11223344");
-        if(!runCommand(cmd,ret2,1024))
+        if(!runCommand(cmd,ret,1024))
         {
             printf("fail to change the mode to Access point\n");
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT ipv4.method shared");
-        if(!runCommand(cmd,ret2,1024))
+        if(!runCommand(cmd,ret,1024))
         {
             printf("fail to change the mode to Access point\n");
             return false;
         }
 
         sprintf(cmd, "nmcli con up HOTSPOT");
-        if(!runCommand(cmd,ret2,1024))
+        if(!runCommand(cmd,ret,1024))
         {
             printf("fail to change the mode to Access point\n");
             return false;
@@ -868,16 +869,14 @@ bool wifi_mode(bool mode)
     }
     else
     {
-        //char cmd[255];
-        char ret3[1024]="";
-        sprintf(cmd, "nmcli device disconnect %s",ret);
-        if(!runCommand(cmd,ret3,1024))
+        sprintf(cmd, "nmcli device disconnect '%s'",ret);
+        if(!runCommand(cmd,ret,1024))
         {
             printf("fail to change the mode to client\n");
             return false;
         } 
         sprintf(cmd, "nmcli con delete HOTSPOT");
-        if(!runCommand(cmd,ret3,1024))
+        if(!runCommand(cmd,ret,1024))
         {
             printf("fail to change the mode to client\n");
             return false;
@@ -920,6 +919,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
             {
                 printf("already ssid locked ");
                 free(ssid);
+                vector_free(&a);
                 return false;
             }
             else 
@@ -936,6 +936,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                         {
                             printf("command failed\n");
                             free(ssid);
+                            vector_free(&a);
                             return false;
                         }
 
@@ -947,6 +948,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                             {
                                 printf("Not able to lock ssid\n");
                                 free(ssid);
+                                vector_free(&a);
                                 return false;
                             }
                             printf("Currenlty disconnected. Connecting to locked ssid\n");
@@ -959,6 +961,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                                 wifi_reconnect();
                                 printf("Not able to lock ssid\n");
                                 free(ssid);
+                                vector_free(&a);
                                 return false;
                             }
                             printf("currently connected to other ssid. Disconnecting and connecting to locked ssid");
@@ -967,6 +970,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                         if(!runCommand(cmd,ret,1024)) 
                         {
                             free(ssid);
+                            vector_free(&a);
                             return false;
                         }
                     }
@@ -976,6 +980,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                         if(!runCommand(cmd,ret,1024)) 
                         {
                             free(ssid);
+                            vector_free(&a);
                             return false;
                         }
                     }                      
@@ -987,6 +992,8 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
             sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",ssid_lock);
             if(!runCommand(cmd,ret,1024))
             {
+                free(ssid);
+                vector_free(&a);
                 return false;
             }   
             if(atoi(ret)==2)
@@ -999,6 +1006,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                     {
                         printf("Command failed\n");
                         free(ssid);
+                        vector_free(&a);
                         return false;
                     }   
                 }
@@ -1006,6 +1014,8 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
             else
             {
                 printf("This ssid is not locked\n");
+                free(ssid);
+                vector_free(&a);
                 return false;
             }
         }
@@ -1013,9 +1023,13 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
     else
     {
         printf("SSID not avaible in preferred list\n");
+        free(ssid);
+        vector_free(&a);
         return false;
     }
+
     free(ssid);
+    vector_free(&a);
     return true;
 } 
 
