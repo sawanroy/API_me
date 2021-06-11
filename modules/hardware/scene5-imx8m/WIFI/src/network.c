@@ -299,10 +299,11 @@ bool wifi_disconnect_network()
     }
     return true;
 }
+
+
+
 /*
-
     wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
-
 */
 bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials) 
 {   
