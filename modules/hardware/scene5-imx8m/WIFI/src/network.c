@@ -174,10 +174,23 @@ int wifi_connect_network(struct wifiinfo credentials)
     }
 
     char ret[1024]="";
-    char cmd[1024];
-    char cmd2[1024];
+    char cmd[1024]="";
 
-    wifi_disconnect_network();
+    sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
+    if(!runCommand(cmd,ret,255))
+    {
+        printf("command failed\n");
+        return false;
+    }
+
+    char *ssid  = strtok(ret,":");
+    printf("p before scanf: %s\n", ssid);
+    if(ssid!=NULL)
+    {
+        printf("Disconnect first and then connect\n");
+        return false;
+    }
+
     if(!runCommand("wpa_cli scan",ret,1024))
     {
         printf("Command failure\n");
@@ -191,23 +204,23 @@ int wifi_connect_network(struct wifiinfo credentials)
     }
     if(strlen(ret)==0)
     {
-        printf("Command failure\n");
+        printf("SSID not available\n");
         return 10605;
     }
 
     NMRemoteConnection* connection = nm_client_get_connection_by_id(client, credentials.ssid);
     if(!connection)
     {
-        sprintf(cmd2, "nmcli con add ifname '%s' type wifi con-name '%s' autoconnect off ssid '%s' wifi-sec.key-mgmt wpa-psk wifi-sec.psk '%s'",interfaceName,credentials.ssid,credentials.ssid,credentials.password);
-        if(!runCommand(cmd2,ret,1024))
+        sprintf(cmd, "nmcli con add ifname '%s' type wifi con-name '%s' autoconnect off ssid '%s' wifi-sec.key-mgmt wpa-psk wifi-sec.psk '%s'",interfaceName,credentials.ssid,credentials.ssid,credentials.password);
+        if(!runCommand(cmd,ret,1024))
         {
             printf("Command failure\n");
             return 10600;
         }
     }
 
-    sprintf(cmd2, "nmcli con up '%s'",credentials.ssid);
-    if(!runCommand(cmd2,ret,1024))
+    sprintf(cmd, "nmcli con up '%s'",credentials.ssid);
+    if(!runCommand(cmd,ret,1024))
     {
         printf("adding network failed\n");
         return 10600;
@@ -916,11 +929,41 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                     ssid =a.data[j];              
                     if(idx==j)
                     {
-                        sleep(0.3);
                         struct wifiinfo credentials;
-                        credentials.ssid = ssid;
-                        wifi_connect_network(credentials);
-                        sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes connection.autoconnect-priority 2",ssid);
+                        credentials.ssid = ssid_lock;
+                        sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
+                        if(!runCommand(cmd,ret,255))
+                        {
+                            printf("command failed\n");
+                            free(ssid);
+                            return false;
+                        }
+
+                        char *cr_ssid  = strtok(ret,":");
+                        printf("current ssid: %s\n", cr_ssid);
+                        if(cr_ssid==NULL)
+                        {
+                            if(wifi_connect_network(credentials)!=1)
+                            {
+                                printf("Not able to lock ssid\n");
+                                free(ssid);
+                                return false;
+                            }
+                            printf("Currenlty disconnected. Connecting to locked ssid\n");
+                        }
+                        else if(strcmp(cr_ssid,ssid_lock))
+                        {
+                            wifi_disconnect_network();
+                            if(wifi_connect_network(credentials)!=1)
+                            {
+                                wifi_reconnect();
+                                printf("Not able to lock ssid\n");
+                                free(ssid);
+                                return false;
+                            }
+                            printf("currently connected to other ssid. Disconnecting and connecting to locked ssid");
+                        }
+                        sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes connection.autoconnect-priority 2",ssid_lock);
                         if(!runCommand(cmd,ret,1024)) 
                         {
                             free(ssid);
