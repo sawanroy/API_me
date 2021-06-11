@@ -584,14 +584,18 @@ bool wifi_remove_from_ssid_preferred_list(char* SSID)
     }  
     else if(atoi(ret)==1)
     {
-        sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s' | cut -d\: -f1", interfaceName);
+        sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
         if(!runCommand(cmd,ret,1024))
         {
             printf("command failed\n");
             return false;
         }
+
+        char *current_ssid  = strtok(ret,":");
+        printf("p before scanf: %s\n", current_ssid);
+
         //connection is from preferred list.
-        if(strcmp(SSID,ret)==0) 
+        if((current_ssid!=NULL) && strcmp(SSID,current_ssid)==0) 
         {
             sprintf(cmd, "nmcli con modify '%s' connection.autoconnect off connection.autoconnect-priority 0", SSID);
             if(!runCommand(cmd,ret,1024))
