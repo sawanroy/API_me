@@ -247,10 +247,8 @@ bool wifi_disconnect_network()
         return false;
     }
     
-    vector a;
     char cmd[1024];
-    char ret[255];
-    int status=0;
+    char ret[1024];
 
     if(wifi_ssid_lock_check())
     {
@@ -258,60 +256,19 @@ bool wifi_disconnect_network()
         return false;
     }
 
-    sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
-    if(!runCommand(cmd,ret,255))
-    {
-        printf("command failed\n");
-        return false;
-    }
-
-    char *ssid  = strtok(ret,":");
-    printf("p before scanf: %s\n", ssid);
-    if(ssid==NULL)
+    NMDevice *device = nm_client_get_device_by_iface (client,interfaceName);
+    NMDeviceState state = nm_device_get_state(device);
+    if(state != NM_DEVICE_STATE_ACTIVATED) 
     {
         printf("Already disconnected\n");
         return false;
     }
-    
-    vector_init(&a);
-    wifi_get_ssid_preferred_list(&a);
-    for(int idx=0;idx<a.count;idx++)
+    if(!nm_device_disconnect(device, NULL, NULL))
     {
-        char* v_ssid = a.data[idx];
-        if(strcmp(ssid,v_ssid) == 0)
-        {
-            printf("matched\n");
-            status = 1;
-            break;
-        }
+        return false;
     }
-    vector_free(&a);   
-    if(status)
-    {   
-        //if ssid is in preffered list just disconnect it.
-        NMDevice *device = nm_client_get_device_by_iface (client,interfaceName);
-        NMDeviceState state = nm_device_get_state(device);
-        if(state != NM_DEVICE_STATE_ACTIVATED) 
-        {
-            return false;
-        }
-        if(!nm_device_disconnect(device, NULL, NULL))
-        {
-            return false;
-        }
-        printf("Connection Modified\n");
-    }
-    else
-    {
-        //if ssid not in preferred list delete it.
-        sprintf(cmd,"nmcli connection delete id '%s'", ssid);
-        printf("cmd: %s\n",cmd);
-        if(!runCommand(cmd,ret,1024))
-        {
-            return false;
-        }
-        printf("connection deleted\n");
-    }
+     
+    printf("connection disconnected\n");  
     return true;
 }
 
@@ -573,7 +530,7 @@ bool wifi_remove_from_ssid_preferred_list(char* SSID)
     }
     if(getIfname()<1)
     {
-        return 10600;
+        return false;
     }
 
     char ret[1024];
@@ -600,37 +557,13 @@ bool wifi_remove_from_ssid_preferred_list(char* SSID)
     }  
     else if(atoi(ret)==1)
     {
-        sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
+        sprintf(cmd, "nmcli con modify '%s' connection.autoconnect off connection.autoconnect-priority 0", SSID);
         if(!runCommand(cmd,ret,1024))
         {
-            printf("command failed\n");
+            printf("fail to remove from preffered list\n");
             return false;
         }
-
-        char *current_ssid  = strtok(ret,":");
-        printf("p before scanf: %s\n", current_ssid);
-
-        //connection is from preferred list.
-        if((current_ssid!=NULL) && strcmp(SSID,current_ssid)==0) 
-        {
-            sprintf(cmd, "nmcli con modify '%s' connection.autoconnect off connection.autoconnect-priority 0", SSID);
-            if(!runCommand(cmd,ret,1024))
-            {
-                printf("fail to remove from preffered list\n");
-                return false;
-            }
-            printf("connection modified\n"); 
-        }  
-        //Currently not connected to any preferred list ssids.
-        else
-        {
-            sprintf(cmd,"nmcli connection delete id \"%s\"", SSID);
-            if(!runCommand(cmd,ret,1024))
-            {
-                return false;
-            }
-            printf("connection deleted\n");
-        } 
+        printf("connection modified\n");  
     }
     else
     {
