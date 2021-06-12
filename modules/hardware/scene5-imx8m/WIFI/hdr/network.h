@@ -146,10 +146,11 @@ bool wifi_usedhcp(bool enable);
 
 /*! 
 	Switch the wifi mode into client or access point.
-	@param mode bool type variable
+	@param[in] mode bool type variable
+  @param[in] struct wifiifo containing AP name and password.
 	@return true or false
 */
-bool wifi_mode(bool mode);
+bool wifi_mode(bool mode, struct wifiinfo);
 
 /*! @} */
 #ifdef __cplusplus

@@ -762,19 +762,25 @@ bool wifi_usedhcp(bool enable)
     wifi_mode(bool mode)
 */
 
-bool wifi_mode(bool mode)
+bool wifi_mode(bool mode, struct wifiinfo apn)
 {
     if(getIfname()<0)
     {
         return 10600;
     } 
-
+    
     char cmd[2048];
     char ret[1024]="";
 
+    if(!wifi_get_power_status())
+    {
+        printf("wifi not active\n");
+        return false;
+    }
+
     if(mode)
     {         
-        sprintf(cmd, "nmcli con add type wifi ifname %s mode ap con-name HOTSPOT ssid SENCE5",interfaceName);
+        sprintf(cmd, "nmcli con add type wifi ifname %s mode ap con-name HOTSPOT ssid '%s'",interfaceName, apn.ssid);
         if(!runCommand(cmd,ret,1024)) 
         {
             printf("fail to change the mode to Access point\n");
@@ -823,7 +829,7 @@ bool wifi_mode(bool mode)
             return false;
         }
 
-        sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.psk 11223344");
+        sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.psk '%s'",apn.password); //password size between 8 to 63 chars
         if(!runCommand(cmd,ret,1024))
         {
             printf("fail to change the mode to Access point\n");
@@ -847,7 +853,7 @@ bool wifi_mode(bool mode)
     }
     else
     {
-        sprintf(cmd, "nmcli device disconnect '%s'",ret);
+        sprintf(cmd, "nmcli device disconnect '%s'",interfaceName);
         if(!runCommand(cmd,ret,1024))
         {
             printf("fail to change the mode to client\n");
