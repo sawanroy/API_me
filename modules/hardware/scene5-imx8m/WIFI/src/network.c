@@ -94,8 +94,26 @@ bool wifi_get_power_status()
     {
         return false;
     }
-    bool enabled = nm_client_wireless_get_enabled(client);
-    return enabled;
+    if(getIfname()<1)
+    {
+        return false;
+    }
+
+    char cmd[1024];
+    char ret[1024]="";
+
+    sprintf(cmd, "ip a show '%s' up", interfaceName);
+    if(!runCommand(cmd,ret,1024))
+    {
+        return false;
+    }
+    if(strcmp(ret,"")==0)
+    {
+        printf("power off\n");
+        return false;
+    }
+    
+    return true;
 }
 
 
