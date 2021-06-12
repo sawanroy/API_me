@@ -132,17 +132,17 @@ bool wifi_set_ssid_lock(char *ssid,bool enable );
 /*!
  * Set static WiFi IP address
  * @param[in] ipaddress  character type variable
- * @param[in] subnetmask character type variable
+ * @param[in] prefixnetmask character type variable (value between 1-32) 
  * @param[in] getway  character type variable
  * @param[in] dns character type variable
 */
-bool wifi_set_static_ip_Address(char* ipaddress, char* subnetmask, char* gateway, char* dns);
+bool wifi_set_static_ip_Address(char* ipaddress, char* prefixnetmask, char* gateway, char* dns);
 /*!
  * Use DHCP to enable or disable dhcp for ip address
    @param[in] enable bool type variable
-   @return return 0 and -1 
+   @return return true/false 
 */
-int WiFi_usedhcp(bool enable);
+bool wifi_usedhcp(bool enable);
 
 /*! 
 	Switch the wifi mode into client or access point.

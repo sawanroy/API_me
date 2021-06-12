@@ -222,6 +222,7 @@ int wifi_connect_network(struct wifiinfo credentials)
         printf("adding network failed\n");
         return 10600;
     }
+
     return true;
 }
 
@@ -626,7 +627,7 @@ bool wifi_reconnect()
 /*
     wifi_set_static_ip_Address(char* ipaddress, char* subnetmask, char* gateway, char* dns)
 */
-bool wifi_set_static_ip_Address(char* ipaddress, char* subnetmask, char* gateway, char* dns)
+bool wifi_set_static_ip_Address(char* ipaddress, char* prefixnetmask, char* gateway, char* dns)
 {
     NMClient* client = getClient();
     if(!client)
@@ -638,49 +639,62 @@ bool wifi_set_static_ip_Address(char* ipaddress, char* subnetmask, char* gateway
         return false;
     }
 
-    char ret[1024]="";
     char cmd[1024];
+    char ret[1024]=""; 
 
-    if(strlen(ipaddress)>0 && strlen(subnetmask)>0)
+    sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
+    if(!runCommand(cmd,ret,1024))
     {
-        sprintf(cmd, "ifconfig %s %s netmask %s up", interfaceName, ipaddress, subnetmask);
-        if(!runCommand(cmd,ret,1024))
-        {
-            printf("setting IP failed\n");
-            return false;
-        }
+        printf("command failed\n");
+        return false;
     }
-    if(strlen(gateway)>0)
+
+    char *tmp_ssid = strtok(ret,":");
+
+    if(tmp_ssid==NULL)
     {
-        sprintf(cmd, "route add default gw %s", gateway);
-        if(!runCommand(cmd,ret,1024))
-        {
-            printf("setting gateway failed");
-            return false;
-        }
+        printf("No network connected\n");
+        return false;
     }
-    if(strlen(dns)>0)
+
+    char ssid[strlen(tmp_ssid)];
+
+    strcpy(ssid,tmp_ssid);
+
+    sprintf(cmd,"nmcli con down '%s'", ssid);
+    if(!runCommand(cmd,ret,1024))
     {
-        sprintf(cmd, "echo \"nameserver %s\" >> /etc/resolv.conf", dns);
-        if(!runCommand(cmd,ret,1024))
-        {
-            printf("dns setting failed");
-            return false;
-        }
+        printf("setting IP failed\n");
+        return false;
     }
+
+    sprintf(cmd,"nmcli con modify '%s' ipv4.addresses '%s'/'%s' ipv4.gateway '%s' ipv4.dns '%s' ipv4.method manual", ssid, ipaddress, prefixnetmask, gateway, dns);
+    if(!runCommand(cmd,ret,1024))
+    {
+        printf("setting IP failed\n");
+        return false;
+    }
+   
+    sprintf(cmd,"nmcli con up '%s'", ssid);
+    if(!runCommand(cmd,ret,1024))
+    {
+        printf("setting IP failed\n");
+        return false;
+    }
+    
     return true;
 }
 
 
 
 /*
-    int WiFi_usedhcp(bool enable)
+    wifi_usedhcp(bool enable)
 */
-int WiFi_usedhcp(bool enable)
+bool wifi_usedhcp(bool enable)
 {
     if(getIfname()<0)
     {
-        return 10600;
+        return false;
     }
 
     char ret[1024]="";
@@ -688,10 +702,45 @@ int WiFi_usedhcp(bool enable)
 
     if(enable)
     {
-        sprintf(cmd,"dhclient %s",interfaceName);
-        if(!runCommand(cmd, ret, 1024))
+        sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
+        if(!runCommand(cmd,ret,1024))
         {
-            return 10600;
+            printf("command failed\n");
+            return false;
+        }
+
+        char *tmp_ssid = strtok(ret,":");
+        if(tmp_ssid==NULL)
+        {
+            printf("No network connected\n");
+            return false;
+        }
+
+        char ssid[strlen(tmp_ssid)];
+
+        strcpy(ssid,tmp_ssid);
+
+        
+
+        sprintf(cmd,"nmcli con down '%s'", ssid);
+        if(!runCommand(cmd,ret,1024))
+        {
+            printf("setting IP failed\n");
+            return false;
+        }
+        
+        sprintf(cmd,"nmcli con modify '%s' ipv4.addresses \"\" ipv4.gateway \"\" ipv4.dns \"\" ipv4.method auto", ssid);
+        if(!runCommand(cmd,ret,1024))
+        {
+            printf("setting IP failed\n");
+            return false;
+        }
+
+        sprintf(cmd,"nmcli con up '%s'", ssid);
+        if(!runCommand(cmd,ret,1024))
+        {
+            printf("setting IP failed\n");
+            return false;
         }
     }
     else
@@ -699,10 +748,11 @@ int WiFi_usedhcp(bool enable)
         sprintf(cmd,"dhclient -r %s",interfaceName);
         if(!runCommand(cmd, ret, 1024))
         {
-            return 10600;
+            return false;
         }
     }
-    return 0;
+
+    return true;
 }
 
 
