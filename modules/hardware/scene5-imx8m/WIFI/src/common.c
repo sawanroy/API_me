@@ -257,25 +257,27 @@ NMAccessPoint *findApOnDevice (NMDevice *device, GByteArray *bssid, const char *
 bool runCommand( const char* cmd, char* output,int size)
 {
     memset(output,'\0', size);
-    int n;
-    char path[1035];
     FILE* fp = popen(cmd,"r");
-    if (fp == NULL) 
+    if(!fp)
     {
-        pclose(fp);
-        exit(-1);
+        printf("opening pipe failed\n");
+        return false;
     }
-
-    /* Read the output a line at a time - output it. */
-    while (fgets(path, sizeof(path)-1, fp) != NULL)
+    while( NULL != fread(output, size , sizeof(char), fp))
     {
-        strcpy(output,path);
     }
-          
-    pclose(fp);
+    if(!feof(fp)){
+        printf("error happend while reading output\n");
+        return false;
+    }
+    int status= pclose(fp);
+    if(status<0)
+    {
+        printf("command exist status%d\n",status);
+        return false;
+    }
     return true;
 }
-
 
 
 //-----------------------------------------------------------------------------------------------------
