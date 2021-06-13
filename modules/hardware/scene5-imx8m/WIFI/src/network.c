@@ -283,6 +283,12 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
     char cmd[526];
     char ret[1024];
 
+    if(!wifi_get_power_status())
+    {
+        dbg_log(("wifi not active\n"));
+        return false;
+    }
+
     //Check if given ssid exist in connection list
     NMRemoteConnection* connection = nm_client_get_connection_by_id(client, credentials.ssid);
     if(!connection)
@@ -474,6 +480,12 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
     int comp;
     unsigned int i;
 
+    if(!wifi_get_power_status())
+    {
+        dbg_log(("wifi not active\n"));
+        return false;
+    }
+
     const GPtrArray *connections = nm_client_get_connections (client);
     for(i =0; i < connections->len;i++)
     {
@@ -531,6 +543,12 @@ bool wifi_remove_from_ssid_preferred_list(char* SSID)
     char ret[1024];
     char cmd[1024];
 
+    if(!wifi_get_power_status())
+    {
+        dbg_log(("wifi not active\n"));
+        return false;
+    }
+
     NMRemoteConnection* connection = nm_client_get_connection_by_id(client, SSID);
     if(!connection)
     {
@@ -574,6 +592,13 @@ bool wifi_clean_ssid_preferred_list()
 {
     int i;
     vector v;
+
+    if(!wifi_get_power_status())
+    {
+        dbg_log(("wifi not active\n"));
+        return false;
+    }
+
     vector_init(&v);
     wifi_get_ssid_preferred_list(&v);
     for(i=0;i<vector_count(&v);i++)
@@ -875,6 +900,12 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
     char cmd[1024];
     char ret[1024];
     int pri=0;
+
+    if(!wifi_get_power_status())
+    {
+        dbg_log(("wifi not active\n"));
+        return false;
+    }
 
     sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",ssid_lock);
     if(!runCommand(cmd,ret,1024))
