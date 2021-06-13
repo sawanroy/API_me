@@ -46,6 +46,10 @@ bool wifi_ssid_lock_check()
 
 
 /*
+    Internal function
+*/
+
+/*
     wifi_activation(bool state)
 */
 bool wifi_activation(bool state)
@@ -764,12 +768,11 @@ bool wifi_usedhcp(bool enable)
     Select mode Client/Access Point
     wifi_mode(bool mode)
 */
-
 bool wifi_mode(bool mode, struct wifiinfo apn)
 {
     if(getIfname()<0)
     {
-        return 10600;
+        return false;
     } 
     
     char cmd[2048];
@@ -789,7 +792,7 @@ bool wifi_mode(bool mode, struct wifiinfo apn)
             return false;
         }
 
-        sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless.band bg");
+        sprintf(cmd, "nmcli con modify HOTSPOT connection.autoconnect-priority 3 802-11-wireless.band bg");
         if(!runCommand(cmd,ret,1024)) 
         {
             return false;
@@ -841,7 +844,9 @@ bool wifi_mode(bool mode, struct wifiinfo apn)
         if(!runCommand(cmd,ret,1024))
         {
             return false;
-        }             
+        }
+
+
         return true;
     }
     else
