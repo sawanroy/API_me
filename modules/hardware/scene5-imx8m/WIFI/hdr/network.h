@@ -24,6 +24,16 @@
   @brief API refrence for wifi access 
 */
 
+
+#define ENABLE_LOGS 0
+
+#if ENABLE_LOGS
+  #define dbg_log(a) printf a
+#else
+  #define dbg_log(a) (void)0
+#endif
+
+
 /**
  * Structure for list of wifi  
 */

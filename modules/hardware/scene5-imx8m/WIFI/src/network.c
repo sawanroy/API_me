@@ -97,7 +97,7 @@ bool wifi_set_defaultpower_mode(bool powermode)
         sprintf(cmd,"sed -i 's/nmcli r wifi off/nmcli r wifi on/g' /etc/rc.local");
         if(!runCommand(cmd,ret,255))
         {
-            printf("command failed\n");
+            dbg_log(("command failed\n"));
             return false;
         }
     }
@@ -106,7 +106,7 @@ bool wifi_set_defaultpower_mode(bool powermode)
         sprintf(cmd,"sed -i 's/nmcli r wifi on/nmcli r wifi off/g' /etc/rc.local");
         if(!runCommand(cmd,ret,255))
         {
-            printf("command failed\n");
+            dbg_log(("command failed\n"));
             return false;
         }
     }
@@ -132,10 +132,9 @@ bool wifi_get_defaultpower_mode()
     sprintf(cmd,"sed -n '/nmcli r wifi on/{p;q;}' /etc/rc.local");
     if(!runCommand(cmd,ret,255))
     {
-        printf("command failed\n");
+        dbg_log(("command failed\n"));
         return false;
     }
-    printf("ret: %s %d\n",ret,strlen(ret));
     if(strlen(ret)==0)
     {
         return false;
@@ -161,7 +160,7 @@ int wifi_connect_network(struct wifiinfo credentials)
     }
     if(wifi_ssid_lock_check())
     {
-        printf("SSID lock set. Disable lock first");
+        dbg_log(("SSID lock set. Disable lock first"));
         return false;
     }
 
@@ -171,32 +170,31 @@ int wifi_connect_network(struct wifiinfo credentials)
     sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
     if(!runCommand(cmd,ret,255))
     {
-        printf("command failed\n");
+        dbg_log(("command failed\n"));
         return false;
     }
 
     char *ssid  = strtok(ret,":");
-    printf("p before scanf: %s\n", ssid);
     if(ssid!=NULL)
     {
-        printf("Disconnect first and then connect\n");
+        dbg_log(("Disconnect first and then connect\n"));
         return false;
     }
 
     if(!runCommand("wpa_cli scan",ret,1024))
     {
-        printf("Command failure\n");
+        dbg_log(("Command failure\n"));
         return 10600;
     }
     sprintf(cmd, "wpa_cli scan_results | awk -F \" \" ' {print $5 }' - | grep -E '^%s$'", credentials.ssid);
     if(!runCommand(cmd,ret,1024))
     {
-        printf("Command failure\n");
+        dbg_log(("Command failure\n"));
         return 10600;
     }
     if(strlen(ret)==0)
     {
-        printf("SSID not available\n");
+        dbg_log(("SSID not available\n"));
         return 10605;
     }
 
@@ -206,7 +204,7 @@ int wifi_connect_network(struct wifiinfo credentials)
         sprintf(cmd, "nmcli con add ifname '%s' type wifi con-name '%s' autoconnect off ssid '%s' wifi-sec.key-mgmt wpa-psk wifi-sec.psk '%s'",interfaceName,credentials.ssid,credentials.ssid,credentials.password);
         if(!runCommand(cmd,ret,1024))
         {
-            printf("Command failure\n");
+            dbg_log(("Command failure\n"));
             return 10600;
         }
     }
@@ -214,7 +212,7 @@ int wifi_connect_network(struct wifiinfo credentials)
     sprintf(cmd, "nmcli con up '%s'",credentials.ssid);
     if(!runCommand(cmd,ret,1024))
     {
-        printf("adding network failed\n");
+        dbg_log(("adding network failed\n"));
         return 10600;
     }
 
@@ -243,7 +241,7 @@ bool wifi_disconnect_network()
 
     if(wifi_ssid_lock_check())
     {
-        printf("SSID is locked. Disable lock first");
+        dbg_log(("SSID is locked. Disable lock first\n"));
         return false;
     }
 
@@ -251,7 +249,7 @@ bool wifi_disconnect_network()
     NMDeviceState state = nm_device_get_state(device);
     if(state != NM_DEVICE_STATE_ACTIVATED) 
     {
-        printf("Already disconnected\n");
+        dbg_log(("Already disconnected\n"));
         return false;
     }
     if(!nm_device_disconnect(device, NULL, NULL))
@@ -259,7 +257,7 @@ bool wifi_disconnect_network()
         return false;
     }
      
-    printf("connection disconnected\n");  
+    dbg_log(("connection disconnected\n"));  
     return true;
 }
 
@@ -286,23 +284,22 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
     NMRemoteConnection* connection = nm_client_get_connection_by_id(client, credentials.ssid);
     if(!connection)
     {
-        printf("connection does not exist\n");
+        dbg_log(("connection does not exist\n"));
         if(wifi_ssid_lock_check())
         {
             sprintf(cmd, "nmcli con add ifname '%s' type wifi con-name '%s' connection.autoconnect no connection.autoconnect-priority 1 ssid '%s' wifi-sec.key-mgmt wpa-psk wifi-sec.psk '%s'",interfaceName,credentials.ssid,credentials.ssid,credentials.password);
             if(!runCommand(cmd,ret,1024))
             {
-                printf("Command failure\n");
+                dbg_log(("Command failure\n"));
                 return false;
             }
         }
         else
         {
             sprintf(cmd, "nmcli con add ifname '%s' type wifi con-name '%s' connection.autoconnect-priority 1 ssid '%s' wifi-sec.key-mgmt wpa-psk wifi-sec.psk '%s'",interfaceName,credentials.ssid,credentials.ssid,credentials.password);
-            printf("%s\n",cmd);
             if(!runCommand(cmd,ret,1024))
             {
-                printf("Command failure\n");
+                dbg_log(("Command failure\n"));
                 return 10600;
             }
         }
@@ -312,13 +309,13 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
         sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",credentials.ssid);
         if(!runCommand(cmd,ret,1024))
         {
-            printf("Command failure\n");
+            dbg_log(("Command failure\n"));
             return false;
         }
         if(atoi(ret)>=1)
         {
             //ssid already present in preffered list
-            printf("SSID already added to preffered list\n");
+            dbg_log(("SSID already added to preffered list\n"));
             return 10603;
         }
         else
@@ -329,7 +326,7 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
                 sprintf(cmd, "nmcli con modify '%s' connection.autoconnect off connection.autoconnect-priority 1",credentials.ssid);
                 if(!runCommand(cmd,ret,1024))
                 {
-                    printf("Command failure\n");
+                    dbg_log(("Command failure\n"));
                     return false;
                 }
             }
@@ -338,11 +335,11 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
                 sprintf(cmd, "nmcli con modify '%s' connection.autoconnect on connection.autoconnect-priority 1",credentials.ssid);
                 if(!runCommand(cmd,ret,1024))
                 {
-                    printf("Command failure\n");
+                    dbg_log(("Command failure\n"));
                     return false;
                 }
             }
-            printf("Connection added to preffered list\n");   
+            dbg_log(("Connection added to preffered list\n"));   
         }
     } 
     return true;
@@ -371,19 +368,19 @@ int wifi_getsignal_strength(char* SSID)
     int strength;
     if(!runCommand("wpa_cli scan",ret,1024))
     {
-        printf("scan failed\n");
+        dbg_log(("scan failed\n"));
         return 10600;
     }
 
     sprintf(cmd, "wpa_cli scan_results | awk -F \" \" ' {print $3 $5 }' - | grep -E '[-0-9]+%s$'", SSID);
     if(!runCommand(cmd,ret,1024))
     {
-        printf("scan result failed\n");
+        dbg_log(("scan result failed\n"));
         return 10600;
     }
     if(strlen(ret)==0)
     {
-        printf("network not in range\n");
+        dbg_log(("network not in range\n"));
         return 10600;
     }
     sscanf(ret,"%3d%s\n", &dBm,ret);
@@ -416,20 +413,20 @@ int wifi_scan(vector* v)
     
     if(!runCommand("wpa_cli scan",ret,1024))
     {
-        printf("scan failed\n");
+        dbg_log(("scan failed\n"));
         return 10600;
     }
 
     sprintf(cmd, "wpa_cli scan_results | awk 'NR>2 {print $3,$5 }' - ");
     if(!runCommand(cmd,ret,2048))
     {
-        printf("scan result failed\n");
+        dbg_log(("scan result failed\n"));
         return 10600;
     }
     sleep(0.3);
     if(strlen(ret)==0)
     {
-        printf("network not in range");
+        dbg_log(("network not in range\n"));
         return 10600;
     }
     char* p = strtok(ret,"\n");
@@ -494,7 +491,6 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
                 if(atoi(ret)>=1)
                 {
                     vector_add(SSIDs,(void *)id);
-                    printf("filter ssid - %s \n",id);
                 }
             }
         }
@@ -530,20 +526,20 @@ bool wifi_remove_from_ssid_preferred_list(char* SSID)
     NMRemoteConnection* connection = nm_client_get_connection_by_id(client, SSID);
     if(!connection)
     {
-        printf("connection does not exist\n");
+        dbg_log(("connection does not exist\n"));
         return false;
     }
    
     sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",SSID);
     if(!runCommand(cmd,ret,1024))
     {
-        printf("command failure\n");
+        dbg_log(("command failure\n"));
         return false;
     } 
     if(atoi(ret)==2)
     {
         //SSID is locked. Cannot remove
-        printf("SSID is locked. Disbale lock first\n");
+        dbg_log(("SSID is locked. Disbale lock first\n"));
         return false;
     }  
     else if(atoi(ret)==1)
@@ -551,14 +547,14 @@ bool wifi_remove_from_ssid_preferred_list(char* SSID)
         sprintf(cmd, "nmcli con modify '%s' connection.autoconnect off connection.autoconnect-priority 0", SSID);
         if(!runCommand(cmd,ret,1024))
         {
-            printf("fail to remove from preffered list\n");
+            dbg_log(("fail to remove from preffered list\n"));
             return false;
         }
-        printf("connection modified\n");  
+        dbg_log(("connection modified\n"));  
     }
     else
     {
-        printf("connection not found in preferred list\n");
+        dbg_log(("connection not found in preferred list\n"));
     }
     return true;
 }
@@ -640,7 +636,7 @@ bool wifi_set_static_ip_Address(char* ipaddress, char* prefixnetmask, char* gate
     sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
     if(!runCommand(cmd,ret,1024))
     {
-        printf("command failed\n");
+        dbg_log(("command failed\n"));
         return false;
     }
 
@@ -648,7 +644,7 @@ bool wifi_set_static_ip_Address(char* ipaddress, char* prefixnetmask, char* gate
 
     if(tmp_ssid==NULL)
     {
-        printf("No network connected\n");
+        dbg_log(("No network connected\n"));
         return false;
     }
 
@@ -659,21 +655,21 @@ bool wifi_set_static_ip_Address(char* ipaddress, char* prefixnetmask, char* gate
     sprintf(cmd,"nmcli con down '%s'", ssid);
     if(!runCommand(cmd,ret,1024))
     {
-        printf("setting IP failed\n");
+        dbg_log(("setting IP failed\n"));
         return false;
     }
 
     sprintf(cmd,"nmcli con modify '%s' ipv4.addresses '%s'/'%s' ipv4.gateway '%s' ipv4.dns '%s' ipv4.method manual", ssid, ipaddress, prefixnetmask, gateway, dns);
     if(!runCommand(cmd,ret,1024))
     {
-        printf("setting IP failed\n");
+        dbg_log(("setting IP failed\n"));
         return false;
     }
    
     sprintf(cmd,"nmcli con up '%s'", ssid);
     if(!runCommand(cmd,ret,1024))
     {
-        printf("setting IP failed\n");
+        dbg_log(("setting IP failed\n"));
         return false;
     }
     
@@ -700,14 +696,14 @@ bool wifi_usedhcp(bool enable)
         sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
         if(!runCommand(cmd,ret,1024))
         {
-            printf("command failed\n");
+            dbg_log(("command failed\n"));
             return false;
         }
 
         char *tmp_ssid = strtok(ret,":");
         if(tmp_ssid==NULL)
         {
-            printf("No network connected\n");
+            dbg_log(("No network connected\n"));
             return false;
         }
 
@@ -720,21 +716,21 @@ bool wifi_usedhcp(bool enable)
         sprintf(cmd,"nmcli con down '%s'", ssid);
         if(!runCommand(cmd,ret,1024))
         {
-            printf("setting IP failed\n");
+            dbg_log(("setting IP failed\n"));
             return false;
         }
         
         sprintf(cmd,"nmcli con modify '%s' ipv4.addresses \"\" ipv4.gateway \"\" ipv4.dns \"\" ipv4.method auto", ssid);
         if(!runCommand(cmd,ret,1024))
         {
-            printf("setting IP failed\n");
+            dbg_log(("setting IP failed\n"));
             return false;
         }
 
         sprintf(cmd,"nmcli con up '%s'", ssid);
         if(!runCommand(cmd,ret,1024))
         {
-            printf("setting IP failed\n");
+            dbg_log(("setting IP failed\n"));
             return false;
         }
     }
@@ -769,7 +765,7 @@ bool wifi_mode(bool mode, struct wifiinfo apn)
 
     if(!wifi_get_power_status())
     {
-        printf("wifi not active\n");
+        dbg_log(("wifi not active\n"));
         return false;
     }
 
@@ -778,70 +774,70 @@ bool wifi_mode(bool mode, struct wifiinfo apn)
         sprintf(cmd, "nmcli con add type wifi ifname %s mode ap con-name HOTSPOT ssid '%s'",interfaceName, apn.ssid);
         if(!runCommand(cmd,ret,1024)) 
         {
-            printf("fail to change the mode to Access point\n");
+            dbg_log(("fail to change the mode to Access point\n"));
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless.band bg");
         if(!runCommand(cmd,ret,1024)) 
         {
-            printf("fail to change the mode to Access point\n");
+            dbg_log(("fail to change the mode to Access point\n"));
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless.channel 1");
         if(!runCommand(cmd,ret,1024))
         {
-            printf("fail to change the mode to Access point\n");
+            dbg_log(("fail to change the mode to Access point\n"));
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.key-mgmt wpa-psk");
         if(!runCommand(cmd,ret,1024))
         {
-            printf("fail to change the mode to Access point\n");
+            dbg_log(("fail to change the mode to Access point\n"));
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.proto rsn");
         if(!runCommand(cmd,ret,1024))
         {
-            printf("fail to change the mode to Access point\n");
+            dbg_log(("fail to change the mode to Access point\n"));
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.group ccmp");
         if(!runCommand(cmd,ret,1024))
         {
-            printf("fail to change the mode to Access point\n");
+            dbg_log(("fail to change the mode to Access point\n"));
             return false;
         } 
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.pairwise ccmp");
         if(!runCommand(cmd,ret,1024))
         {
-            printf("fail to change the mode to Access point\n");
+            dbg_log(("fail to change the mode to Access point\n"));
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT 802-11-wireless-security.psk '%s'",apn.password); //password size between 8 to 63 chars
         if(!runCommand(cmd,ret,1024))
         {
-            printf("fail to change the mode to Access point\n");
+            dbg_log(("fail to change the mode to Access point\n"));
             return false;
         }
 
         sprintf(cmd, "nmcli con modify HOTSPOT ipv4.method shared");
         if(!runCommand(cmd,ret,1024))
         {
-            printf("fail to change the mode to Access point\n");
+            dbg_log(("fail to change the mode to Access point\n"));
             return false;
         }
 
         sprintf(cmd, "nmcli con up HOTSPOT");
         if(!runCommand(cmd,ret,1024))
         {
-            printf("fail to change the mode to Access point\n");
+            dbg_log(("fail to change the mode to Access point\n"));
             return false;
         }             
         return true;
@@ -851,13 +847,13 @@ bool wifi_mode(bool mode, struct wifiinfo apn)
         sprintf(cmd, "nmcli device disconnect '%s'",interfaceName);
         if(!runCommand(cmd,ret,1024))
         {
-            printf("fail to change the mode to client\n");
+            dbg_log(("fail to change the mode to client\n"));
             return false;
         } 
         sprintf(cmd, "nmcli con delete HOTSPOT");
         if(!runCommand(cmd,ret,1024))
         {
-            printf("fail to change the mode to client\n");
+            dbg_log(("fail to change the mode to client\n"));
             return false;
         }   
         return true;        
@@ -896,7 +892,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
             //int count = search_autoconnect();
             if(wifi_ssid_lock_check() == true) 
             {
-                printf("already ssid locked ");
+                dbg_log(("already ssid locked\n"));
                 free(ssid);
                 vector_free(&a);
                 return false;
@@ -913,24 +909,23 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                         sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
                         if(!runCommand(cmd,ret,255))
                         {
-                            printf("command failed\n");
+                            dbg_log(("command failed\n"));
                             free(ssid);
                             vector_free(&a);
                             return false;
                         }
 
                         char *cr_ssid  = strtok(ret,":");
-                        printf("current ssid: %s\n", cr_ssid);
                         if(cr_ssid==NULL)
                         {
                             if(wifi_connect_network(credentials)!=1)
                             {
-                                printf("Not able to lock ssid\n");
+                                dbg_log(("Not able to lock ssid\n"));
                                 free(ssid);
                                 vector_free(&a);
                                 return false;
                             }
-                            printf("Currenlty disconnected. Connecting to locked ssid\n");
+                            dbg_log(("Currenlty disconnected. Connecting to locked ssid\n"));
                         }
                         else if(strcmp(cr_ssid,ssid_lock))
                         {
@@ -938,12 +933,12 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                             if(wifi_connect_network(credentials)!=1)
                             {
                                 wifi_reconnect();
-                                printf("Not able to lock ssid\n");
+                                dbg_log(("Not able to lock ssid\n"));
                                 free(ssid);
                                 vector_free(&a);
                                 return false;
                             }
-                            printf("currently connected to other ssid. Disconnecting and connecting to locked ssid");
+                            dbg_log(("currently connected to other ssid. Disconnecting and connecting to locked ssid\n"));
                         }
                         sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes connection.autoconnect-priority 2",ssid_lock);
                         if(!runCommand(cmd,ret,1024)) 
@@ -983,7 +978,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                     sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes connection.autoconnect-priority 1",ssid);
                     if(!runCommand(cmd,ret,1024))
                     {
-                        printf("Command failed\n");
+                        dbg_log(("Command failed\n"));
                         free(ssid);
                         vector_free(&a);
                         return false;
@@ -992,7 +987,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
             }
             else
             {
-                printf("This ssid is not locked\n");
+                dbg_log(("This ssid is not locked\n"));
                 free(ssid);
                 vector_free(&a);
                 return false;
@@ -1001,7 +996,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
     }
     else
     {
-        printf("SSID not avaible in preferred list\n");
+        dbg_log(("SSID not avaible in preferred list\n"));
         free(ssid);
         vector_free(&a);
         return false;
