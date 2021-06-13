@@ -266,8 +266,9 @@ bool runCommand( const char* cmd, char* output,int size)
     while( NULL != fread(output, size , sizeof(char), fp))
     {
     }
-    if(!feof(fp)){
-        printf("error happend while reading output\n");
+    if(!feof(fp))
+    {
+        printf("error while reading output\n");
         return false;
     }
     int status= pclose(fp);
