@@ -48,6 +48,53 @@ bool wifi_ssid_lock_check()
 /*
     Internal function
 */
+bool wifi_ssid_available(char *ssid)
+{
+    char cmd[1024];
+    char ret[1024]="";
+
+    if(!runCommand("wpa_cli scan",ret,1024))
+    {
+        return false;
+    }
+    sprintf(cmd, "wpa_cli scan_results | awk -F \" \" ' {print $5 }' - | grep -E '^%s$'", ssid);
+    if(!runCommand(cmd,ret,1024))
+    {
+        return false;
+    }
+    if(strlen(ret)==0)
+    {
+        dbg_log(("SSID not available\n"));
+        return false;
+    }
+    return true;
+}
+
+
+
+/*
+    Internal function
+*/
+bool wifi_client_mode()
+{
+    char cmd[1024];
+    char ret[1024]="";
+
+    sprintf(cmd, "nmcli con show | grep HOTSPOT");
+    if(!runCommand(cmd,ret,1024))
+    {
+        return false;
+    }
+    if(strlen(ret)==0)
+    {
+        dbg_log(("Client mode\n"));
+        return true;
+    }
+    dbg_log(("AP mode\n"));
+    return false;
+}
+
+
 
 /*
     wifi_activation(bool state)
@@ -169,19 +216,14 @@ int wifi_connect_network(struct wifiinfo credentials)
         return false;
     }
 
-    if(!runCommand("wpa_cli scan",ret,1024))
+    if(!wifi_client_mode())
     {
-        return 10600;
+        return false;
     }
-    sprintf(cmd, "wpa_cli scan_results | awk -F \" \" ' {print $5 }' - | grep -E '^%s$'", credentials.ssid);
-    if(!runCommand(cmd,ret,1024))
+
+    if(!wifi_ssid_available(credentials.ssid))
     {
-        return 10600;
-    }
-    if(strlen(ret)==0)
-    {
-        dbg_log(("SSID not available\n"));
-        return 10605;
+        return false;
     }
 
     if(wifi_ssid_lock_check())
@@ -240,6 +282,11 @@ bool wifi_disconnect_network()
         return false;
     }
 
+    if(!wifi_client_mode())
+    {
+        return false;
+    }
+
     NMDevice *device = nm_client_get_device_by_iface (client,interfaceName);
     NMDeviceState state = nm_device_get_state(device);
     if(state != NM_DEVICE_STATE_ACTIVATED) 
@@ -286,6 +333,11 @@ bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
     if(!wifi_get_power_status())
     {
         dbg_log(("wifi not active\n"));
+        return false;
+    }
+
+    if(!wifi_client_mode())
+    {
         return false;
     }
 
@@ -378,6 +430,11 @@ int wifi_getsignal_strength(char* SSID)
         return false;
     }
 
+    if(!wifi_client_mode())
+    {
+        return false;
+    }
+
     if(!runCommand("wpa_cli scan",ret,1024))
     {
         return 10600;
@@ -427,6 +484,11 @@ int wifi_scan(vector* v)
         return false;
     }
     
+    if(!wifi_client_mode())
+    {
+        return false;
+    }
+
     if(!runCommand("wpa_cli scan",ret,1024))
     {
         return 10600;
@@ -483,6 +545,11 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
     if(!wifi_get_power_status())
     {
         dbg_log(("wifi not active\n"));
+        return false;
+    }
+
+    if(!wifi_client_mode())
+    {
         return false;
     }
 
@@ -549,6 +616,11 @@ bool wifi_remove_from_ssid_preferred_list(char* SSID)
         return false;
     }
 
+    if(!wifi_client_mode())
+    {
+        return false;
+    }
+
     NMRemoteConnection* connection = nm_client_get_connection_by_id(client, SSID);
     if(!connection)
     {
@@ -599,6 +671,11 @@ bool wifi_clean_ssid_preferred_list()
         return false;
     }
 
+    if(!wifi_client_mode())
+    {
+        return false;
+    }
+
     vector_init(&v);
     wifi_get_ssid_preferred_list(&v);
     for(i=0;i<vector_count(&v);i++)
@@ -638,6 +715,11 @@ bool wifi_reconnect()
         return false;
     }
 
+    if(!wifi_client_mode())
+    {
+        return false;
+    }
+
     sprintf(cmd, "nmcli device connect %s",interfaceName);
     if(!runCommand(cmd,ret,1024))
     {
@@ -673,6 +755,11 @@ bool wifi_set_static_ip_Address(char* ipaddress, char* prefixnetmask, char* gate
     if(!wifi_get_power_status())
     {
         dbg_log(("wifi not active\n"));
+        return false;
+    }
+
+    if(!wifi_client_mode())
+    {
         return false;
     }
 
@@ -736,6 +823,11 @@ bool wifi_usedhcp(bool enable)
         return false;
     }
 
+    if(!wifi_client_mode())
+    {
+        return false;
+    }
+
     if(enable)
     {
         sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
@@ -754,9 +846,6 @@ bool wifi_usedhcp(bool enable)
         char ssid[strlen(tmp_ssid)];
 
         strcpy(ssid,tmp_ssid);
-
-        
-
         sprintf(cmd,"nmcli con down '%s'", ssid);
         if(!runCommand(cmd,ret,1024))
         {
@@ -871,7 +960,6 @@ bool wifi_mode(bool mode, struct wifiinfo apn)
             return false;
         }
 
-
         return true;
     }
     else
@@ -881,11 +969,13 @@ bool wifi_mode(bool mode, struct wifiinfo apn)
         {
             return false;
         } 
+
         sprintf(cmd, "nmcli con delete HOTSPOT");
         if(!runCommand(cmd,ret,1024))
         {
             return false;
-        }   
+        }
+
         return true;        
     }
 }
@@ -907,13 +997,18 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
         return false;
     }
 
+    if(!wifi_client_mode())
+    {
+        return false;
+    }
+
     sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",ssid_lock);
     if(!runCommand(cmd,ret,1024))
     {
         return false;
     }
     pri = atoi(ret);
-    if(pri>=1)
+    if(pri==1 || pri==2)
     {
         if(enable) 
         {
@@ -924,17 +1019,20 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
             }
             else 
             {
+                if(!wifi_ssid_available(ssid_lock))
+                {
+                    return false;
+                }
+
                 char *ssid = (char *)malloc(50);
                 vector con;
                 vector_init(&con);
                 wifi_get_ssid_preferred_list(&con);
                 for(int j=0;j<con.count;j++)
                 {
-                    ssid =con.data[j];              
+                    ssid = con.data[j];              
                     if(strcmp(ssid_lock,ssid)==0)
                     {
-                        struct wifiinfo credentials;
-                        credentials.ssid = ssid_lock;
                         sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
                         if(!runCommand(cmd,ret,255))
                         {
@@ -946,9 +1044,9 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                         char *cr_ssid = strtok(ret,":");
                         if(cr_ssid==NULL)
                         {
-                            if(wifi_connect_network(credentials)!=1)
+                            sprintf(cmd, "nmcli con up '%s'",ssid_lock);
+                            if(!runCommand(cmd,ret,1024)) 
                             {
-                                dbg_log(("Not able to lock ssid\n"));
                                 free(ssid);
                                 vector_free(&con);
                                 return false;
@@ -957,13 +1055,17 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                         }
                         else if(strcmp(cr_ssid,ssid_lock))
                         {
-                            wifi_disconnect_network();
-                            sleep(0.1);
-                            if(wifi_connect_network(credentials)!=1)
+                            sprintf(cmd, "nmcli device disconnect '%s'",interfaceName);
+                            if(!runCommand(cmd,ret,1024)) 
                             {
-                                sleep(5);
-                                wifi_reconnect();
-                                dbg_log(("Not able to lock ssid\n"));
+                                free(ssid);
+                                vector_free(&con);
+                                return false;
+                            }
+                            
+                            sprintf(cmd, "nmcli con up '%s'",ssid_lock);
+                            if(!runCommand(cmd,ret,1024)) 
+                            {
                                 free(ssid);
                                 vector_free(&con);
                                 return false;
