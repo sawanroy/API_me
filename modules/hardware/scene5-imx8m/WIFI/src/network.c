@@ -56,29 +56,7 @@ bool wifi_activation(bool state)
     {
         return false;
     }
-    if(getIfname()<1)
-    {
-        return false;
-    }
-
-    char cmd[1024];
-    char ret[1024];
-    if(state)
-    {
-        sprintf(cmd, "ifconfig %s up", interfaceName);
-        if(!runCommand(cmd,ret,1024))
-        {
-            return false;
-        }
-    }
-    else
-    {
-        sprintf(cmd, "ifconfig %s down", interfaceName);
-        if(!runCommand(cmd,ret,1024))
-        {
-            return false;
-        }
-    }
+    nm_client_wireless_set_enabled(client, state);
     return true;
 }
 
@@ -92,28 +70,10 @@ bool wifi_get_power_status()
     NMClient* client = getClient();
     if(!client)
     {
-        return false;
+        return true;
     }
-    if(getIfname()<1)
-    {
-        return false;
-    }
-
-    char cmd[1024];
-    char ret[1024]="";
-
-    sprintf(cmd, "ip a show '%s' up", interfaceName);
-    if(!runCommand(cmd,ret,1024))
-    {
-        return false;
-    }
-    if(strcmp(ret,"")==0)
-    {
-        printf("power off\n");
-        return false;
-    }
-    
-    return true;
+    bool enabled = nm_client_wireless_get_enabled(client);
+    return enabled;
 }
 
 
@@ -128,7 +88,28 @@ bool wifi_set_defaultpower_mode(bool powermode)
     {
         return false;
     }
-    nm_client_wireless_set_enabled (client, powermode);
+
+    char cmd[1024];
+    char ret[1024]="";
+
+    if(powermode)
+    {
+        sprintf(cmd,"sed -i 's/nmcli r wifi off/nmcli r wifi on/g' /etc/rc.local");
+        if(!runCommand(cmd,ret,255))
+        {
+            printf("command failed\n");
+            return false;
+        }
+    }
+    else
+    {
+        sprintf(cmd,"sed -i 's/nmcli r wifi on/nmcli r wifi off/g' /etc/rc.local");
+        if(!runCommand(cmd,ret,255))
+        {
+            printf("command failed\n");
+            return false;
+        }
+    }
     return true;
 }
 
@@ -144,8 +125,22 @@ bool wifi_get_defaultpower_mode()
     {
         return true;
     }
-    bool enabled = nm_client_wireless_get_enabled(client);
-    return enabled;
+
+    char cmd[1024];
+    char ret[1024]="";
+
+    sprintf(cmd,"sed -n '/nmcli r wifi on/{p;q;}' /etc/rc.local");
+    if(!runCommand(cmd,ret,255))
+    {
+        printf("command failed\n");
+        return false;
+    }
+    printf("ret: %s %d\n",ret,strlen(ret));
+    if(strlen(ret)==0)
+    {
+        return false;
+    }
+    return true;
 }
 
 
