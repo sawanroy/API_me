@@ -200,11 +200,11 @@ int wifi_connect_network(struct wifiinfo credentials)
     NMClient* client = getClient();
     if(!client)
     {
-        return 10600;
+        return FAILURE;
     }
     if(getIfname()<1)
     {
-        return 10600;
+        return FAILURE;
     }
 
     char ret[1024]="";
@@ -213,23 +213,23 @@ int wifi_connect_network(struct wifiinfo credentials)
     if(!wifi_get_power_status())
     {
         dbg_log(("wifi not active\n"));
-        return false;
+        return WIFI_INACTIVE;
     }
 
     if(!wifi_client_mode())
     {
-        return false;
+        return WIFI_CLIENT_DISABLED;
     }
 
     if(!wifi_ssid_available(credentials.ssid))
     {
-        return false;
+        return WIFI_SSID_UNAVAILABLE;
     }
 
     if(wifi_ssid_lock_check())
     {
         dbg_log(("SSID lock set. Disable lock first"));
-        return false;
+        return WIFI_LOCK_IS_ON;
     }
 
     NMDevice *device = nm_client_get_device_by_iface (client,interfaceName);
@@ -237,7 +237,7 @@ int wifi_connect_network(struct wifiinfo credentials)
     if(state == NM_DEVICE_STATE_ACTIVATED) 
     {
         dbg_log(("Disconnect first and then connect\n"));
-        return false;
+        return WIFI_ALREADY_CONNECTED;
     }
 
     NMRemoteConnection* connection = nm_client_get_connection_by_id(client, credentials.ssid);
@@ -246,17 +246,17 @@ int wifi_connect_network(struct wifiinfo credentials)
         sprintf(cmd, "nmcli con add ifname '%s' type wifi con-name '%s' autoconnect off ssid '%s' wifi-sec.key-mgmt wpa-psk wifi-sec.psk '%s'",interfaceName,credentials.ssid,credentials.ssid,credentials.password);
         if(!runCommand(cmd,ret,1024))
         {
-            return 10600;
+            return FAILURE;
         }
     }
 
     sprintf(cmd, "nmcli con up '%s'",credentials.ssid);
     if(!runCommand(cmd,ret,1024))
     {
-        return 10600;
+        return FAILURE;
     }
 
-    return true;
+    return WIFI_CONNECTED;
 }
 
 

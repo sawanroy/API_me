@@ -35,6 +35,22 @@
 
 
 /**
+ * Enum wifi 
+*/
+enum WIFI
+{
+  FAILURE,
+  WIFI_CONNECTED,
+  WIFI_INACTIVE,
+  WIFI_CLIENT_DISABLED,
+  WIFI_SSID_UNAVAILABLE,
+  WIFI_LOCK_IS_ON,
+  WIFI_ALREADY_CONNECTED, 
+};
+
+
+
+/**
  * Structure for list of wifi  
 */
 typedef struct{
