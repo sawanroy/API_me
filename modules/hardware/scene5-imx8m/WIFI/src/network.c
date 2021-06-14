@@ -21,18 +21,19 @@ bool wifi_ssid_lock_check()
     char cmd[1024];
     char ret[1024]="";
     vector a;
+
     vector_init(&a);
     wifi_get_ssid_preferred_list(&a);
-    for(int i=0;i< a.count;i++) 
+    for(int i=0; i< a.count; i++) 
     {
-        char* ssid =a.data[i];
+        char* ssid = a.data[i];
         sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority: | awk '{print $2}' ",ssid);
         if(!runCommand(cmd,ret,1024)) 
         {
             vector_free(&a);
             return false;
         }
-        if(atoi(ret) == 2)
+        if(atoi(ret)==2)
         {
             //lock is set
             vector_free(&a);
@@ -40,6 +41,7 @@ bool wifi_ssid_lock_check()
         }
     }
     vector_free(&a);
+    
     return false;
 }
 
@@ -57,6 +59,7 @@ bool wifi_ssid_available(char *ssid)
     {
         return false;
     }
+
     sprintf(cmd, "wpa_cli scan_results | awk -F \" \" ' {print $5 }' - | grep -E '^%s$'", ssid);
     if(!runCommand(cmd,ret,1024))
     {
@@ -67,6 +70,7 @@ bool wifi_ssid_available(char *ssid)
         dbg_log(("SSID not available\n"));
         return false;
     }
+
     return true;
 }
 
@@ -91,6 +95,7 @@ bool wifi_client_mode()
         return true;
     }
     dbg_log(("AP mode\n"));
+
     return false;
 }
 
@@ -107,6 +112,7 @@ bool wifi_activation(bool state)
         return false;
     }
     nm_client_wireless_set_enabled(client, state);
+
     return true;
 }
 
@@ -159,6 +165,7 @@ bool wifi_set_defaultpower_mode(bool powermode)
             return false;
         }
     }
+
     return true;
 }
 
@@ -187,6 +194,7 @@ bool wifi_get_defaultpower_mode()
     {
         return false;
     }
+
     return true;
 }
 
@@ -234,7 +242,7 @@ int wifi_connect_network(wifi_info credentials)
 
     NMDevice *device = nm_client_get_device_by_iface (client,interfaceName);
     NMDeviceState state = nm_device_get_state(device);
-    if(state == NM_DEVICE_STATE_ACTIVATED) 
+    if(state==NM_DEVICE_STATE_ACTIVATED) 
     {
         dbg_log(("Disconnect first and then connect\n"));
         return WIFI_ALREADY_CONNECTED;
@@ -289,7 +297,7 @@ bool wifi_disconnect_network()
 
     NMDevice *device = nm_client_get_device_by_iface (client,interfaceName);
     NMDeviceState state = nm_device_get_state(device);
-    if(state != NM_DEVICE_STATE_ACTIVATED) 
+    if(state!=NM_DEVICE_STATE_ACTIVATED) 
     {
         dbg_log(("Already disconnected\n"));
         return false;
@@ -359,7 +367,7 @@ bool wifi_add_to_ssid_preferred_list(wifi_info credentials)
             sprintf(cmd, "nmcli con add ifname '%s' type wifi con-name '%s' connection.autoconnect-priority 1 ssid '%s' wifi-sec.key-mgmt wpa-psk wifi-sec.psk '%s'",interfaceName,credentials.ssid,credentials.ssid,credentials.password);
             if(!runCommand(cmd,ret,1024))
             {
-                return 10600;
+                return false;
             }
         }
     }
@@ -375,7 +383,7 @@ bool wifi_add_to_ssid_preferred_list(wifi_info credentials)
         {
             //ssid already present in preffered list
             dbg_log(("SSID already added to preffered list\n"));
-            return 10603;
+            return false;
         }
         else
         {
@@ -399,6 +407,7 @@ bool wifi_add_to_ssid_preferred_list(wifi_info credentials)
             dbg_log(("Connection added to preffered list\n"));   
         }
     } 
+
     return true;
 }
 
@@ -412,11 +421,11 @@ int wifi_getsignal_strength(char* SSID)
     NMClient* client = getClient();
     if(!client)
     {
-        return 10600;
+        return false;
     }
     if(getIfname()<1)
     {
-        return 10600;
+        return false;
     }
 
     char ret[1024]="";
@@ -437,21 +446,22 @@ int wifi_getsignal_strength(char* SSID)
 
     if(!runCommand("wpa_cli scan",ret,1024))
     {
-        return 10600;
+        return false;
     }
 
     sprintf(cmd, "wpa_cli scan_results | awk -F \" \" ' {print $3 $5 }' - | grep -E '[-0-9]+%s$'", SSID);
     if(!runCommand(cmd,ret,1024))
     {
-        return 10600;
+        return false;
     }
     if(strlen(ret)==0)
     {
         dbg_log(("network not in range\n"));
-        return 10600;
+        return -1;
     }
     sscanf(ret,"%3d%s\n", &dBm,ret);
     strength = dbmToQuality(dBm);
+
     return strength;
 }
 
@@ -558,17 +568,17 @@ bool wifi_scan(vector* v)
 /*
     wifi_get_ssid_preferred_list(vector* SSIDs)
 */
-int wifi_get_ssid_preferred_list(vector* SSIDs)
+bool wifi_get_ssid_preferred_list(vector* SSIDs)
 {   
     
     NMClient* client = getClient();
     if(!client)
     {
-        return 10600;
+        return false;
     }
     if(getIfname()<1)
     {
-        return 10600;
+        return false;
     }
 
     char cmd[1024];
@@ -587,15 +597,15 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
         return false;
     }
 
-    const GPtrArray *connections = nm_client_get_connections (client);
-    for(i =0; i < connections->len;i++)
+    const GPtrArray *connections = nm_client_get_connections(client);
+    for(i=0; i < connections->len; i++)
     {
         NMConnection *connection = connections->pdata[i];
         NMSettingConnection *s_con;
-        s_con = nm_connection_get_setting_connection (connection);
-        if (s_con)
+        s_con = nm_connection_get_setting_connection(connection);
+        if(s_con)
         {
-            const char* id = nm_setting_connection_get_id (s_con);
+            const char* id = nm_setting_connection_get_id(s_con);
             sprintf(cmd, "nmcli -f NAME,TYPE con show | grep '%s' | awk '{print $NF}'",id);
             if(!runCommand(cmd,ret,1024))
             {
@@ -617,10 +627,11 @@ int wifi_get_ssid_preferred_list(vector* SSIDs)
         }
         else
         {
-            return 10600;
+            return false;
         }
     }
-    return 0;
+
+    return true;
 }
 
 
@@ -686,6 +697,7 @@ bool wifi_remove_from_ssid_preferred_list(char* SSID)
     {
         dbg_log(("connection not found in preferred list\n"));
     }
+
     return true;
 }
 
@@ -712,7 +724,7 @@ bool wifi_clean_ssid_preferred_list()
 
     vector_init(&v);
     wifi_get_ssid_preferred_list(&v);
-    for(i=0;i<vector_count(&v);i++)
+    for(i=0; i<vector_count(&v); i++)
     {
         if(!wifi_remove_from_ssid_preferred_list(vector_get(&v,i)))
         {
@@ -720,6 +732,7 @@ bool wifi_clean_ssid_preferred_list()
         }
     }
     vector_free(&v);
+
     return true;
 }
 
@@ -763,6 +776,7 @@ bool wifi_reconnect()
     {
         return false;
     }
+
     return true;
 }
 
