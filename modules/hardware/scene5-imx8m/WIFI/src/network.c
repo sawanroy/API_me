@@ -460,23 +460,26 @@ int wifi_getsignal_strength(char* SSID)
 /*
     wifi_scan(vector* v)
 */
-int wifi_scan(vector* v)
+bool wifi_scan(vector* v)
 {
     NMClient* client = getClient();
     if(!client)
     {
-        return 10600;
+        return false;
     }
     if(getIfname()<1)
     {
-        return 10600;
+        return false;
     }
 
-    char ret[2048]="";
-    char cmd[255];
-    char ssid[128]="";
+    char ret[10]="";
+    char security[50];
     int count =0;
-    int dbm;
+    int strength;
+    int chan;
+    gsize size;
+    NM80211ApFlags wpa1;
+    NM80211ApFlags wpa2;
 
     if(!wifi_get_power_status())
     {
@@ -489,34 +492,65 @@ int wifi_scan(vector* v)
         return false;
     }
 
-    if(!runCommand("wpa_cli scan",ret,1024))
+    NMDevice *device = nm_client_get_device_by_iface (client, interfaceName);
+    NMDeviceType type = nm_device_get_device_type(device);
+    if(type!=NM_DEVICE_TYPE_WIFI)
     {
-        return 10600;
+        printf("type wifi\n");
+        return false;
+    } 
+   
+    //request scan
+    if(!runCommand("wpa_cli scan",ret,10))
+    {
+        return false;
+    }
+    sleep(10);
+    const GPtrArray *connections = nm_device_wifi_get_access_points ((NMDeviceWifi *)device);
+    for(guint i =0; i < connections->len;i++)
+    {    
+        //SSID
+        GBytes *bytes = nm_access_point_get_ssid(connections->pdata[i]); 
+        const char *ssid = g_bytes_get_data(bytes,&size);
+            
+        //Signal strength
+        strength = nm_access_point_get_strength(connections->pdata[i]);
+        
+        //Channel        
+        chan = nm_utils_wifi_freq_to_channel(nm_access_point_get_frequency (connections->pdata[i]));
+        
+        //Security
+        wpa1 = nm_access_point_get_wpa_flags(connections->pdata[i]);
+        wpa2 = nm_access_point_get_rsn_flags(connections->pdata[i]);
+        
+        if(wpa1 && !wpa2)
+        {
+            sprintf(security,"WPA1");
+        }
+        else if(wpa2 && !wpa1)
+        {
+            sprintf(security,"WPA2");
+        }
+        else
+        {
+            sprintf(security,"WPA1 WPA2");
+        }
+
+        dbg_log(("SSID:%s          ",ssid));
+        dbg_log(("SIG:%d  ",strength));
+        dbg_log(("CHAN: %d  ",chan));
+        dbg_log(("SEC: %s\n", security));
+        
+        WiFi_scanResult *res = malloc(sizeof(WiFi_scanResult));
+        res->strength = strength;
+        res->ssid = strdup(ssid);
+        res->channel = chan;
+        res->security = strdup(security);
+        vector_add(v, res);
+        count++;        
     }
 
-    sprintf(cmd, "wpa_cli scan_results | awk 'NR>2 {print $3,$5 }' - ");
-    if(!runCommand(cmd,ret,2048))
-    {
-        return 10600;
-    }
-    sleep(0.3);
-    if(strlen(ret)==0)
-    {
-        dbg_log(("network not in range\n"));
-        return 10600;
-    }
-    char* p = strtok(ret,"\n");
-    while(p!=NULL)
-    {
-        sscanf(p,"%3d %s\n", &dbm,ssid);
-        WiFi_scanResult *res = malloc(sizeof(WiFi_scanResult));
-        res->strength = dbmToQuality(dbm);
-        res->ssid = strdup(ssid);
-        vector_add(v, res);
-        count++;
-        p = strtok(NULL,"\n");
-    }
-    return 0;
+    return true;
 }
 
 

@@ -38,8 +38,10 @@
  * Structure for list of wifi  
 */
 typedef struct{
-    int strength; /**< Interger type variable for string strength for wifi*/
-    char *ssid;   /**< Character type variable for ssid name */
+    int strength;   /**< Interger type variable for string strength for wifi*/
+    char *ssid;     /**< Character type variable for ssid name */
+    char *security; /**< Character type variable for security type */
+    int channel;    /**< Character type variable for channel */
 } WiFi_scanResult;
 
 /**
@@ -127,7 +129,7 @@ int wifi_getsignal_strength(char* SSID);
    scan the wifi networks and gives the list of network presrent.
  * @param[out] v typedef varaiable for list of ssid.
 */
-int wifi_scan(vector* v);
+bool wifi_scan(vector* v);
 
 /*!
  * Reconnect to the currently connected network if it was disconnected.
