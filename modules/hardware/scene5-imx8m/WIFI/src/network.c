@@ -193,9 +193,9 @@ bool wifi_get_defaultpower_mode()
 
 
 /*
-    wifi_connect_network(struct wifiinfo credentials)
+    wifi_connect_network(wifi_info credentials)
 */
-int wifi_connect_network(struct wifiinfo credentials)
+int wifi_connect_network(wifi_info credentials)
 { 
     NMClient* client = getClient();
     if(!client)
@@ -313,9 +313,9 @@ bool wifi_disconnect_network()
 
 
 /*
-    wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)
+    wifi_add_to_ssid_preferred_list(wifi_info credentials)
 */
-bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials) 
+bool wifi_add_to_ssid_preferred_list(wifi_info credentials) 
 {   
     NMClient* client = getClient();
     if(!client)
@@ -541,7 +541,7 @@ bool wifi_scan(vector* v)
         dbg_log(("CHAN: %d  ",chan));
         dbg_log(("SEC: %s\n", security));
         
-        WiFi_scanResult *res = malloc(sizeof(WiFi_scanResult));
+        wifi_scanresult *res = malloc(sizeof(wifi_scanresult));
         res->strength = strength;
         res->ssid = strdup(ssid);
         res->channel = chan;
@@ -916,7 +916,7 @@ bool wifi_usedhcp(bool enable)
     Select mode Client/Access Point
     wifi_mode(bool mode)
 */
-bool wifi_mode(bool mode, struct wifiinfo apn)
+bool wifi_mode(bool mode, wifi_info apn)
 {
     if(getIfname()<0)
     {
