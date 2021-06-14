@@ -36,7 +36,6 @@ add_library(
     ${PROJECT_NAME}
     SHARED
     src/common.c
-    src/main.c
     src/network.c
     src/vector.c
 )
