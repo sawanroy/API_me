@@ -414,9 +414,9 @@ bool wifi_add_to_ssid_preferred_list(wifi_info credentials)
 
 
 /*
-    wifi_get_signal_strength(char* SSID)
+    wifi_get_signal_strength(char* ssid)
 */
-int wifi_get_signal_strength(char* SSID)
+int wifi_get_signal_strength(char* ssid)
 {
     NMClient* client = getClient();
     if(!client)
@@ -430,7 +430,6 @@ int wifi_get_signal_strength(char* SSID)
 
     char ret[1024]="";
     char cmd[1024];
-    int dBm;
     int strength;
 
     if(!wifi_get_power_status())
@@ -449,7 +448,7 @@ int wifi_get_signal_strength(char* SSID)
         return false;
     }
 
-    sprintf(cmd, "wpa_cli scan_results | awk -F \" \" ' {print $3 $5 }' - | grep -E '[-0-9]+%s$'", SSID);
+    sprintf(cmd, "nmcli -g SSID,SIGNAL d wifi | grep -w '%s' | awk -F \":\" '{print $2}'", ssid);
     if(!runCommand(cmd,ret,1024))
     {
         return false;
@@ -459,9 +458,8 @@ int wifi_get_signal_strength(char* SSID)
         dbg_log(("network not in range\n"));
         return -1;
     }
-    sscanf(ret,"%3d%s\n", &dBm,ret);
-    strength = dbmToQuality(dBm);
-
+    
+    strength = atoi(ret);
     return strength;
 }
 

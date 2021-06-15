@@ -151,7 +151,7 @@ bool wifi_get_ssid_preferred_list(vector* con_list);
  * @param[in] SSID character type variable
  * 
 */
-bool wifi_remove_from_ssid_preferred_list(char* SSID);
+bool wifi_remove_from_ssid_preferred_list(char* ssid);
 
 
 /*!
