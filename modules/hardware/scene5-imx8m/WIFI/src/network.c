@@ -923,7 +923,7 @@ bool wifi_use_dhcp(bool enable)
     }
     else
     {
-        sprintf(cmd,"dhclient -r %s",interfaceName);
+        sprintf(cmd,"dhclient '%s' && dhclient -r %s", interfaceName, interfaceName);
         if(!runCommand(cmd, ret, 1024))
         {
             return false;
