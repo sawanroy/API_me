@@ -28,7 +28,7 @@
 /**
  * Enable/Disable logs
 */
-#define ENABLE_LOGS 0
+#define ENABLE_LOGS 1
 
 #if ENABLE_LOGS
     #define dbg_log(a) printf a
@@ -151,7 +151,7 @@ bool wifi_get_ssid_preferred_list(vector* con_list);
  * @param[in] SSID character type variable
  * 
 */
-bool wifi_remove_from_ssid_preferred_list(char* ssid);
+int wifi_remove_from_ssid_preferred_list(char* ssid);
 
 
 /*!

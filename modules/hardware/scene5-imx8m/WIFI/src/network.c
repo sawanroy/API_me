@@ -659,7 +659,7 @@ bool wifi_get_ssid_preferred_list(vector* con_list)
 /*
     wifi_remove_from_ssid_preferred_list(char* ssid)
 */
-bool wifi_remove_from_ssid_preferred_list(char* ssid)
+int wifi_remove_from_ssid_preferred_list(char* ssid)
 {
     
     NMClient* client = getClient();
@@ -702,8 +702,8 @@ bool wifi_remove_from_ssid_preferred_list(char* ssid)
     {
         //SSID is locked. Cannot remove
         dbg_log(("SSID is locked. Disbale lock first\n"));
-        return false;
-    }  
+        return WIFI_LOCK_IS_ON;
+    }
     else if(atoi(ret)==1)
     {
         sprintf(cmd, "nmcli con modify '%s' connection.autoconnect off connection.autoconnect-priority 0", ssid);
