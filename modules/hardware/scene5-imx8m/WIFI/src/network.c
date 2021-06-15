@@ -26,7 +26,7 @@ bool wifi_ssid_lock_check()
     wifi_get_ssid_preferred_list(&a);
     for(int i=0; i< a.count; i++) 
     {
-        wifi_info *con = (wifi_info *)vector_get(&a,i);
+        wifi_info *con = (wifi_info *)a.data[i];
         sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority: | awk '{print $2}' ", con->ssid);
         if(!runCommand(cmd,ret,1024)) 
         {
@@ -637,7 +637,7 @@ bool wifi_get_ssid_preferred_list(vector* con_list)
                         return false;
                     }
 
-                    wifi_info *con = malloc(sizeof(wifi_info));
+                    wifi_info *con = (wifi_info *)malloc(sizeof(wifi_info));
                     con->ssid = strdup(id);
                     con->password = strdup(ret);
                     vector_add(con_list, con);
@@ -746,7 +746,7 @@ bool wifi_clean_ssid_preferred_list()
     wifi_get_ssid_preferred_list(&v);
     for(i=0; i<vector_count(&v); i++)
     {
-        wifi_info *con = vector_get(&v,i);
+        wifi_info *con = (wifi_info *)v.data[i];
         if(!wifi_remove_from_ssid_preferred_list(con->ssid))
         {
             free(con->ssid);
@@ -1106,7 +1106,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                 wifi_get_ssid_preferred_list(&con);
                 for(int j=0;j<con.count;j++)
                 {
-                    wifi_info *wificon = con.data[j];  
+                    wifi_info *wificon = (wifi_info *)con.data[j];  
                 
                     if(strcmp(ssid_lock, wificon->ssid)==0)
                     {
@@ -1196,7 +1196,7 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                 wifi_get_ssid_preferred_list(&con);
                 for(int j=0;j<con.count;j++)
                 {
-                    wifi_info *wificon = con.data[j];
+                    wifi_info *wificon = (wifi_info *)con.data[j];
                     sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes connection.autoconnect-priority 1", wificon->ssid);
                     if(!runCommand(cmd,ret,1024))
                     {
