@@ -167,7 +167,7 @@ bool wifi_clean_ssid_preferred_list();
  * 
  * @return strenght of signal  
 */
-int wifi_getsignal_strength(char* SSID);
+int wifi_get_signal_strength(char* SSID);
 
 
 /*!
@@ -199,7 +199,7 @@ bool wifi_set_ssid_lock(char *ssid, bool enable );
  * @param[in] getway  character type variable
  * @param[in] dns character type variable
 */
-bool wifi_set_static_ip_Address(char* ipaddress, char* prefixnetmask, char* gateway, char* dns);
+bool wifi_set_static(char* ipaddress, char* prefixnetmask, char* gateway, char* dns);
 
 
 /*!
@@ -207,7 +207,7 @@ bool wifi_set_static_ip_Address(char* ipaddress, char* prefixnetmask, char* gate
    @param[in] enable bool type variable
    @return return true/false 
 */
-bool wifi_usedhcp(bool enable);
+bool wifi_use_dhcp(bool enable);
 
 
 /*! 

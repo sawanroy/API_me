@@ -414,9 +414,9 @@ bool wifi_add_to_ssid_preferred_list(wifi_info credentials)
 
 
 /*
-    wifi_getsignal_strength(char* SSID)
+    wifi_get_signal_strength(char* SSID)
 */
-int wifi_getsignal_strength(char* SSID)
+int wifi_get_signal_strength(char* SSID)
 {
     NMClient* client = getClient();
     if(!client)
@@ -783,9 +783,9 @@ bool wifi_reconnect()
 
 
 /*
-    wifi_set_static_ip_Address(char* ipaddress, char* subnetmask, char* gateway, char* dns)
+    wifi_set_static(char* ipaddress, char* subnetmask, char* gateway, char* dns)
 */
-bool wifi_set_static_ip_Address(char* ipaddress, char* prefixnetmask, char* gateway, char* dns)
+bool wifi_set_static(char* ipaddress, char* prefixnetmask, char* gateway, char* dns)
 {
     NMClient* client = getClient();
     if(!client)
@@ -853,9 +853,9 @@ bool wifi_set_static_ip_Address(char* ipaddress, char* prefixnetmask, char* gate
 
 
 /*
-    wifi_usedhcp(bool enable)
+    wifi_use_dhcp(bool enable)
 */
-bool wifi_usedhcp(bool enable)
+bool wifi_use_dhcp(bool enable)
 {
     if(getIfname()<0)
     {
