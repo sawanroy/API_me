@@ -20,18 +20,19 @@ NMClient* getClient()
     NMClient *client = NULL;
     GError *error = NULL;
 
-    if (!(client = nm_client_new (NULL, &error))) 
+    if(!(client=nm_client_new(NULL, &error))) 
     {
-        g_message ("Error: Could not connect to NetworkManager: %s.", error->message);
-        g_error_free (error);
+        g_message("Error: Could not connect to NetworkManager: %s.", error->message);
+        g_error_free(error);
         return NULL;
     }
 
-    if (!nm_client_get_nm_running (client)) 
+    if(!nm_client_get_nm_running(client)) 
     {
-        g_message ("Error: Can't obtain connections: NetworkManager is not running.");
+        g_message("Error: Can't obtain connections: NetworkManager is not running.");
         return NULL;
     }
+
     return client;
 }
 
@@ -40,7 +41,8 @@ NMClient* getClient()
 int getIfname()
 {
     int skfd;
-    if((skfd = iw_sockets_open())<0)
+
+    if((skfd=iw_sockets_open())<0)
     {
         return -1;
     }
@@ -50,6 +52,7 @@ int getIfname()
         printf("cannot find wireless interface, forgot root?\n");
         return -1;
     }
+
     return 1; 
 }
 
@@ -189,65 +192,68 @@ int _list_iface_info(int skfd, char* ifname, char* args[], int count)
             //ignore
             break;
     }
+
     return(rc);
 }
 
 
 
 //-----------------------------------------------------------------------------------------------------
-NMAccessPoint *findApOnDevice (NMDevice *device, GByteArray *bssid, const char *ssid)
+NMAccessPoint *findApOnDevice(NMDevice *device, GByteArray *bssid, const char *ssid)
 {
     const GPtrArray *aps;
     NMAccessPoint *ap = NULL;
     int i;
-    g_return_val_if_fail (NM_IS_DEVICE_WIFI (device), NULL);
-    g_return_val_if_fail ((bssid && !ssid) || (!bssid && ssid), NULL);
+    g_return_val_if_fail(NM_IS_DEVICE_WIFI(device), NULL);
+    g_return_val_if_fail((bssid && !ssid) || (!bssid && ssid), NULL);
     // nm_device_wifi_request_scan(NM_DEVICE_WIFI(device),NULL,NULL);
     char ret[1024];
+
     if(!runCommand("wpa_cli scan",ret,1024))
     {
         printf("scan failed\n");
         return (NMAccessPoint *)-1;
     }
-    aps = nm_device_wifi_get_access_points (NM_DEVICE_WIFI (device));
+    aps = nm_device_wifi_get_access_points(NM_DEVICE_WIFI (device));
     printf("Found %d APs\n", aps->len);
-    for (i = 0; i < aps->len; i++) 
+    for(i=0; i < aps->len; i++) 
     {
-        NMAccessPoint *candidate_ap = g_ptr_array_index (aps, i);
-        if (ssid) 
+        NMAccessPoint *candidate_ap = g_ptr_array_index(aps, i);
+        if(ssid) 
         {
             /* Parameter is SSID */
             GBytes *candidate_ssid;
-            candidate_ssid = nm_access_point_get_ssid (candidate_ap);
-            if (candidate_ssid)
+            candidate_ssid = nm_access_point_get_ssid(candidate_ap);
+            if(candidate_ssid)
             {
                 char *ssid_tmp = nm_utils_ssid_to_utf8 (g_bytes_get_data (candidate_ssid, NULL),
                                                         g_bytes_get_size (candidate_ssid));
                 /* Compare SSIDs */
-                if (strcmp (ssid, ssid_tmp) == 0)
+                if(strcmp (ssid, ssid_tmp) == 0)
                 {
                     ap = candidate_ap;
-                    g_free (ssid_tmp);
+                    g_free(ssid_tmp);
                     break;
                 }
-                g_free (ssid_tmp);
+                g_free(ssid_tmp);
             }
         } 
-        else if (bssid) 
+        else if(bssid) 
         {
             /* Parameter is BSSID */
-            const char *candidate_bssid = nm_access_point_get_bssid (candidate_ap);
-            char *bssid_up = nm_utils_hwaddr_ntoa (bssid->data, bssid->len);
+            const char *candidate_bssid = nm_access_point_get_bssid(candidate_ap);
+            char *bssid_up = nm_utils_hwaddr_ntoa(bssid->data, bssid->len);
             /* Compare BSSIDs */
-            if (strcmp (bssid_up, candidate_bssid) == 0)
+            if(strcmp(bssid_up, candidate_bssid) == 0)
             {
                 ap = candidate_ap;
-                g_free (bssid_up);
+                g_free(bssid_up);
                 break;
             }
-            g_free (bssid_up);
+            g_free(bssid_up);
         }
     }
+
     return ap;
 }
 
@@ -263,12 +269,13 @@ bool runCommand( const char* cmd, char* output,int size)
         printf("opening pipe failed\n");
         return false;
     }
-    while( NULL != fread(output, size , sizeof(char), fp))
+    while(NULL != fread(output, size , sizeof(char), fp))
     {
     }
     if(!feof(fp))
     {
         printf("error while reading output\n");
+        pclose(fp);
         return false;
     }
     int status= pclose(fp);
@@ -277,6 +284,7 @@ bool runCommand( const char* cmd, char* output,int size)
         printf("command exist status%d\n",status);
         return false;
     }
+
     return true;
 }
 

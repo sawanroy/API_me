@@ -24,7 +24,7 @@
 extern NMClient* getClient();
 extern char interfaceName[255];
 extern NMAccessPoint *findApOnDevice (NMDevice *device, GByteArray *bssid, const char *ssid);
-extern bool runCommand( const char* cmd, char* output,int size);
+extern bool runCommand(const char* cmd, char* output,int size);
 
 int _list_iface_info(int skfd, char* ifname, char* args[], int count);
 int getIfname();
