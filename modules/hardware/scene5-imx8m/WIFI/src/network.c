@@ -129,6 +129,7 @@ bool wifi_get_power_status()
         return true;
     }
     bool enabled = nm_client_wireless_get_enabled(client);
+    
     return enabled;
 }
 
@@ -513,7 +514,7 @@ bool wifi_scan(vector* v)
     {
         return false;
     }
-    sleep(10);
+    sleep(2);
     const GPtrArray *connections = nm_device_wifi_get_access_points ((NMDeviceWifi *)device);
     for(guint i =0; i < connections->len;i++)
     {    

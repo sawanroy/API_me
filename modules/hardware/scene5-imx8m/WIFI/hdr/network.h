@@ -28,12 +28,12 @@
 /**
  * Enable/Disable logs
 */
-#define ENABLE_LOGS 1
+#define ENABLE_LOGS 0
 
 #if ENABLE_LOGS
-  #define dbg_log(a) printf a
+    #define dbg_log(a) printf a
 #else
-  #define dbg_log(a) (void)0
+    #define dbg_log(a) (void)0
 #endif
 
 
@@ -42,13 +42,13 @@
 */
 enum WIFI
 {
-  FAILURE,
-  WIFI_CONNECTED,
-  WIFI_INACTIVE,
-  WIFI_CLIENT_DISABLED,
-  WIFI_SSID_UNAVAILABLE,
-  WIFI_LOCK_IS_ON,
-  WIFI_ALREADY_CONNECTED, 
+    FAILURE,
+    WIFI_CONNECTED,
+    WIFI_INACTIVE,
+    WIFI_CLIENT_DISABLED,
+    WIFI_SSID_UNAVAILABLE,
+    WIFI_LOCK_IS_ON,
+    WIFI_ALREADY_CONNECTED, 
 };
 
 
