@@ -26,8 +26,8 @@ bool wifi_ssid_lock_check()
     wifi_get_ssid_preferred_list(&a);
     for(int i=0; i< a.count; i++) 
     {
-        char* ssid = a.data[i];
-        sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority: | awk '{print $2}' ",ssid);
+        wifi_info *con = (wifi_info *)vector_get(&a,i);
+        sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority: | awk '{print $2}' ", con->ssid);
         if(!runCommand(cmd,ret,1024)) 
         {
             vector_free(&a);
