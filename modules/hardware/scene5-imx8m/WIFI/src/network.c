@@ -566,9 +566,9 @@ bool wifi_scan(vector* v)
 
 
 /*
-    wifi_get_ssid_preferred_list(vector* SSIDs)
+    wifi_get_ssid_preferred_list(vector* con_list)
 */
-bool wifi_get_ssid_preferred_list(vector* SSIDs)
+bool wifi_get_ssid_preferred_list(vector* con_list)
 {   
     
     NMClient* client = getClient();
@@ -584,6 +584,7 @@ bool wifi_get_ssid_preferred_list(vector* SSIDs)
     char cmd[1024];
     char ret[1024];
     int comp;
+    int count=0;
     unsigned int i;
 
     if(!wifi_get_power_status())
@@ -621,7 +622,17 @@ bool wifi_get_ssid_preferred_list(vector* SSIDs)
                 }   
                 if(atoi(ret)>=1)
                 {
-                    vector_add(SSIDs,(void *)id);
+                    sprintf(cmd, "nmcli -s -g 802-11-wireless-security.psk connection show '%s'",id);
+                    if(!runCommand(cmd,ret,1024))
+                    {
+                        return false;
+                    }
+
+                    wifi_info *con = malloc(sizeof(wifi_info));
+                    con->ssid = strdup(id);
+                    con->password = strdup(ret);
+                    vector_add(con_list, con);
+                    count++;        
                 }
             }
         }

@@ -143,7 +143,7 @@ bool wifi_add_to_ssid_preferred_list(wifi_info credentials);
  * Get SSID preferred list
  * @param[out] SSIDs structure type variable.
 */
-bool wifi_get_ssid_preferred_list(vector* SSIDs);
+bool wifi_get_ssid_preferred_list(vector* con_list);
 
 
 /*!
