@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['discoverable_228',['discoverable',['../d5/d63/structbluetoothconfig.html#afef45eadcd4f7d1da79cfc736629967c',1,'bluetoothconfig']]],
-  ['discoverabletimeout_229',['discoverableTimeout',['../d5/d63/structbluetoothconfig.html#aa36c3e717dfb8526dd8707fd8831970b',1,'bluetoothconfig']]]
+  ['channel_230',['channel',['../db/dcb/structwifi__scanresult.html#a724d34a3cd50951f4eb2c4aed0aa1e65',1,'wifi_scanresult']]]
 ];

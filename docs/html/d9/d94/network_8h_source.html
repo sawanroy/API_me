@@ -96,91 +96,152 @@ $(document).ready(function(){initNavTree('d9/d94/network_8h_source.html','../../
 <div class="title">network.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">***************************************************************************</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* Author: Sawan roy </span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">*</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">* Copyright (C) 2021 TRUNEXA INC</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">*</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">* Email: sawan.roy@trunexa.com</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">*</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">***************************************************************************</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">*/</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">***************************************************************************</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">*</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">* Author: Sawan roy </span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">*</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* Copyright (C) 2021 TRUNEXA INC</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">*</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">* Email: sawan.roy@trunexa.com</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">*</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">***************************************************************************</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#ifndef HEX_NETWORK_H</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#define HEX_NETWORK_H</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;vector.h&gt;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;common.h&gt;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;vector.h&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;sys/wait.h&gt;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="../../d6/d37/structWiFi__scanResult.html">   30</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct</span>{</div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="../../d6/d37/structWiFi__scanResult.html#aeb73116ab0f1b1b2fe8b0e2af2e56946">   31</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="../../d6/d37/structWiFi__scanResult.html#aeb73116ab0f1b1b2fe8b0e2af2e56946">strength</a>; </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="../../d6/d37/structWiFi__scanResult.html#a518d91db8f2998577a0d54c32654820e">   32</a></span>&#160;    <span class="keywordtype">char</span> *<a class="code" href="../../d6/d37/structWiFi__scanResult.html#a518d91db8f2998577a0d54c32654820e">ssid</a>;   </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;} <a class="code" href="../../d6/d37/structWiFi__scanResult.html">WiFi_scanResult</a>;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="../../d4/dbc/structwifiinfo.html">   38</a></span>&#160;<span class="keyword">struct </span><a class="code" href="../../d4/dbc/structwifiinfo.html">wifiinfo</a>{</div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="../../d4/dbc/structwifiinfo.html#ae538c17cb9c8fffddaffcf1f0e8fecf4">   39</a></span>&#160;    <span class="keywordtype">char</span> *<a class="code" href="../../d4/dbc/structwifiinfo.html#ae538c17cb9c8fffddaffcf1f0e8fecf4">ssid</a>;        </div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="../../d4/dbc/structwifiinfo.html#a6c486bb45986d4df500914f8c809629e">   40</a></span>&#160;    <span class="keywordtype">char</span> *<a class="code" href="../../d4/dbc/structwifiinfo.html#a6c486bb45986d4df500914f8c809629e">password</a>;    </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;};</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;{</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga345fc50de936fc0c936f6fb8fe438b5f">wifi_activation</a>(<span class="keywordtype">bool</span> state);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#gacd4ad97de9e9bb22768dd21238932a85">wifi_get_power_status</a>();</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga536762bceeac953aa63eb02001847103">wifi_set_defaultpower_mode</a>(<span class="keywordtype">bool</span> powermode);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#gae6365c0a0fe75ce93e5310c268c443ee">wifi_get_defaultpower_mode</a>();</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../df/d42/group__WIFI.html#ga5846d0e4096ea1424e9c88d59d96f9f3">wifi_connect_network</a>(<span class="keyword">struct</span> <a class="code" href="../../d4/dbc/structwifiinfo.html">wifiinfo</a> credentials);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga9f74a48fb719e56648b63a753dd76c95">wifi_disconnect_network</a>();</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga23f8834421de1fa38fa98856711ffbcb">wifi_add_to_ssid_preferred_list</a>(<span class="keyword">struct</span> <a class="code" href="../../d4/dbc/structwifiinfo.html">wifiinfo</a> credentials);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../df/d42/group__WIFI.html#gaecde380d1e76e69ce1161e31c16e0424">wifi_get_ssid_preferred_list</a>(<a class="code" href="../../dc/d3d/structvector__.html">vector</a>* SSIDs);</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga848f0063817fa7674a05847acdd6a886">wifi_remove_from_ssid_preferred_list</a>(<span class="keywordtype">char</span>* SSID);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga462917e8fc2cfe15f3a0ca56a4a76a8c">wifi_clean_ssid_preferred_list</a>();</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../df/d42/group__WIFI.html#gadc3df2638d4f4edd93ace5e3cfd8862c">wifi_getsignal_strength</a>(<span class="keywordtype">char</span>* SSID);</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../df/d42/group__WIFI.html#gaff13bc4fabb8a98bfefb6c56ea31fda8">wifi_scan</a>(<a class="code" href="../../dc/d3d/structvector__.html">vector</a>* v);</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#gac2062f21a8c2021715817afffcf0bc5b">wifi_reconnect</a>();</div>
-<div class="line"><a name="l00131"></a><span class="lineno"><a class="line" href="../../df/d42/group__WIFI.html#gabddd8d04fdcd96c6245abe6164f26ef3">  131</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../df/d42/group__WIFI.html#gabddd8d04fdcd96c6245abe6164f26ef3">WiFi_setSSIDLock</a>(<span class="keywordtype">char</span>* SSID, <span class="keywordtype">bool</span> value);</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#gae60588ab9b08f185b739d7ac51df16aa">wifi_set_static_ip_Address</a>(<span class="keywordtype">char</span>* ipaddress, <span class="keywordtype">char</span>* subnetmask, <span class="keywordtype">char</span>* gateway, <span class="keywordtype">char</span>* dns);</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../df/d42/group__WIFI.html#gad2756cfb8287efa864987bc1eb74045b">WiFi_useDHCP</a>();</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga4df39d7003dc5fb7e8eda1c6d3d263ca">wifi_mode</a>(<span class="keywordtype">bool</span> mode);</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#ifndef HEX_NETWORK_H</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#define HEX_NETWORK_H</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;vector.h&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;common.h&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;vector.h&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;sys/wait.h&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#define ENABLE_LOGS 1</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#if ENABLE_LOGS</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">    #define dbg_log(a) printf a</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">    #define dbg_log(a) (void)0</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">enum</span> WIFI_CODES</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    FAILURE,                </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    WIFI_CONNECTED,         </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    WIFI_INACTIVE,          </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    WIFI_CLIENT_DISABLED,   </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    WIFI_SSID_UNAVAILABLE,  </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    WIFI_LOCK_IS_ON,        </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    WIFI_ALREADY_CONNECTED, </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;};</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="../../db/dcb/structwifi__scanresult.html">   58</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;{</div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="../../db/dcb/structwifi__scanresult.html#a19878d63709b6a9d13114acf5cde84e6">   60</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="../../db/dcb/structwifi__scanresult.html#a19878d63709b6a9d13114acf5cde84e6">strength</a>;   </div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="../../db/dcb/structwifi__scanresult.html#a1e3edd1f74d063c5436475706ace3d0f">   61</a></span>&#160;    <span class="keywordtype">char</span> *<a class="code" href="../../db/dcb/structwifi__scanresult.html#a1e3edd1f74d063c5436475706ace3d0f">ssid</a>;     </div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="../../db/dcb/structwifi__scanresult.html#a6764dc0f71e3a25e5d07535da2078fab">   62</a></span>&#160;    <span class="keywordtype">char</span> *<a class="code" href="../../db/dcb/structwifi__scanresult.html#a6764dc0f71e3a25e5d07535da2078fab">security</a>; </div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="../../db/dcb/structwifi__scanresult.html#a724d34a3cd50951f4eb2c4aed0aa1e65">   63</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="../../db/dcb/structwifi__scanresult.html#a724d34a3cd50951f4eb2c4aed0aa1e65">channel</a>;    </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;} <a class="code" href="../../db/dcb/structwifi__scanresult.html">wifi_scanresult</a>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="../../dd/d8b/structwifi__info.html">   71</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;{</div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="../../dd/d8b/structwifi__info.html#ad1e60c5483c2b1ca64c7067f2430be61">   73</a></span>&#160;    <span class="keywordtype">char</span> *<a class="code" href="../../dd/d8b/structwifi__info.html#ad1e60c5483c2b1ca64c7067f2430be61">ssid</a>;        </div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="../../dd/d8b/structwifi__info.html#a564a186fa9f8d91bd82e54e118ed74cb">   74</a></span>&#160;    <span class="keywordtype">char</span> *<a class="code" href="../../dd/d8b/structwifi__info.html#a564a186fa9f8d91bd82e54e118ed74cb">password</a>;    </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;} <a class="code" href="../../dd/d8b/structwifi__info.html">wifi_info</a>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;{</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga345fc50de936fc0c936f6fb8fe438b5f">wifi_activation</a>(<span class="keywordtype">bool</span> state);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#gacd4ad97de9e9bb22768dd21238932a85">wifi_get_power_status</a>();</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga536762bceeac953aa63eb02001847103">wifi_set_defaultpower_mode</a>(<span class="keywordtype">bool</span> powermode);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#gae6365c0a0fe75ce93e5310c268c443ee">wifi_get_defaultpower_mode</a>();</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../df/d42/group__WIFI.html#ga07282ee3261a18556b1b039ab463a1b3">wifi_connect_network</a>(<a class="code" href="../../dd/d8b/structwifi__info.html">wifi_info</a> credentials);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga9f74a48fb719e56648b63a753dd76c95">wifi_disconnect_network</a>();</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga1d44656268daf13fa5abe4d37a7b0f72">wifi_add_to_ssid_preferred_list</a>(<a class="code" href="../../dd/d8b/structwifi__info.html">wifi_info</a> credentials);</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga7b8a20d646245699ddcdd89020272ac2">wifi_get_ssid_preferred_list</a>(<a class="code" href="../../dc/d3d/structvector__.html">vector</a>* con_list);</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;}</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="agroup__WIFI_html_ga23f8834421de1fa38fa98856711ffbcb"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga23f8834421de1fa38fa98856711ffbcb">wifi_add_to_ssid_preferred_list</a></div><div class="ttdeci">bool wifi_add_to_ssid_preferred_list(struct wifiinfo credentials)</div><div class="ttdef"><b>Definition:</b> network.c:195</div></div>
-<div class="ttc" id="agroup__WIFI_html_ga345fc50de936fc0c936f6fb8fe438b5f"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga345fc50de936fc0c936f6fb8fe438b5f">wifi_activation</a></div><div class="ttdeci">bool wifi_activation(bool state)</div><div class="ttdef"><b>Definition:</b> network.c:37</div></div>
-<div class="ttc" id="agroup__WIFI_html_ga462917e8fc2cfe15f3a0ca56a4a76a8c"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga462917e8fc2cfe15f3a0ca56a4a76a8c">wifi_clean_ssid_preferred_list</a></div><div class="ttdeci">bool wifi_clean_ssid_preferred_list()</div><div class="ttdef"><b>Definition:</b> network.c:404</div></div>
-<div class="ttc" id="agroup__WIFI_html_ga4df39d7003dc5fb7e8eda1c6d3d263ca"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga4df39d7003dc5fb7e8eda1c6d3d263ca">wifi_mode</a></div><div class="ttdeci">bool wifi_mode(bool mode)</div><div class="ttdef"><b>Definition:</b> network.c:503</div></div>
-<div class="ttc" id="agroup__WIFI_html_ga536762bceeac953aa63eb02001847103"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga536762bceeac953aa63eb02001847103">wifi_set_defaultpower_mode</a></div><div class="ttdeci">bool wifi_set_defaultpower_mode(bool powermode)</div><div class="ttdef"><b>Definition:</b> network.c:83</div></div>
-<div class="ttc" id="agroup__WIFI_html_ga5846d0e4096ea1424e9c88d59d96f9f3"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga5846d0e4096ea1424e9c88d59d96f9f3">wifi_connect_network</a></div><div class="ttdeci">int wifi_connect_network(struct wifiinfo credentials)</div><div class="ttdef"><b>Definition:</b> network.c:109</div></div>
-<div class="ttc" id="agroup__WIFI_html_ga848f0063817fa7674a05847acdd6a886"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga848f0063817fa7674a05847acdd6a886">wifi_remove_from_ssid_preferred_list</a></div><div class="ttdeci">bool wifi_remove_from_ssid_preferred_list(char *SSID)</div><div class="ttdef"><b>Definition:</b> network.c:378</div></div>
-<div class="ttc" id="agroup__WIFI_html_ga9f74a48fb719e56648b63a753dd76c95"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga9f74a48fb719e56648b63a753dd76c95">wifi_disconnect_network</a></div><div class="ttdeci">bool wifi_disconnect_network()</div><div class="ttdef"><b>Definition:</b> network.c:171</div></div>
-<div class="ttc" id="agroup__WIFI_html_gabddd8d04fdcd96c6245abe6164f26ef3"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gabddd8d04fdcd96c6245abe6164f26ef3">WiFi_setSSIDLock</a></div><div class="ttdeci">int WiFi_setSSIDLock(char *SSID, bool value)</div></div>
-<div class="ttc" id="agroup__WIFI_html_gac2062f21a8c2021715817afffcf0bc5b"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gac2062f21a8c2021715817afffcf0bc5b">wifi_reconnect</a></div><div class="ttdeci">bool wifi_reconnect()</div><div class="ttdef"><b>Definition:</b> network.c:424</div></div>
-<div class="ttc" id="agroup__WIFI_html_gacd4ad97de9e9bb22768dd21238932a85"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gacd4ad97de9e9bb22768dd21238932a85">wifi_get_power_status</a></div><div class="ttdeci">bool wifi_get_power_status()</div><div class="ttdef"><b>Definition:</b> network.c:70</div></div>
-<div class="ttc" id="agroup__WIFI_html_gad2756cfb8287efa864987bc1eb74045b"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gad2756cfb8287efa864987bc1eb74045b">WiFi_useDHCP</a></div><div class="ttdeci">int WiFi_useDHCP()</div><div class="ttdef"><b>Definition:</b> network.c:487</div></div>
-<div class="ttc" id="agroup__WIFI_html_gadc3df2638d4f4edd93ace5e3cfd8862c"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gadc3df2638d4f4edd93ace5e3cfd8862c">wifi_getsignal_strength</a></div><div class="ttdeci">int wifi_getsignal_strength(char *SSID)</div><div class="ttdef"><b>Definition:</b> network.c:269</div></div>
-<div class="ttc" id="agroup__WIFI_html_gae60588ab9b08f185b739d7ac51df16aa"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gae60588ab9b08f185b739d7ac51df16aa">wifi_set_static_ip_Address</a></div><div class="ttdeci">bool wifi_set_static_ip_Address(char *ipaddress, char *subnetmask, char *gateway, char *dns)</div><div class="ttdef"><b>Definition:</b> network.c:449</div></div>
-<div class="ttc" id="agroup__WIFI_html_gae6365c0a0fe75ce93e5310c268c443ee"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gae6365c0a0fe75ce93e5310c268c443ee">wifi_get_defaultpower_mode</a></div><div class="ttdeci">bool wifi_get_defaultpower_mode()</div><div class="ttdef"><b>Definition:</b> network.c:96</div></div>
-<div class="ttc" id="agroup__WIFI_html_gaecde380d1e76e69ce1161e31c16e0424"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gaecde380d1e76e69ce1161e31c16e0424">wifi_get_ssid_preferred_list</a></div><div class="ttdeci">int wifi_get_ssid_preferred_list(vector *SSIDs)</div><div class="ttdef"><b>Definition:</b> network.c:351</div></div>
-<div class="ttc" id="agroup__WIFI_html_gaff13bc4fabb8a98bfefb6c56ea31fda8"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gaff13bc4fabb8a98bfefb6c56ea31fda8">wifi_scan</a></div><div class="ttdeci">int wifi_scan(vector *v)</div><div class="ttdef"><b>Definition:</b> network.c:305</div></div>
-<div class="ttc" id="astructWiFi__scanResult_html"><div class="ttname"><a href="../../d6/d37/structWiFi__scanResult.html">WiFi_scanResult</a></div><div class="ttdoc">Structure for list of wifi</div><div class="ttdef"><b>Definition:</b> network.h:30</div></div>
-<div class="ttc" id="astructWiFi__scanResult_html_a518d91db8f2998577a0d54c32654820e"><div class="ttname"><a href="../../d6/d37/structWiFi__scanResult.html#a518d91db8f2998577a0d54c32654820e">WiFi_scanResult::ssid</a></div><div class="ttdeci">char * ssid</div><div class="ttdoc">Character type variable for ssid name.</div><div class="ttdef"><b>Definition:</b> network.h:32</div></div>
-<div class="ttc" id="astructWiFi__scanResult_html_aeb73116ab0f1b1b2fe8b0e2af2e56946"><div class="ttname"><a href="../../d6/d37/structWiFi__scanResult.html#aeb73116ab0f1b1b2fe8b0e2af2e56946">WiFi_scanResult::strength</a></div><div class="ttdeci">int strength</div><div class="ttdoc">Interger type variable for string strength for wifi.</div><div class="ttdef"><b>Definition:</b> network.h:31</div></div>
-<div class="ttc" id="astructvector___html"><div class="ttname"><a href="../../dc/d3d/structvector__.html">vector_</a></div><div class="ttdef"><b>Definition:</b> bluetooth.h:23</div></div>
-<div class="ttc" id="astructwifiinfo_html"><div class="ttname"><a href="../../d4/dbc/structwifiinfo.html">wifiinfo</a></div><div class="ttdoc">Structure for Wifi detail.</div><div class="ttdef"><b>Definition:</b> network.h:38</div></div>
-<div class="ttc" id="astructwifiinfo_html_a6c486bb45986d4df500914f8c809629e"><div class="ttname"><a href="../../d4/dbc/structwifiinfo.html#a6c486bb45986d4df500914f8c809629e">wifiinfo::password</a></div><div class="ttdeci">char * password</div><div class="ttdoc">Character type variable for Password.</div><div class="ttdef"><b>Definition:</b> network.h:40</div></div>
-<div class="ttc" id="astructwifiinfo_html_ae538c17cb9c8fffddaffcf1f0e8fecf4"><div class="ttname"><a href="../../d4/dbc/structwifiinfo.html#ae538c17cb9c8fffddaffcf1f0e8fecf4">wifiinfo::ssid</a></div><div class="ttdeci">char * ssid</div><div class="ttdoc">Character type variable for ssid name.</div><div class="ttdef"><b>Definition:</b> network.h:39</div></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../df/d42/group__WIFI.html#gafa3591ae5aed4835db7640fcb064be67">wifi_remove_from_ssid_preferred_list</a>(<span class="keywordtype">char</span>* ssid);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga462917e8fc2cfe15f3a0ca56a4a76a8c">wifi_clean_ssid_preferred_list</a>();</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../df/d42/group__WIFI.html#ga448404736f930320160c147fb38ccc33">wifi_get_signal_strength</a>(<span class="keywordtype">char</span>* ssid);</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga4d86b46637178e02b61218287fca46b9">wifi_scan</a>(<a class="code" href="../../dc/d3d/structvector__.html">vector</a>* v);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#gac2062f21a8c2021715817afffcf0bc5b">wifi_reconnect</a>();</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#gaebbe2e96e56123b40d43c04200d642aa">wifi_set_ssid_lock</a>(<span class="keywordtype">char</span> *ssid, <span class="keywordtype">bool</span> enable );</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#gaa5859524785ac856e50bad1d3647eb51">wifi_set_static</a>(<span class="keywordtype">char</span>* ipaddress, <span class="keywordtype">char</span>* prefixnetmask, <span class="keywordtype">char</span>* gateway, <span class="keywordtype">char</span>* dns);</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#ga3effac70c3acbefbd70dcfa82870a94a">wifi_use_dhcp</a>(<span class="keywordtype">bool</span> enable);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../df/d42/group__WIFI.html#gab1e5504d096e96d8a8fb1aa7fc13a83e">wifi_mode</a>(<span class="keywordtype">bool</span> mode, <a class="code" href="../../dd/d8b/structwifi__info.html">wifi_info</a> <a class="code" href="../../d5/d6d/structapn.html">apn</a>);</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;}</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="agroup__WIFI_html_ga07282ee3261a18556b1b039ab463a1b3"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga07282ee3261a18556b1b039ab463a1b3">wifi_connect_network</a></div><div class="ttdeci">int wifi_connect_network(wifi_info credentials)</div><div class="ttdef"><b>Definition:</b> network.c:217</div></div>
+<div class="ttc" id="agroup__WIFI_html_ga1d44656268daf13fa5abe4d37a7b0f72"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga1d44656268daf13fa5abe4d37a7b0f72">wifi_add_to_ssid_preferred_list</a></div><div class="ttdeci">bool wifi_add_to_ssid_preferred_list(wifi_info credentials)</div><div class="ttdef"><b>Definition:</b> network.c:337</div></div>
+<div class="ttc" id="agroup__WIFI_html_ga345fc50de936fc0c936f6fb8fe438b5f"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga345fc50de936fc0c936f6fb8fe438b5f">wifi_activation</a></div><div class="ttdeci">bool wifi_activation(bool state)</div><div class="ttdef"><b>Definition:</b> network.c:117</div></div>
+<div class="ttc" id="agroup__WIFI_html_ga3effac70c3acbefbd70dcfa82870a94a"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga3effac70c3acbefbd70dcfa82870a94a">wifi_use_dhcp</a></div><div class="ttdeci">bool wifi_use_dhcp(bool enable)</div><div class="ttdef"><b>Definition:</b> network.c:887</div></div>
+<div class="ttc" id="agroup__WIFI_html_ga448404736f930320160c147fb38ccc33"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga448404736f930320160c147fb38ccc33">wifi_get_signal_strength</a></div><div class="ttdeci">int wifi_get_signal_strength(char *ssid)</div><div class="ttdef"><b>Definition:</b> network.c:430</div></div>
+<div class="ttc" id="agroup__WIFI_html_ga462917e8fc2cfe15f3a0ca56a4a76a8c"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga462917e8fc2cfe15f3a0ca56a4a76a8c">wifi_clean_ssid_preferred_list</a></div><div class="ttdeci">bool wifi_clean_ssid_preferred_list()</div><div class="ttdef"><b>Definition:</b> network.c:729</div></div>
+<div class="ttc" id="agroup__WIFI_html_ga4d86b46637178e02b61218287fca46b9"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga4d86b46637178e02b61218287fca46b9">wifi_scan</a></div><div class="ttdeci">bool wifi_scan(vector *v)</div><div class="ttdef"><b>Definition:</b> network.c:482</div></div>
+<div class="ttc" id="agroup__WIFI_html_ga536762bceeac953aa63eb02001847103"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga536762bceeac953aa63eb02001847103">wifi_set_defaultpower_mode</a></div><div class="ttdeci">bool wifi_set_defaultpower_mode(bool powermode)</div><div class="ttdef"><b>Definition:</b> network.c:151</div></div>
+<div class="ttc" id="agroup__WIFI_html_ga7b8a20d646245699ddcdd89020272ac2"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga7b8a20d646245699ddcdd89020272ac2">wifi_get_ssid_preferred_list</a></div><div class="ttdeci">bool wifi_get_ssid_preferred_list(vector *con_list)</div><div class="ttdef"><b>Definition:</b> network.c:580</div></div>
+<div class="ttc" id="agroup__WIFI_html_ga9f74a48fb719e56648b63a753dd76c95"><div class="ttname"><a href="../../df/d42/group__WIFI.html#ga9f74a48fb719e56648b63a753dd76c95">wifi_disconnect_network</a></div><div class="ttdeci">bool wifi_disconnect_network()</div><div class="ttdef"><b>Definition:</b> network.c:286</div></div>
+<div class="ttc" id="agroup__WIFI_html_gaa5859524785ac856e50bad1d3647eb51"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gaa5859524785ac856e50bad1d3647eb51">wifi_set_static</a></div><div class="ttdeci">bool wifi_set_static(char *ipaddress, char *prefixnetmask, char *gateway, char *dns)</div><div class="ttdef"><b>Definition:</b> network.c:817</div></div>
+<div class="ttc" id="agroup__WIFI_html_gab1e5504d096e96d8a8fb1aa7fc13a83e"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gab1e5504d096e96d8a8fb1aa7fc13a83e">wifi_mode</a></div><div class="ttdeci">bool wifi_mode(bool mode, wifi_info apn)</div><div class="ttdef"><b>Definition:</b> network.c:962</div></div>
+<div class="ttc" id="agroup__WIFI_html_gac2062f21a8c2021715817afffcf0bc5b"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gac2062f21a8c2021715817afffcf0bc5b">wifi_reconnect</a></div><div class="ttdeci">bool wifi_reconnect()</div><div class="ttdef"><b>Definition:</b> network.c:773</div></div>
+<div class="ttc" id="agroup__WIFI_html_gacd4ad97de9e9bb22768dd21238932a85"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gacd4ad97de9e9bb22768dd21238932a85">wifi_get_power_status</a></div><div class="ttdeci">bool wifi_get_power_status()</div><div class="ttdef"><b>Definition:</b> network.c:134</div></div>
+<div class="ttc" id="agroup__WIFI_html_gae6365c0a0fe75ce93e5310c268c443ee"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gae6365c0a0fe75ce93e5310c268c443ee">wifi_get_defaultpower_mode</a></div><div class="ttdeci">bool wifi_get_defaultpower_mode()</div><div class="ttdef"><b>Definition:</b> network.c:188</div></div>
+<div class="ttc" id="agroup__WIFI_html_gaebbe2e96e56123b40d43c04200d642aa"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gaebbe2e96e56123b40d43c04200d642aa">wifi_set_ssid_lock</a></div><div class="ttdeci">bool wifi_set_ssid_lock(char *ssid, bool enable)</div><div class="ttdef"><b>Definition:</b> network.c:1065</div></div>
+<div class="ttc" id="agroup__WIFI_html_gafa3591ae5aed4835db7640fcb064be67"><div class="ttname"><a href="../../df/d42/group__WIFI.html#gafa3591ae5aed4835db7640fcb064be67">wifi_remove_from_ssid_preferred_list</a></div><div class="ttdeci">int wifi_remove_from_ssid_preferred_list(char *ssid)</div><div class="ttdef"><b>Definition:</b> network.c:662</div></div>
+<div class="ttc" id="astructapn_html"><div class="ttname"><a href="../../d5/d6d/structapn.html">apn</a></div><div class="ttdoc">Structure for APN configuration.</div><div class="ttdef"><b>Definition:</b> sim.h:29</div></div>
+<div class="ttc" id="astructvector___html"><div class="ttname"><a href="../../dc/d3d/structvector__.html">vector_</a></div><div class="ttdef"><b>Definition:</b> vector.h:17</div></div>
+<div class="ttc" id="astructwifi__info_html"><div class="ttname"><a href="../../dd/d8b/structwifi__info.html">wifi_info</a></div><div class="ttdoc">Structure for Wifi detail.</div><div class="ttdef"><b>Definition:</b> network.h:72</div></div>
+<div class="ttc" id="astructwifi__info_html_a564a186fa9f8d91bd82e54e118ed74cb"><div class="ttname"><a href="../../dd/d8b/structwifi__info.html#a564a186fa9f8d91bd82e54e118ed74cb">wifi_info::password</a></div><div class="ttdeci">char * password</div><div class="ttdoc">Character type variable for Password.</div><div class="ttdef"><b>Definition:</b> network.h:74</div></div>
+<div class="ttc" id="astructwifi__info_html_ad1e60c5483c2b1ca64c7067f2430be61"><div class="ttname"><a href="../../dd/d8b/structwifi__info.html#ad1e60c5483c2b1ca64c7067f2430be61">wifi_info::ssid</a></div><div class="ttdeci">char * ssid</div><div class="ttdoc">Character type variable for ssid name.</div><div class="ttdef"><b>Definition:</b> network.h:73</div></div>
+<div class="ttc" id="astructwifi__scanresult_html"><div class="ttname"><a href="../../db/dcb/structwifi__scanresult.html">wifi_scanresult</a></div><div class="ttdoc">Structure for list of wifi</div><div class="ttdef"><b>Definition:</b> network.h:59</div></div>
+<div class="ttc" id="astructwifi__scanresult_html_a19878d63709b6a9d13114acf5cde84e6"><div class="ttname"><a href="../../db/dcb/structwifi__scanresult.html#a19878d63709b6a9d13114acf5cde84e6">wifi_scanresult::strength</a></div><div class="ttdeci">int strength</div><div class="ttdoc">Interger type variable for string strength for wifi.</div><div class="ttdef"><b>Definition:</b> network.h:60</div></div>
+<div class="ttc" id="astructwifi__scanresult_html_a1e3edd1f74d063c5436475706ace3d0f"><div class="ttname"><a href="../../db/dcb/structwifi__scanresult.html#a1e3edd1f74d063c5436475706ace3d0f">wifi_scanresult::ssid</a></div><div class="ttdeci">char * ssid</div><div class="ttdoc">Character type variable for ssid name.</div><div class="ttdef"><b>Definition:</b> network.h:61</div></div>
+<div class="ttc" id="astructwifi__scanresult_html_a6764dc0f71e3a25e5d07535da2078fab"><div class="ttname"><a href="../../db/dcb/structwifi__scanresult.html#a6764dc0f71e3a25e5d07535da2078fab">wifi_scanresult::security</a></div><div class="ttdeci">char * security</div><div class="ttdoc">Character type variable for security type.</div><div class="ttdef"><b>Definition:</b> network.h:62</div></div>
+<div class="ttc" id="astructwifi__scanresult_html_a724d34a3cd50951f4eb2c4aed0aa1e65"><div class="ttname"><a href="../../db/dcb/structwifi__scanresult.html#a724d34a3cd50951f4eb2c4aed0aa1e65">wifi_scanresult::channel</a></div><div class="ttdeci">int channel</div><div class="ttdoc">Character type variable for channel.</div><div class="ttdef"><b>Definition:</b> network.h:63</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
