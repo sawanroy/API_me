@@ -167,7 +167,7 @@ bool wifi_clean_ssid_preferred_list();
  * 
  * @return strenght of signal  
 */
-int wifi_get_signal_strength(char* SSID);
+int wifi_get_signal_strength(char* ssid);
 
 
 /*!

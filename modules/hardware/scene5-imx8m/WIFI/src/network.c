@@ -30,16 +30,26 @@ bool wifi_ssid_lock_check()
         sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority: | awk '{print $2}' ", con->ssid);
         if(!runCommand(cmd,ret,1024)) 
         {
+            free(con->ssid);
+            free(con->password);
+            free(con);
             vector_free(&a);
             return false;
         }
         if(atoi(ret)==2)
         {
             //lock is set
+            free(con->ssid);
+            free(con->password);
+            free(con);
             vector_free(&a);
             return true;
         }
+        free(con->ssid);
+        free(con->password);
+        free(con);
     }
+    
     vector_free(&a);
     
     return false;
@@ -647,9 +657,9 @@ bool wifi_get_ssid_preferred_list(vector* con_list)
 
 
 /*
-    wifi_remove_from_ssid_preferred_list(char* SSID)
+    wifi_remove_from_ssid_preferred_list(char* ssid)
 */
-bool wifi_remove_from_ssid_preferred_list(char* SSID)
+bool wifi_remove_from_ssid_preferred_list(char* ssid)
 {
     
     NMClient* client = getClient();
@@ -676,14 +686,14 @@ bool wifi_remove_from_ssid_preferred_list(char* SSID)
         return false;
     }
 
-    NMRemoteConnection* connection = nm_client_get_connection_by_id(client, SSID);
+    NMRemoteConnection* connection = nm_client_get_connection_by_id(client, ssid);
     if(!connection)
     {
         dbg_log(("connection does not exist\n"));
         return false;
     }
    
-    sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",SSID);
+    sprintf(cmd, "nmcli con show '%s' | grep connection.autoconnect-priority | awk '{print $2}'",ssid);
     if(!runCommand(cmd,ret,1024))
     {
         return false;
@@ -696,7 +706,7 @@ bool wifi_remove_from_ssid_preferred_list(char* SSID)
     }  
     else if(atoi(ret)==1)
     {
-        sprintf(cmd, "nmcli con modify '%s' connection.autoconnect off connection.autoconnect-priority 0", SSID);
+        sprintf(cmd, "nmcli con modify '%s' connection.autoconnect off connection.autoconnect-priority 0", ssid);
         if(!runCommand(cmd,ret,1024))
         {
             return false;
@@ -736,11 +746,20 @@ bool wifi_clean_ssid_preferred_list()
     wifi_get_ssid_preferred_list(&v);
     for(i=0; i<vector_count(&v); i++)
     {
-        if(!wifi_remove_from_ssid_preferred_list(vector_get(&v,i)))
+        wifi_info *con = vector_get(&v,i);
+        if(!wifi_remove_from_ssid_preferred_list(con->ssid))
         {
+            free(con->ssid);
+            free(con->password);
+            free(con);
+            vector_free(&v);
             return false;
         }
+        free(con->ssid);
+        free(con->password);
+        free(con);
     }
+    
     vector_free(&v);
 
     return true;
@@ -1082,19 +1101,21 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                     return false;
                 }
 
-                char *ssid = (char *)malloc(50);
                 vector con;
                 vector_init(&con);
                 wifi_get_ssid_preferred_list(&con);
                 for(int j=0;j<con.count;j++)
                 {
-                    ssid = con.data[j];              
-                    if(strcmp(ssid_lock,ssid)==0)
+                    wifi_info *wificon = con.data[j];  
+                
+                    if(strcmp(ssid_lock, wificon->ssid)==0)
                     {
                         sprintf(cmd, "nmcli -t -f name,device connection show --active | grep '%s'", interfaceName);
                         if(!runCommand(cmd,ret,255))
                         {
-                            free(ssid);
+                            free(wificon->ssid);
+                            free(wificon->password);
+                            free(wificon);
                             vector_free(&con);
                             return false;
                         }
@@ -1105,7 +1126,9 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                             sprintf(cmd, "nmcli con up '%s'",ssid_lock);
                             if(!runCommand(cmd,ret,1024)) 
                             {
-                                free(ssid);
+                                free(wificon->ssid);
+                                free(wificon->password);
+                                free(wificon);
                                 vector_free(&con);
                                 return false;
                             }
@@ -1116,7 +1139,9 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                             sprintf(cmd, "nmcli device disconnect '%s'",interfaceName);
                             if(!runCommand(cmd,ret,1024)) 
                             {
-                                free(ssid);
+                                free(wificon->ssid);
+                                free(wificon->password);
+                                free(wificon);
                                 vector_free(&con);
                                 return false;
                             }
@@ -1124,7 +1149,9 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                             sprintf(cmd, "nmcli con up '%s'",ssid_lock);
                             if(!runCommand(cmd,ret,1024)) 
                             {
-                                free(ssid);
+                                free(wificon->ssid);
+                                free(wificon->password);
+                                free(wificon);
                                 vector_free(&con);
                                 return false;
                             }
@@ -1133,23 +1160,30 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
                         sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes connection.autoconnect-priority 2",ssid_lock);
                         if(!runCommand(cmd,ret,1024)) 
                         {
-                            free(ssid);
+                            free(wificon->ssid);
+                            free(wificon->password);
+                            free(wificon);
                             vector_free(&con);
                             return false;
                         }
                     }
                     else
                     {
-                        sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect no",ssid);
+                        sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect no",wificon->ssid);
                         if(!runCommand(cmd,ret,1024)) 
                         {
-                            free(ssid);
+                            free(wificon->ssid);
+                            free(wificon->password);
+                            free(wificon);
                             vector_free(&con);
                             return false;
                         }
-                    }                      
+                    }
+                    free(wificon->ssid);
+                    free(wificon->password);
+                    free(wificon);                    
                 }
-                free(ssid);
+                
                 vector_free(&con);
             }
         } 
@@ -1157,22 +1191,26 @@ bool wifi_set_ssid_lock(char *ssid_lock,bool enable)
         {
             if(pri==2)
             {
-                char *ssid = (char *)malloc(50);
                 vector con;
                 vector_init(&con);
                 wifi_get_ssid_preferred_list(&con);
                 for(int j=0;j<con.count;j++)
                 {
-                    ssid = con.data[j];
-                    sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes connection.autoconnect-priority 1",ssid);
+                    wifi_info *wificon = con.data[j];
+                    sprintf(cmd, "nmcli connection modify '%s' connection.autoconnect yes connection.autoconnect-priority 1", wificon->ssid);
                     if(!runCommand(cmd,ret,1024))
                     {
-                        free(ssid);
+                        free(wificon->ssid);
+                        free(wificon->password);
+                        free(wificon);
                         vector_free(&con);
                         return false;
-                    }   
+                    }
+                    free(wificon->ssid);
+                    free(wificon->password);
+                    free(wificon);  
                 }
-                free(ssid);
+                
                 vector_free(&con);
             }
             else
