@@ -1,7 +1,7 @@
 /*
 ***************************************************************************
 *
-* Author: Sawan roy 
+* Author: Sawan roy
 *
 * Copyright (C) 2021 TRUNEXA INC
 *
@@ -21,7 +21,7 @@
 #include <termios.h>
 #include <sys/file.h>
 #include <time.h>
-#include <sys/types.h>  
+#include <sys/types.h>
 #include <sys/stat.h>
 #include <getopt.h>
 #include <sys/ioctl.h>
@@ -30,41 +30,109 @@
 #include <serial.h>
 #include <gps.h>
 
+
+
 /*
-	open_port()
-	Open GPS serial link
-
+    open_port()
+    Open GPS serial link
 */
-
-int open_port() {
+int open_port()
+{
     FILE* fd;
+
     fd=serial_open(GPS_PORT,GPS_Baud_Rate);
-	if(fd<0) {
-		return  -1;
-	}
-    	else {
-		return fd;
-	}
+    if(fd<0)
+    {
+        return  -1;
+    }
+    else
+    {
+        return fd;
+    }
 }
+
+
+
 /*
-
-	state_gps(int filedescriptor)
-	State of GPS
-
+    state_gps(int filedescriptor)
+    State of GPS
 */
-char* state_gps(int filedescriptor) {
+char* state_gps(int filedescriptor)
+{
     unsigned char *buf_tmp = malloc(100);
     unsigned char *buf[5000];
     int size=sizeof(buf);
     int Timeout=100000;
-    if(filedescriptor>0) {
-		int usbrd;
-		usbrd=serial_read(filedescriptor, buf, size,Timeout);
-   }  
-   FILE * fPtr;
-     fPtr = fopen("/tmp/status.txt", "w");
+    int line_num = 1;
+    int find_result = 0;
+    char temp[10000];
+
+    if(filedescriptor>0)
+    {
+        int usbrd;
+        usbrd=serial_read(filedescriptor, buf, size,Timeout);
+    }
+
+    FILE * fPtr;
+    fPtr = fopen("/tmp/status.txt", "w");
+    /* fopen() return NULL if last operation was unsuccessful */
+    if(fPtr == NULL)
+    {
+        /* File not created hence exit */
+        printf("Unable to create file.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    fputs(buf, fPtr);
+    fclose(fPtr);
+    FILE * fP;
+    fP = fopen("/tmp/status.txt", "r");
+    while(fgets(temp, 10000, fP ) != NULL)
+    {
+        // printf("line 2\n%s",temp);
+        if((strstr(temp, "$PSTMANTENNASTATUS")) != NULL)
+        {
+            strcpy(buf_tmp,temp);
+            find_result++;
+        }
+        line_num++;
+    }
+    if(find_result == 0)
+    {
+        printf("\n didnt get the data \n");
+        return -1;
+    }
+    fclose(fP);
+    int del = remove("/tmp/status.txt");
+
+    return buf_tmp;
+}
 
 
+
+/*
+    char* read_data_gprmc(int filedescriptor)
+    output full GPRMC of 1 trame
+*/
+char* read_data_gprmc(int filedescriptor)
+{
+    char *buf_temp = malloc(60);
+    unsigned char *buf[5000];
+    int size=sizeof(buf);
+    int Timeout=10000;
+    int line_num = 1;
+    int find_result = 0;
+    char temp[10000];
+    FILE * fPtr;
+    FILE * fP;
+
+    if(filedescriptor>0)
+    {
+        int usbrd;
+        usbrd=serial_read(filedescriptor, buf, size,Timeout);
+    }
+
+    fPtr = fopen("/tmp/gprmc.txt", "w");
     /* fopen() return NULL if last operation was unsuccessful */
     if(fPtr == NULL)
     {
@@ -74,208 +142,165 @@ char* state_gps(int filedescriptor) {
     }
     fputs(buf, fPtr);
     fclose(fPtr);
-    FILE * fP;
-    fP = fopen("/tmp/status.txt", "r");
 
-    int line_num = 1;
-	int find_result = 0;
-	char temp[10000];
-
-    while(fgets(temp, 10000, fP ) != NULL){
-      // printf("line 2\n%s",temp);
-		if((strstr(temp, "$PSTMANTENNASTATUS")) != NULL) {
-            strcpy(buf_tmp,temp);
-			find_result++;
-		}
-		line_num++;
-       
-    }
-	if(find_result == 0) {
-		printf("\n didnt get the data \n");
-      return -1;
-	}  
-   fclose(fP);
-   int del = remove("/tmp/status.txt");
-    return buf_tmp;
-}
-
-/*
-
-	char* read_data_gprmc(int filedescriptor)
-	output full GPRMC of 1 trame
-
-*/
-
-char* read_data_gprmc(int filedescriptor) { 
-    char *buf_temp = malloc(60);
-    unsigned char *buf[5000];
-    int size=sizeof(buf);
-    int Timeout=10000;
-    if(filedescriptor>0) {
-		int usbrd;
-		usbrd=serial_read(filedescriptor, buf, size,Timeout);
-    }  
-    FILE * fPtr;
-    fPtr = fopen("/tmp/gprmc.txt", "w");
-    /* fopen() return NULL if last operation was unsuccessful */
-    if(fPtr == NULL) {
-        /* File not created hence exit */
-        printf("Unable to create file.\n");
-        exit(EXIT_FAILURE);
-    }
-    fputs(buf, fPtr);
-    fclose(fPtr);
-    FILE * fP;
     fP = fopen("/tmp/gprmc.txt", "r");
-
-    int line_num = 1;
-	int find_result = 0;
-	char temp[10000];
-
-    while(fgets(temp, 10000, fP ) != NULL){
-      // printf("line 2\n%s",temp);
-		if((strstr(temp, "$GPRMC")) != NULL) {
+    while(fgets(temp, 10000, fP ) != NULL)
+    {
+        if((strstr(temp, "$GPRMC")) != NULL)
+        {
             strcpy(buf_temp,temp);
-			find_result++;
-		}
-		line_num++;
-       
+            find_result++;
+        }
+        line_num++;
     }
-	if(find_result == 0) {
-		printf("\n didnt get the data \n");
-      return -1;
-	}  
-   fclose(fP);
-   int del = remove("/tmp/gprmc.txt");
+    if(find_result == 0)
+    {
+        printf("\n didnt get the data \n");
+        return -1;
+    }
+    fclose(fP);
+    int del = remove("/tmp/gprmc.txt");
+
     return buf_temp;
 }
 
+
+
 /*
-
-	char* read_data_gprmc_parse(int filedescriptor, int gprmc_index)
-	extract part of GPRMC of 1 trame
-
+    char* read_data_gprmc_parse(int filedescriptor, int gprmc_index)
+    extract part of GPRMC of 1 trame
 */
+char* read_data_gprmc_parse(int filedescriptor, int gprmc_index)
+{
+    char *buf_tmp = malloc(100);
+    int i;
+    char *str1;
+    char *gpsdata[14][14];
+    char *original;
 
-char* read_data_gprmc_parse(int filedescriptor, int gprmc_index){
-   char *buf_tmp = malloc(100);
-   int i;
-   char *str1;
-   char *gpsdata[14][14];
-   buf_tmp = read_data_gprmc(filedescriptor);
-   char *original;
-   original = strdup(buf_tmp);
-   while ((str1 = strsep(&original,","))!= NULL) {
-   // loop[i] = strdup(str1);
-    strcpy(gpsdata[i], str1);
-    printf("Token %d: %s \n", i,str1);
-    i++;
-}
+    buf_tmp = read_data_gprmc(filedescriptor);
+    original = strdup(buf_tmp);
+    while ((str1 = strsep(&original,","))!= NULL)
+    {
+        // loop[i] = strdup(str1);
+        strcpy(gpsdata[i], str1);
+        printf("Token %d: %s \n", i,str1);
+        i++;
+    }
     printf("GPS return data %s ", gpsdata[gprmc_index]);
     strcpy(buf_tmp,gpsdata[gprmc_index]);
+
     return buf_tmp;
-
-
 }
 
+
+
 /*
-	char* read_data_gpgga(int filedescriptor)
-	output full GPGGA of 1 trame
-
+    char* read_data_gpgga(int filedescriptor)
+    output full GPGGA of 1 trame
 */
-
-char* read_data_gpgga(int filedescriptor) {
+char* read_data_gpgga(int filedescriptor)
+{
     unsigned char *buf_tmp = malloc(100);
     unsigned char *buf[5000];
     int size=sizeof(buf);
     int Timeout=100000;
+    int line_num = 1;
+    int find_result = 0;
+    char temp[10000];
     FILE *fPtr;
-    if(filedescriptor>0) {
-		int usbrd;
-		usbrd=serial_read(filedescriptor, buf, size,Timeout);
-    }  
+    FILE * fP;
+
+    if(filedescriptor>0)
+    {
+        int usbrd;
+        usbrd=serial_read(filedescriptor, buf, size,Timeout);
+    }
     fPtr = fopen("/tmp/gpgga.txt", "w");
     /* fopen() return NULL if last operation was unsuccessful */
-    if(fPtr == NULL) {
+    if(fPtr == NULL)
+    {
         /* File not created hence exit */
         printf("Unable to create file.\n");
         exit(EXIT_FAILURE);
     }
     fputs(buf, fPtr);
     fclose(fPtr);
-    FILE * fP;
-    fP = fopen("/tmp/gpgga.txt", "r");
-    int line_num = 1;
-	int find_result = 0;
-	char temp[10000];
-    
-    while(fgets(temp, 10000, fP ) != NULL) {
-      // printf("line 2\n%s",temp);
-		if((strstr(temp, "$GPGGA")) != NULL) {
-            strcpy(buf_tmp,temp);
-			find_result++;
-		}
-		line_num++;   
-    }
 
-	if(find_result == 0) {
-		printf("\n didnt get the data, check for port  \n");
+    fP = fopen("/tmp/gpgga.txt", "r");
+    while(fgets(temp, 10000, fP ) != NULL)
+    {
+        // printf("line 2\n%s",temp);
+        if((strstr(temp, "$GPGGA")) != NULL)
+        {
+            strcpy(buf_tmp,temp);
+            find_result++;
+        }
+        line_num++;
+    }
+    if(find_result == 0)
+    {
+        printf("\n didnt get the data, check for port  \n");
         return -1;
-	}  
+    }
     printf("\n%s\n",buf_tmp);
     fclose(fP);
-    int del = remove("/tmp/gpgga.txt");   
+    int del = remove("/tmp/gpgga.txt");
+
     return buf_tmp;
-} 
+}
+
+
 
 /*
-
-	char* read_data_gpgga_parse(int filedescriptor, int gpgga_index)
-	extract part of GPGGA of 1 trame
-
+    char* read_data_gpgga_parse(int filedescriptor, int gpgga_index)
+    extract part of GPGGA of 1 trame
 */
-
-char* read_data_gpgga_parse(int filedescriptor, int gpgga_index) {
+char* read_data_gpgga_parse(int filedescriptor, int gpgga_index)
+{
     char *buf_tmp = malloc(100);
     char *str1;
     int i;
     char *gpsdata[14][14];
-    buf_tmp = read_data_gpgga(filedescriptor);
     char *original;
+
+    buf_tmp = read_data_gpgga(filedescriptor);
     original = strdup(buf_tmp);
-    
-    while ((str1 = strsep(&original,","))!= NULL) {
-    // loop[i] = strdup(str1);
+    while ((str1 = strsep(&original,","))!= NULL)
+    {
+        // loop[i] = strdup(str1);
         strcpy(gpsdata[i], str1);
         printf("Token %d: %s \n", i,str1);
         i++;
     }
     printf("GPS return data %s ", gpsdata[gpgga_index]);
     strcpy(buf_tmp,gpsdata[gpgga_index]);
+
     return buf_tmp;
-
-
 }
+
 
 
 /*
-
-	close_port(int filedescriptor)
-	Close GPS serial link
-
+    close_port(int filedescriptor)
+    Close GPS serial link
 */
-
-int close_port(int filedescriptor) {
-	if(filedescriptor>0) {
-		if(!serial_close(filedescriptor)) {
-			return 0;	
-		}
-		else {
-			return -1;
-		}
-	}
-	else {
-		return -1;
-	}
+int close_port(int filedescriptor)
+{
+    if(filedescriptor>0)
+    {
+        if(!serial_close(filedescriptor))
+        {
+            return 0;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    else
+    {
+        return -1;
+    }
 }
-	
+
