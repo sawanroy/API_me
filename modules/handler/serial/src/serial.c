@@ -141,7 +141,7 @@ int serial_open(int portname,int baudrate)
 {
 
     char buf[15];
-    snprintf(buf, sizeof(buf), "/dev/ttyAMA%d", portname);
+    snprintf(buf, sizeof(buf), "/dev/ttymxc%d", portname);
     int fd;
 			
     fd = open(buf, O_RDWR | O_NOCTTY | O_SYNC);
