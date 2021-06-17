@@ -41,6 +41,19 @@ typedef struct {
    char Gpsval;
 } GPSData;
 
+
+/**
+ * Enable/Disable logs
+*/
+#define ENABLE_LOGS 0
+
+#if ENABLE_LOGS
+    #define dbg_log(a) printf a
+#else
+    #define dbg_log(a) (void)0
+#endif
+
+
 /*! \addtogroup GPS
   Additional documentation for group 'GPS'
       @{

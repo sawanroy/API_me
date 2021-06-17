@@ -79,7 +79,7 @@ char* state_gps(int filedescriptor)
     if(fPtr == NULL)
     {
         /* File not created hence exit */
-        printf("Unable to create file.\n");
+        dbg_log(("Unable to create file.\n"));
         exit(EXIT_FAILURE);
     }
 
@@ -89,7 +89,7 @@ char* state_gps(int filedescriptor)
     fP = fopen("/tmp/status.txt", "r");
     while(fgets(temp, 10000, fP ) != NULL)
     {
-        // printf("line 2\n%s",temp);
+        // dbg_log(("line 2\n%s",temp));
         if((strstr(temp, "$PSTMANTENNASTATUS")) != NULL)
         {
             strcpy(buf_tmp,temp);
@@ -99,7 +99,7 @@ char* state_gps(int filedescriptor)
     }
     if(find_result == 0)
     {
-        printf("\n didnt get the data \n");
+        dbg_log(("\n didnt get the data \n"));
         return -1;
     }
     fclose(fP);
@@ -137,7 +137,7 @@ char* read_data_gprmc(int filedescriptor)
     if(fPtr == NULL)
     {
         /* File not created hence exit */
-        printf("Unable to create file.\n");
+        dbg_log(("Unable to create file.\n"));
         exit(EXIT_FAILURE);
     }
     fputs(buf, fPtr);
@@ -155,7 +155,7 @@ char* read_data_gprmc(int filedescriptor)
     }
     if(find_result == 0)
     {
-        printf("\n didnt get the data \n");
+        dbg_log(("\n didnt get the data \n"));
         return -1;
     }
     fclose(fP);
@@ -184,10 +184,10 @@ char* read_data_gprmc_parse(int filedescriptor, int gprmc_index)
     {
         // loop[i] = strdup(str1);
         strcpy(gpsdata[i], str1);
-        printf("Token %d: %s \n", i,str1);
+        dbg_log(("Token %d: %s \n", i,str1));
         i++;
     }
-    printf("GPS return data %s ", gpsdata[gprmc_index]);
+    dbg_log(("GPS return data %s ", gpsdata[gprmc_index]));
     strcpy(buf_tmp,gpsdata[gprmc_index]);
 
     return buf_tmp;
@@ -221,7 +221,7 @@ char* read_data_gpgga(int filedescriptor)
     if(fPtr == NULL)
     {
         /* File not created hence exit */
-        printf("Unable to create file.\n");
+        dbg_log(("Unable to create file.\n"));
         exit(EXIT_FAILURE);
     }
     fputs(buf, fPtr);
@@ -230,7 +230,7 @@ char* read_data_gpgga(int filedescriptor)
     fP = fopen("/tmp/gpgga.txt", "r");
     while(fgets(temp, 10000, fP ) != NULL)
     {
-        // printf("line 2\n%s",temp);
+        // dbg_log(("line 2\n%s",temp));
         if((strstr(temp, "$GPGGA")) != NULL)
         {
             strcpy(buf_tmp,temp);
@@ -240,10 +240,10 @@ char* read_data_gpgga(int filedescriptor)
     }
     if(find_result == 0)
     {
-        printf("\n didnt get the data, check for port  \n");
+        dbg_log(("\n didnt get the data, check for port  \n"));
         return -1;
     }
-    printf("\n%s\n",buf_tmp);
+    dbg_log(("\n%s\n",buf_tmp));
     fclose(fP);
     int del = remove("/tmp/gpgga.txt");
 
@@ -270,10 +270,10 @@ char* read_data_gpgga_parse(int filedescriptor, int gpgga_index)
     {
         // loop[i] = strdup(str1);
         strcpy(gpsdata[i], str1);
-        printf("Token %d: %s \n", i,str1);
+        dbg_log(("Token %d: %s \n", i,str1));
         i++;
     }
-    printf("GPS return data %s ", gpsdata[gpgga_index]);
+    dbg_log(("GPS return data %s ", gpsdata[gpgga_index]));
     strcpy(buf_tmp,gpsdata[gpgga_index]);
 
     return buf_tmp;
