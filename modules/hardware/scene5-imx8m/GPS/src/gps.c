@@ -38,10 +38,8 @@
 */
 int open_port()
 {
-    FILE* fd;
-
-    fd=serial_open(GPS_PORT,GPS_Baud_Rate);
-    if(fd<0)
+    int fd = serial_open(GPS_PORT,GPS_Baud_Rate);
+    if(fd < 0)
     {
         dbg_log(("open port error\n"));
         return  -1;
@@ -60,8 +58,8 @@ int open_port()
 */
 char* state_gps(int filedescriptor)
 {
-    unsigned char *buftmp = malloc(100);
-    unsigned char buf[5000];
+    char *buftmp = malloc(100);
+    char buf[5000];
     int size = sizeof(buf);
     int timeout = 800000; //usec
     int findresult = 0;
@@ -69,7 +67,7 @@ char* state_gps(int filedescriptor)
     if(filedescriptor > 0)
     {
         int usbrd;
-        usbrd=serial_read(filedescriptor, buf, size, timeout);
+        usbrd=serial_read(filedescriptor, (unsigned char *)buf, size, timeout);
         dbg_log(("usbrd : %d \n",usbrd));
         if(usbrd < 1)
         {
@@ -104,8 +102,8 @@ char* state_gps(int filedescriptor)
 */
 char* read_data_gprmc(int filedescriptor)
 {
-    unsigned char *buftmp = malloc(100);
-    unsigned char buf[5000];
+    char *buftmp = malloc(100);
+    char buf[5000];
     int size = sizeof(buf);
     int timeout = 800000; //usec
     int findresult = 0;
@@ -113,7 +111,7 @@ char* read_data_gprmc(int filedescriptor)
     if(filedescriptor > 0)
     {
         int usbrd;
-        usbrd=serial_read(filedescriptor, buf, size, timeout);
+        usbrd=serial_read(filedescriptor, (unsigned char *)buf, size, timeout);
         dbg_log(("usbrd : %d \n",usbrd));
         if(usbrd < 1)
         {
@@ -151,7 +149,7 @@ char* read_data_gprmc_parse(int filedescriptor, int index)
     char *buftmp = malloc(100);
     int i = 0;
     char *str1 = "";
-    char *gpsdata[14][14];
+    char gpsdata[14][14];
 
     if(!(index > 0 && index < 14))
     {
@@ -189,8 +187,8 @@ char* read_data_gprmc_parse(int filedescriptor, int index)
 */
 char* read_data_gpgga(int filedescriptor)
 {
-    unsigned char *buftmp = malloc(100);
-    unsigned char buf[5000];
+    char *buftmp = malloc(100);
+    char buf[5000];
     int size = sizeof(buf);
     int timeout = 800000; //usec
     int findresult = 0;
@@ -198,7 +196,7 @@ char* read_data_gpgga(int filedescriptor)
     if(filedescriptor > 0)
     {
         int usbrd;
-        usbrd=serial_read(filedescriptor, buf, size, timeout);
+        usbrd=serial_read(filedescriptor, (unsigned char *)buf, size, timeout);
         dbg_log(("usbrd : %d \n",usbrd));
         if(usbrd < 1)
         {
@@ -236,7 +234,7 @@ char* read_data_gpgga_parse(int filedescriptor, int index)
     char *buftmp = malloc(100);
     int i = 0;
     char *str1 = "";
-    char *gpsdata[14][14];
+    char gpsdata[14][14];
 
     if(!(index > 0 && index < 14))
     {
@@ -274,7 +272,7 @@ char* read_data_gpgga_parse(int filedescriptor, int index)
 */
 int close_port(int filedescriptor)
 {
-    if(filedescriptor>0)
+    if(filedescriptor > 0)
     {
         if(!serial_close(filedescriptor))
         {
