@@ -43,6 +43,7 @@ int open_port()
     fd=serial_open(GPS_PORT,GPS_Baud_Rate);
     if(fd<0)
     {
+        dbg_log(("open port error\n"));
         return  -1;
     }
     else
@@ -59,53 +60,40 @@ int open_port()
 */
 char* state_gps(int filedescriptor)
 {
-    unsigned char *buf_tmp = malloc(100);
-    unsigned char *buf[5000];
-    int size=sizeof(buf);
-    int Timeout=100000;
-    int line_num = 1;
-    int find_result = 0;
-    char temp[10000];
+    unsigned char *buftmp = malloc(100);
+    unsigned char buf[5000];
+    int size = sizeof(buf);
+    int timeout = 800000; //usec
+    int findresult = 0;
 
-    if(filedescriptor>0)
+    if(filedescriptor > 0)
     {
         int usbrd;
-        usbrd=serial_read(filedescriptor, buf, size,Timeout);
+        usbrd=serial_read(filedescriptor, buf, size, timeout);
+        dbg_log(("usbrd : %d \n",usbrd));
+        if(usbrd < 1)
+        {
+           dbg_log(("serial read error\n"));
+           return buftmp; 
+        }
     }
 
-    FILE * fPtr;
-    fPtr = fopen("/tmp/status.txt", "w");
-    /* fopen() return NULL if last operation was unsuccessful */
-    if(fPtr == NULL)
+    char *temp = strtok(buf, "\n");
+    while(temp != NULL)
     {
-        /* File not created hence exit */
-        dbg_log(("Unable to create file.\n"));
-        exit(EXIT_FAILURE);
-    }
-
-    fputs(buf, fPtr);
-    fclose(fPtr);
-    FILE * fP;
-    fP = fopen("/tmp/status.txt", "r");
-    while(fgets(temp, 10000, fP ) != NULL)
-    {
-        // dbg_log(("line 2\n%s",temp));
         if((strstr(temp, "$PSTMANTENNASTATUS")) != NULL)
         {
-            strcpy(buf_tmp,temp);
-            find_result++;
+            strcpy(buftmp,temp);
+            findresult++;
         }
-        line_num++;
+        temp = strtok(NULL, "\n");
     }
-    if(find_result == 0)
+    if(findresult == 0)
     {
         dbg_log(("\n didnt get the data \n"));
-        return -1;
     }
-    fclose(fP);
-    int del = remove("/tmp/status.txt");
 
-    return buf_tmp;
+    return buftmp;
 }
 
 
@@ -116,52 +104,40 @@ char* state_gps(int filedescriptor)
 */
 char* read_data_gprmc(int filedescriptor)
 {
-    char *buf_temp = malloc(60);
-    unsigned char *buf[5000];
-    int size=sizeof(buf);
-    int Timeout=10000;
-    int line_num = 1;
-    int find_result = 0;
-    char temp[10000];
-    FILE * fPtr;
-    FILE * fP;
+    unsigned char *buftmp = malloc(100);
+    unsigned char buf[5000];
+    int size = sizeof(buf);
+    int timeout = 800000; //usec
+    int findresult = 0;
 
-    if(filedescriptor>0)
+    if(filedescriptor > 0)
     {
         int usbrd;
-        usbrd=serial_read(filedescriptor, buf, size,Timeout);
+        usbrd=serial_read(filedescriptor, buf, size, timeout);
+        dbg_log(("usbrd : %d \n",usbrd));
+        if(usbrd < 1)
+        {
+           dbg_log(("serial read error\n"));
+           return buftmp; 
+        }
     }
 
-    fPtr = fopen("/tmp/gprmc.txt", "w");
-    /* fopen() return NULL if last operation was unsuccessful */
-    if(fPtr == NULL)
-    {
-        /* File not created hence exit */
-        dbg_log(("Unable to create file.\n"));
-        exit(EXIT_FAILURE);
-    }
-    fputs(buf, fPtr);
-    fclose(fPtr);
-
-    fP = fopen("/tmp/gprmc.txt", "r");
-    while(fgets(temp, 10000, fP ) != NULL)
+    char *temp = strtok(buf, "\n");
+    while(temp != NULL)
     {
         if((strstr(temp, "$GPRMC")) != NULL)
         {
-            strcpy(buf_temp,temp);
-            find_result++;
+            strcpy(buftmp,temp);
+            findresult++;
         }
-        line_num++;
+        temp = strtok(NULL, "\n");
     }
-    if(find_result == 0)
+    if(findresult == 0)
     {
         dbg_log(("\n didnt get the data \n"));
-        return -1;
     }
-    fclose(fP);
-    int del = remove("/tmp/gprmc.txt");
 
-    return buf_temp;
+    return buftmp;
 }
 
 
@@ -201,53 +177,40 @@ char* read_data_gprmc_parse(int filedescriptor, int gprmc_index)
 */
 char* read_data_gpgga(int filedescriptor)
 {
-    unsigned char *buf_tmp = malloc(100);
-    unsigned char *buf[5000];
-    int size=sizeof(buf);
-    int Timeout=100000;
-    int line_num = 1;
-    int find_result = 0;
-    char temp[10000];
-    FILE *fPtr;
-    FILE * fP;
+    unsigned char *buftmp = malloc(100);
+    unsigned char buf[5000];
+    int size = sizeof(buf);
+    int timeout = 800000; //usec
+    int findresult = 0;
 
-    if(filedescriptor>0)
+    if(filedescriptor > 0)
     {
         int usbrd;
-        usbrd=serial_read(filedescriptor, buf, size,Timeout);
+        usbrd=serial_read(filedescriptor, buf, size, timeout);
+        dbg_log(("usbrd : %d \n",usbrd));
+        if(usbrd < 1)
+        {
+           dbg_log(("serial read error\n"));
+           return buftmp; 
+        }
     }
-    fPtr = fopen("/tmp/gpgga.txt", "w");
-    /* fopen() return NULL if last operation was unsuccessful */
-    if(fPtr == NULL)
-    {
-        /* File not created hence exit */
-        dbg_log(("Unable to create file.\n"));
-        exit(EXIT_FAILURE);
-    }
-    fputs(buf, fPtr);
-    fclose(fPtr);
 
-    fP = fopen("/tmp/gpgga.txt", "r");
-    while(fgets(temp, 10000, fP ) != NULL)
+    char *temp = strtok(buf, "\n");
+    while(temp != NULL)
     {
-        // dbg_log(("line 2\n%s",temp));
         if((strstr(temp, "$GPGGA")) != NULL)
         {
-            strcpy(buf_tmp,temp);
-            find_result++;
+            strcpy(buftmp,temp);
+            findresult++;
         }
-        line_num++;
+        temp = strtok(NULL, "\n");
     }
-    if(find_result == 0)
+    if(findresult == 0)
     {
-        dbg_log(("\n didnt get the data, check for port  \n"));
-        return -1;
+        dbg_log(("\n didnt get the data \n"));
     }
-    dbg_log(("\n%s\n",buf_tmp));
-    fclose(fP);
-    int del = remove("/tmp/gpgga.txt");
 
-    return buf_tmp;
+    return buftmp;
 }
 
 
