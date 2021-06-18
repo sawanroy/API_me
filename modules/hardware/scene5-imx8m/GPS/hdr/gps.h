@@ -21,26 +21,6 @@
 #define GPS_PORT 1                                          /**<  "/dev/ttymxc1" */
 #define GPS_Baud_Rate 115200                                /**< set baudrate */
 
-typedef struct {
-   int degrees;
-   int mins;
-   int minFrac;
-   char* quadrasphere;
-} DMData;
-
-typedef struct {
-   DMData latDM;
-   DMData longDM;
-   DMData time;
-   int quality;
-   int numSats;
-   int checkSum;
-   int hdop;
-   int alt;
-   char altval;
-   char Gpsval;
-} GPSData;
-
 
 /**
  * Enable/Disable logs
