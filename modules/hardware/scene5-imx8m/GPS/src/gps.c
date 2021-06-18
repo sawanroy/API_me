@@ -72,6 +72,7 @@ char* state_gps(int filedescriptor)
         if(usbrd < 1)
         {
            dbg_log(("serial read error\n"));
+           sprintf(buftmp,"ERROR");
            return buftmp; 
         }
     }
@@ -116,6 +117,7 @@ char* read_data_gprmc(int filedescriptor)
         if(usbrd < 1)
         {
            dbg_log(("serial read error\n"));
+           sprintf(buftmp,"ERROR");
            return buftmp; 
         }
     }
@@ -158,7 +160,7 @@ char* read_data_gprmc_parse(int filedescriptor, int index)
     }
 
     char *data = read_data_gprmc(filedescriptor);
-    if(strcmp(data, "") == 0)
+    if((strcmp(data, "") == 0) || (strcmp(data, "ERROR") == 0))
     {
         free(data);
         sprintf(buftmp,"ERROR");
@@ -201,6 +203,7 @@ char* read_data_gpgga(int filedescriptor)
         if(usbrd < 1)
         {
            dbg_log(("serial read error\n"));
+           sprintf(buftmp,"ERROR");
            return buftmp; 
         }
     }
@@ -219,7 +222,7 @@ char* read_data_gpgga(int filedescriptor)
     {
         dbg_log(("\n didnt get the data \n"));
     }
-
+    
     return buftmp;
 }
 
@@ -243,7 +246,7 @@ char* read_data_gpgga_parse(int filedescriptor, int index)
     }
 
     char *data = read_data_gpgga(filedescriptor);
-    if(strcmp(data, "") == 0)
+    if((strcmp(data, "") == 0) || (strcmp(data, "ERROR") == 0))
     {
         free(data);
         sprintf(buftmp,"ERROR");
