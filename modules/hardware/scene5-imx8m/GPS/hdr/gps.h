@@ -65,10 +65,10 @@ char* read_data_gprmc(int filedescriptor);
 /*!
   Extract part of GPRMC of 1 frame
   @param[in] filedescriptor  FD of opened port
-  @param[in] gprmc_index
+  @param[in] index
   @return gprmc data
 */
-char* read_data_gprmc_parse(int filedescriptor, int gprmc_index);
+char* read_data_gprmc_parse(int filedescriptor, int index);
 
 
 /*!
@@ -82,10 +82,10 @@ char* read_data_gpgga(int filedescriptor);
 /*!
   Extract part of GPGGA of 1 frame
   @param[in] filedescriptor FD of opened port
-  @param[in] gpgga_index
+  @param[in] index
   @return gpgga data
 */
-char* read_data_gpgga_parse(int filedescriptor, int gpgga_index);
+char* read_data_gpgga_parse(int filedescriptor, int index);
 
 
  /*!
