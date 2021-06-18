@@ -146,27 +146,39 @@ char* read_data_gprmc(int filedescriptor)
     char* read_data_gprmc_parse(int filedescriptor, int gprmc_index)
     extract part of GPRMC of 1 trame
 */
-char* read_data_gprmc_parse(int filedescriptor, int gprmc_index)
+char* read_data_gprmc_parse(int filedescriptor, int index)
 {
-    char *buf_tmp = malloc(100);
-    int i;
-    char *str1;
+    char *buftmp = malloc(100);
+    int i = 0;
+    char *str1 = "";
     char *gpsdata[14][14];
-    char *original;
 
-    buf_tmp = read_data_gprmc(filedescriptor);
-    original = strdup(buf_tmp);
-    while ((str1 = strsep(&original,","))!= NULL)
+    if(!(index > 0 && index < 14))
     {
-        // loop[i] = strdup(str1);
+        sprintf(buftmp,"ERROR");
+        return buftmp;
+    }
+
+    char *data = read_data_gprmc(filedescriptor);
+    if(strcmp(data, "") == 0)
+    {
+        free(data);
+        sprintf(buftmp,"ERROR");
+        return buftmp;
+    }
+
+    char *original = strdup((const char *)data);
+    while((str1 = strsep(&original, ",")) != NULL)
+    {
         strcpy(gpsdata[i], str1);
-        dbg_log(("Token %d: %s \n", i,str1));
         i++;
     }
-    dbg_log(("GPS return data %s ", gpsdata[gprmc_index]));
-    strcpy(buf_tmp,gpsdata[gprmc_index]);
+    
+    strcpy(buftmp, gpsdata[index]);    
+    free(original);
+    free(data);
 
-    return buf_tmp;
+    return buftmp;
 }
 
 
@@ -219,27 +231,39 @@ char* read_data_gpgga(int filedescriptor)
     char* read_data_gpgga_parse(int filedescriptor, int gpgga_index)
     extract part of GPGGA of 1 trame
 */
-char* read_data_gpgga_parse(int filedescriptor, int gpgga_index)
+char* read_data_gpgga_parse(int filedescriptor, int index)
 {
-    char *buf_tmp = malloc(100);
-    char *str1;
-    int i;
+    char *buftmp = malloc(100);
+    int i = 0;
+    char *str1 = "";
     char *gpsdata[14][14];
-    char *original;
 
-    buf_tmp = read_data_gpgga(filedescriptor);
-    original = strdup(buf_tmp);
-    while ((str1 = strsep(&original,","))!= NULL)
+    if(!(index > 0 && index < 14))
     {
-        // loop[i] = strdup(str1);
+        sprintf(buftmp,"ERROR");
+        return buftmp;
+    }
+
+    char *data = read_data_gpgga(filedescriptor);
+    if(strcmp(data, "") == 0)
+    {
+        free(data);
+        sprintf(buftmp,"ERROR");
+        return buftmp;
+    }
+
+    char *original = strdup((const char *)data);
+    while((str1 = strsep(&original, ",")) != NULL)
+    {
         strcpy(gpsdata[i], str1);
-        dbg_log(("Token %d: %s \n", i,str1));
         i++;
     }
-    dbg_log(("GPS return data %s ", gpsdata[gpgga_index]));
-    strcpy(buf_tmp,gpsdata[gpgga_index]);
+    
+    strcpy(buftmp, gpsdata[index]);    
+    free(original);
+    free(data);
 
-    return buf_tmp;
+    return buftmp;
 }
 
 
