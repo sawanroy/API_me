@@ -29,11 +29,13 @@
 #include <libgpio.h>
 
 
-int gpio_export(unsigned int gpio) {
+int gpio_export(unsigned int gpio)
+{
 	int fd, len;
 	char buf[MAX_BUF];
 	fd = open(SYSFS_GPIO_DIR "/export", O_WRONLY);
-	if (fd < 0) {
+	if (fd < 0) 
+	{
 		perror("gpio/export");
 		return fd;
 	}
@@ -43,47 +45,54 @@ int gpio_export(unsigned int gpio) {
 	return 0;
 }
  
-int gpio_unexport(unsigned int gpio) {
+int gpio_unexport(unsigned int gpio)
+{
 	int fd, len;
     	char buf[MAX_BUF];
     	fd = open(SYSFS_GPIO_DIR "/unexport", O_WRONLY);
-    	if (fd < 0) {
+    	if (fd < 0)
+		{
         perror("gpio/export");
         return fd;
-   	}
+   		}
 	len = snprintf(buf, sizeof(buf), "%d", gpio);
 	write(fd, buf, len);
 	close(fd);
 	return 0;
 }
  
-int Check_if_exported(unsigned int gpio) {
+int Check_if_exported(unsigned int gpio) 
+{
 	int fd;
 	/*, len*/
 	char buf[MAX_BUF];	
 	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR  "/gpio%d/direction", gpio);	
 	fd = open(buf, O_WRONLY);
 	printf("value of fd=%d\n",fd);
-	if (fd < 0) {
+	if (fd < 0)
+	{
 		perror("gpio/direction");
 		printf("unable to open gpio port not exported  %d\n",gpio);
 		close(fd);
-        	return fd;
+        return fd;
 	}	
-	else {
+	else 
+	{
 		printf("able to open gpio port exported  %d\n",gpio);
 		close(fd);
-    		return 0;
+    	return 0;
     }
 }
 
-int gpio_set_dir(unsigned int gpio, unsigned int out_flag) {
+int gpio_set_dir(unsigned int gpio, unsigned int out_flag) 
+{
 	int fd/*, len*/;
 	char buf[MAX_BUF];
 	/*len =*/ 
 	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR  "/gpio%d/direction", gpio);  
 	fd = open(buf, O_WRONLY);
-	if (fd < 0) {
+	if (fd < 0)
+	{
 		perror("gpio/direction");
 		return fd;
 	}
@@ -97,13 +106,15 @@ int gpio_set_dir(unsigned int gpio, unsigned int out_flag) {
  
 
 
-int gpio_set_value(unsigned int gpio, unsigned int value) {    
+int gpio_set_value(unsigned int gpio, unsigned int value)
+{    
 	int fd/*, len*/;    
 	char buf[MAX_BUF];  
 	/*len =*/ 
 	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);    
 	fd = open(buf, O_WRONLY);    
-	if (fd < 0) {        
+	if (fd < 0)
+	{        
 		perror("gpio/set-value");        
 		return fd;    
 	}      
@@ -117,7 +128,8 @@ int gpio_set_value(unsigned int gpio, unsigned int value) {
  
 
 
-int gpio_get_value(unsigned int gpio, unsigned int *value) {
+int gpio_get_value(unsigned int gpio, unsigned int *value)
+{
 	int fd/*, len*/;    
 	char buf[MAX_BUF];    
 	char ch;    
@@ -141,7 +153,8 @@ int gpio_get_value(unsigned int gpio, unsigned int *value) {
  
 
 
-int gpio_set_edge(unsigned int gpio, char *edge) {    
+int gpio_set_edge(unsigned int gpio, char *edge)
+{    
 	int fd;
 	/*, len*/   
 	char buf[MAX_BUF];    
@@ -157,7 +170,8 @@ int gpio_set_edge(unsigned int gpio, char *edge) {
 	return 0;
 }
 
-int gpio_fd_open(unsigned int gpio) {    
+int gpio_fd_open(unsigned int gpio)
+{    
 	int fd;    
 	char buf[MAX_BUF];     
 	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);    

@@ -28,13 +28,33 @@
  * @param[in] pinnumber interger type variable (gpio pinnumber to read ) 
  * @return true when gpio value is 1 or false when gpio value is 0  
  */
-bool read_value_from_input_pin(int pinnumber);    
+int read_value_from_input_pin(int pinnumber); 
+
+
  /*!
   * Write value to output pin 
-  * @param[in] pinnumber interger type variable(gpio pinnumber to write) 
+  * @param[in] pinnumber interger type variable(gpio pinnumber to write)
+  * @param[in] state boolean type variable
   * @return ture or false 
  */                  
-int write_value_to_output_gpio(int pinnumber, bool state);     
+int write_value_to_output_gpio(int pinnumber, bool state);
+
+
+/*! 
+ * get the high state position
+ * @param[in] pinnumber interger type variable (gpio pinnumber to read )
+ * @return value of gpio
+ */
+bool get_inverter_state(int pinnumber);
+
+
+/*! 
+ * Inverse the high state position
+  * @param[in] pinnumber interger type variable(gpio pinnumber to write)
+  * @param[in] state boolean type variable
+ */
+void set_inverter_state(int pinnumber, bool state);     
+
 
 /*! @} */
 
