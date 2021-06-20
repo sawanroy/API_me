@@ -22,7 +22,6 @@
 *	bool read_value_from_input_pin(int pinnumber)
 *	Read value from Input pin
 */
-
 int read_value_from_input_pin(int pinnumber)
 {
 	int *value;
@@ -34,7 +33,7 @@ int read_value_from_input_pin(int pinnumber)
 	else
 	{
 		check = Check_if_exported(pinnumber);
-		if(check == 0)
+		if(check==0)
 		{
 
 			return -1;
@@ -56,11 +55,13 @@ int read_value_from_input_pin(int pinnumber)
 		}
 	}
 }
+
+
+
 /*
 *	int write_value_to_output_gpio(int pinnumber, bool state)
 *	Write value to output pin
 */
-
 int write_value_to_output_gpio(int pinnumber, bool state)
 {
 	if(Check_if_exported(pinnumber))
@@ -99,16 +100,17 @@ int write_value_to_output_gpio(int pinnumber, bool state)
 	return 0;		
 }
 
+
+
 /*
 *	bool get_inverter_state(int pinnumber)
 *	get the high state position
 */
-
 bool get_inverter_state(int pinnumber)
 {
 	int state ;
 	state = read_value_from_input_pin(pinnumber);
-	if(state == 1)
+	if(state==1)
 	{
 		return false;
 	}
@@ -118,14 +120,15 @@ bool get_inverter_state(int pinnumber)
 	}
 }
 
+
+
 /*
 *	void set_inverter_state(int pinnumber, bool state)
 *	Inverse the high state position
 */
-
 void set_inverter_state(int pinnumber, bool state)
 {
-	if(state == true)
+	if(state==true)
 	{
 		write_value_to_output_gpio(pinnumber,false);
 	}
