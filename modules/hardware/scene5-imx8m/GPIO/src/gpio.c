@@ -17,6 +17,7 @@
 #include <stdbool.h>
 #include <libgpio.h>
 #include <gpio.h>
+#include <fcntl.h>
 
 
 
@@ -28,7 +29,7 @@ int read_value_from_input_pin(int pin_number)
 {
 	int value;
 	int check;
-	if(gpio_get_value(pin_number,value))
+	if(gpio_get_value(pin_number, value))
 	{
 		return value;
 	}
@@ -44,7 +45,7 @@ int read_value_from_input_pin(int pin_number)
 		{
 			if(gpio_export(pin_number) == 0)
 			{
-				if(gpio_get_value(pin_number,value))
+				if(gpio_get_value(pin_number, value))
 				{
 					return value;
 					
@@ -66,15 +67,15 @@ int read_value_from_input_pin(int pin_number)
 */
 bool write_value_to_output_gpio(int pin_number, bool state)
 {
-	if(Check_if_exported(pin_number))
+	if(check_if_exported(pin_number))
 	{
 		gpio_export(pin_number);
 	}
-	if(!gpio_set_dir(pin_number,1))
+	if(!gpio_set_dir(pin_number, 1))
 	{
 		if(state == true)
 		{	  	
-			if(!gpio_set_value(pin_number,1))
+			if(!gpio_set_value(pin_number, 1))
 			{
 				return true;
 			}
@@ -85,7 +86,7 @@ bool write_value_to_output_gpio(int pin_number, bool state)
 		}
 		else
 		{
-			if(!gpio_set_value(pin_number,0))
+			if(!gpio_set_value(pin_number, 0))
 			{
 				return true;
 			}
@@ -108,35 +109,37 @@ bool write_value_to_output_gpio(int pin_number, bool state)
 *	bool get_inverter_state(int pin_number)
 *	get the high state position
 */
-bool get_inverter_state(int pin_number)
+int get_inverter_state(int pin_number)
 {
-	int state ;
-	state = read_value_from_input_pin(pin_number);
-	if(state == 1)
+if(check_if_exported(pin_number))
 	{
-		return false;
+		gpio_export(pin_number);
 	}
+	int fd/*, len*/;    
+	char buf[MAX_BUF];    
+	char ch;    
+	/*len =*/ 
+	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/active_low", pin_number);    
+	fd = open(buf, O_RDONLY);    
+	if (fd < 0)
+	{        
+		perror("gpio/active_low");
+		close(fd);        
+		return fd;    
+	}    
+	read(fd, &ch, 1);    
+	if (ch != '0')
+	{    
+		close(fd);    
+		return 1;    
+	} 
 	else
-	{
-		return true;
-	}
-}
-
-
-
-/*
-*	void set_inverter_state(int pin_number, bool state)
-*	Inverse the high state position
-*/
-void set_inverter_state(int pin_number, bool state)
-{
-	if(state == true)
-	{
-		write_value_to_output_gpio(pin_number,false);
-	}
-	else
-	{
-		write_value_to_output_gpio(pin_number,true);
-	}
+	{   
+		close(fd);     
+		return 0;  
+	}    
 	
 }
+
+
+
