@@ -135,7 +135,7 @@ int gpio_set_value(unsigned int gpio, unsigned int value)
 
 
 
-int gpio_get_value(unsigned int gpio, unsigned int *value)
+int gpio_get_value(unsigned int gpio, unsigned int value)
 {
 	int fd/*, len*/;    
 	char buf[MAX_BUF];    
@@ -151,11 +151,11 @@ int gpio_get_value(unsigned int gpio, unsigned int *value)
 	read(fd, &ch, 1);    
 	if (ch != '0')
 	{        
-		*value = 1;    
+		value = 1;    
 	} 
 	else
 	{        
-		*value = 0;   
+		value = 0;   
 	}    
 	close(fd);
 	return 0;

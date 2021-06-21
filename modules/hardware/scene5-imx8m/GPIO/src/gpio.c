@@ -18,6 +18,7 @@
 #include <libgpio.h>
 #include <gpio.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 
 
@@ -27,7 +28,7 @@
 */
 int read_value_from_input_pin(int pin_number)
 {
-    int value;
+    unsigned int value = 0;
     int check;
     if(gpio_get_value(pin_number, value))
     {
@@ -55,6 +56,7 @@ int read_value_from_input_pin(int pin_number)
             }
         }
     }
+	return -1;
 }
 
 
@@ -122,7 +124,6 @@ int get_inverter_state(int pin_number)
     if(fd < 0)
     {
         perror("gpio/active_low");
-        close(fd);
         return fd;
     }
     read(fd, &ch, 1);
@@ -154,7 +155,6 @@ void set_inverter_state(int pin_number, bool state)
     if(fd < 0)
     {
         perror("gpio/set-value");
-        return fd;
     }
     if(state)
     {
