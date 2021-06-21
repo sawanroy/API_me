@@ -209,15 +209,12 @@ int serial_read(int fd, unsigned char *buf, int size, int T)
     int expected_Byte=size;
     int filedisc = fd;
     int sizetoread = 0;
-    static int ntoread=0;
+    int ntoread=0;
 
     FD_ZERO(&set);  /* clear the set */
     FD_SET(filedisc, &set); /* add our file descriptor to the set */
-
-
-    double sec = ((double)T/(double)1000000);
+    
     ready = select(fd + 1 , &set, NULL, NULL, &timeout);
-
     if(ready == -1)
     {
     /* Some error has occured in input */
@@ -229,36 +226,34 @@ int serial_read(int fd, unsigned char *buf, int size, int T)
     /* a timeout occured */
         return -2;
     }
+   
     else if(ready)
     {
         /* there was data to read */
         TotalBytes = read(fd, buf, expected_Byte);
-
         if (TotalBytes < expected_Byte)
         {
             sizetoread = expected_Byte - TotalBytes;
             ntoread = sizetoread;
-
-            clock_t  total_t;
-            total_t = clock() + sec * CLOCKS_PER_SEC;
-            while (clock() < total_t)
-            {
+            clock_t start = clock();
+            double sec = 2;
+            clock_t total = start + (sec * CLOCKS_PER_SEC);
+            while (clock() < total)
+            {   
+                r = read(fd, &buf[TotalBytes], ntoread);
+                TotalBytes += r;
                 ntoread = ntoread - r;
-                long int time = ((double)total_t - (double)clock())/ (double)CLOCKS_PER_SEC ;
-                struct timeval t = {0, time};
-                if(select(fd + 1 , &set, NULL, NULL, &t)>0)
-                {
-                    r = read(fd, &buf[TotalBytes], ntoread);
-                    TotalBytes += r;
-                }
-                else
+                if(ntoread <= 0)
                 {
                     break;
                 }
             }
         }
     }
-    if(TotalBytes == 0){return -2;}
+    if(TotalBytes == 0)
+    {
+        return -2;
+    }
     FD_CLR(filedisc, &set);
 
     return TotalBytes;
