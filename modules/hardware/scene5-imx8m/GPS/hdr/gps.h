@@ -18,6 +18,9 @@
 #ifndef libgps_h__
 #define libgps_h__
 
+#include <stdio.h>
+#include <stdbool.h>
+
 #define GPS_PORT 1                                          /**<  "/dev/ttymxc1" */
 #define GPS_Baud_Rate 115200                                /**< set baudrate */
 
@@ -50,7 +53,7 @@ int open_port();
 /*!
   State of GPS
   @param[in] filedescriptor  FD of opened port
-  @return character return the string of satate
+  @return frame of PSTMANTENNASTATUS data
 */
 char* state_gps(int filedescriptor);
 
@@ -58,6 +61,7 @@ char* state_gps(int filedescriptor);
 /*!
   Output full GPRMC of 1 frame
   @param[in] filedescriptor FD of opened port
+  @return frame of GPRMC data
 */
 char* read_data_gprmc(int filedescriptor);
 
@@ -66,7 +70,7 @@ char* read_data_gprmc(int filedescriptor);
   Extract part of GPRMC of 1 frame
   @param[in] filedescriptor  FD of opened port
   @param[in] index
-  @return gprmc data
+  @return required gprmc data
 */
 char* read_data_gprmc_parse(int filedescriptor, int index);
 
@@ -74,7 +78,7 @@ char* read_data_gprmc_parse(int filedescriptor, int index);
 /*!
   Output full GPGGA of 1 frame
   @param[in] filedescriptor  FD of opened port
-  @return gprmc parse data
+  @return frame of GPGGA data
 */
 char* read_data_gpgga(int filedescriptor);
 
@@ -83,7 +87,7 @@ char* read_data_gpgga(int filedescriptor);
   Extract part of GPGGA of 1 frame
   @param[in] filedescriptor FD of opened port
   @param[in] index
-  @return gpgga data
+  @return required GPGGA data
 */
 char* read_data_gpgga_parse(int filedescriptor, int index);
 
@@ -91,9 +95,9 @@ char* read_data_gpgga_parse(int filedescriptor, int index);
  /*!
   Close GPS serial link
   @param[in] filedescriptor FD of opened port
-  @return gpgga parse data
+  @return status of function
  */
-int close_port(int filedescriptor);
+bool close_port(int filedescriptor);
 
 /*! @} */
 

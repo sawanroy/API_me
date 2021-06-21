@@ -277,22 +277,16 @@ char* read_data_gpgga_parse(int filedescriptor, int index)
     close_port(int filedescriptor)
     Close GPS serial link
 */
-int close_port(int filedescriptor)
+bool close_port(int filedescriptor)
 {
     if(filedescriptor > 0)
     {
         if(!serial_close(filedescriptor))
         {
-            return 0;
-        }
-        else
-        {
-            return -1;
+            return true;
         }
     }
-    else
-    {
-        return -1;
-    }
+
+    return false;
 }
 
