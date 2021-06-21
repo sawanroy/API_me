@@ -67,7 +67,7 @@ char* state_gps(int filedescriptor)
     if(filedescriptor > 0)
     {
         int usbrd;
-        usbrd=serial_read(filedescriptor, (unsigned char *)buf, size, timeout);
+        usbrd = serial_read(filedescriptor, (unsigned char *)buf, size, timeout);
         dbg_log(("usbrd : %d \n",usbrd));
         if(usbrd < 1)
         {
@@ -112,7 +112,7 @@ char* read_data_gprmc(int filedescriptor)
     if(filedescriptor > 0)
     {
         int usbrd;
-        usbrd=serial_read(filedescriptor, (unsigned char *)buf, size, timeout);
+        usbrd = serial_read(filedescriptor, (unsigned char *)buf, size, timeout);
         dbg_log(("usbrd : %d \n",usbrd));
         if(usbrd < 1)
         {
@@ -152,8 +152,10 @@ char* read_data_gprmc_parse(int filedescriptor, int index)
     int i = 0;
     char *str1 = "";
     char gpsdata[14][14];
+    char *original = "";
+    char *freeable = "";
 
-    if(!(index > 0 && index < 14))
+    if(!(index >= 0 && index <= 13))
     {
         sprintf(buftmp,"ERROR");
         return buftmp;
@@ -167,16 +169,16 @@ char* read_data_gprmc_parse(int filedescriptor, int index)
         return buftmp;
     }
 
-    char *original = strdup((const char *)data);
+    freeable = original = strdup((const char *)data);
     while((str1 = strsep(&original, ",")) != NULL)
     {
         strcpy(gpsdata[i], str1);
         i++;
     }
     
-    strcpy(buftmp, gpsdata[index]);    
-    free(original);
-    free(data);
+    strcpy(buftmp, gpsdata[index]);
+    free(data);   
+    free(freeable);
 
     return buftmp;
 }
@@ -198,7 +200,7 @@ char* read_data_gpgga(int filedescriptor)
     if(filedescriptor > 0)
     {
         int usbrd;
-        usbrd=serial_read(filedescriptor, (unsigned char *)buf, size, timeout);
+        usbrd = serial_read(filedescriptor, (unsigned char *)buf, size, timeout);
         dbg_log(("usbrd : %d \n",usbrd));
         if(usbrd < 1)
         {
@@ -238,8 +240,10 @@ char* read_data_gpgga_parse(int filedescriptor, int index)
     int i = 0;
     char *str1 = "";
     char gpsdata[14][14];
+    char *original = "";
+    char *freeable = "";
 
-    if(!(index > 0 && index < 14))
+    if(!(index >= 0 && index <= 9))
     {
         sprintf(buftmp,"ERROR");
         return buftmp;
@@ -253,17 +257,17 @@ char* read_data_gpgga_parse(int filedescriptor, int index)
         return buftmp;
     }
 
-    char *original = strdup((const char *)data);
+    freeable = original = strdup((const char *)data);
     while((str1 = strsep(&original, ",")) != NULL)
     {
         strcpy(gpsdata[i], str1);
         i++;
     }
     
-    strcpy(buftmp, gpsdata[index]);    
-    free(original);
-    free(data);
-
+    strcpy(buftmp, gpsdata[index]); 
+    free(data);   
+    free(freeable);
+    
     return buftmp;
 }
 
