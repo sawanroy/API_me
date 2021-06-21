@@ -143,3 +143,25 @@ if(check_if_exported(pin_number))
 
 
 
+/*
+*	void set_inverter_state(int pin_number, bool state)
+*	Inverse the high state position
+*/
+void set_inverter_state(int pin_number, bool state)
+{
+	int fd/*, len*/;    
+	char buf[MAX_BUF];  
+	/*len =*/ 
+	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", pin_number);    
+	fd = open(buf, O_WRONLY);    
+	if (fd < 0)
+	{        
+		perror("gpio/set-value");        
+		return fd;    
+	}      
+	if (state)       
+		write(fd, "1", 2);    
+	else        
+		write(fd, "0", 2);
+	close(fd);	
+}

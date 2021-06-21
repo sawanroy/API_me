@@ -48,7 +48,12 @@ bool write_value_to_output_gpio(int pin_number, bool state);
 int get_inverter_state(int pin_number);
 
 
-     
+/*! 
+ * Inverse the high state position
+  * @param[in] pin_number interger type variable(gpio pin_number to write)
+  * @param[in] state boolean type variable
+ */
+void set_inverter_state(int pin_number, bool state);    
 
 
 /*! @} */
