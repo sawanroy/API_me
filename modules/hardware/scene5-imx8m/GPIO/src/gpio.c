@@ -18,31 +18,33 @@
 #include <libgpio.h>
 #include <gpio.h>
 
+
+
 /*
-*	bool read_value_from_input_pin(int pinnumber)
+*	bool read_value_from_input_pin(int pin_number)
 *	Read value from Input pin
 */
-int read_value_from_input_pin(int pinnumber)
+int read_value_from_input_pin(int pin_number)
 {
-	int *value;
+	int value;
 	int check;
-	if(gpio_get_value( pinnumber,value))
+	if(gpio_get_value(pin_number,value))
 	{
-			return value;
+		return value;
 	}
 	else
 	{
-		check = Check_if_exported(pinnumber);
-		if(check==0)
+		check = check_if_exported(pin_number);
+		if(check == 0)
 		{
 
 			return -1;
 		}
 		else
 		{
-			if(gpio_export(pinnumber)==0)
+			if(gpio_export(pin_number) == 0)
 			{
-				if(gpio_get_value( pinnumber,value))
+				if(gpio_get_value(pin_number,value))
 				{
 					return value;
 					
@@ -59,43 +61,43 @@ int read_value_from_input_pin(int pinnumber)
 
 
 /*
-*	int write_value_to_output_gpio(int pinnumber, bool state)
+*	int write_value_to_output_gpio(int pin_number, bool state)
 *	Write value to output pin
 */
-int write_value_to_output_gpio(int pinnumber, bool state)
+bool write_value_to_output_gpio(int pin_number, bool state)
 {
-	if(Check_if_exported(pinnumber))
+	if(Check_if_exported(pin_number))
 	{
-		gpio_export(pinnumber);
+		gpio_export(pin_number);
 	}
-	if(!gpio_set_dir(pinnumber,1))
+	if(!gpio_set_dir(pin_number,1))
 	{
-		if(state==true)
+		if(state == true)
 		{	  	
-			if(!gpio_set_value(pinnumber,1))
+			if(!gpio_set_value(pin_number,1))
 			{
-				return 0;
+				return true;
 			}
 			else 
 			{
-				return -1;
+				return true;
 			}                     
 		}
 		else
 		{
-			if(!gpio_set_value(pinnumber,0))
+			if(!gpio_set_value(pin_number,0))
 			{
-				return 0;
+				return true;
 			}
 			else
 			{	
-				return -1; 		                             
+				return false; 		                             
 			}
 		}
 	}
 	else
 	{	
-		return -1;
+		return false;
 	}
 	return 0;		
 }
@@ -103,14 +105,14 @@ int write_value_to_output_gpio(int pinnumber, bool state)
 
 
 /*
-*	bool get_inverter_state(int pinnumber)
+*	bool get_inverter_state(int pin_number)
 *	get the high state position
 */
-bool get_inverter_state(int pinnumber)
+bool get_inverter_state(int pin_number)
 {
 	int state ;
-	state = read_value_from_input_pin(pinnumber);
-	if(state==1)
+	state = read_value_from_input_pin(pin_number);
+	if(state == 1)
 	{
 		return false;
 	}
@@ -123,18 +125,18 @@ bool get_inverter_state(int pinnumber)
 
 
 /*
-*	void set_inverter_state(int pinnumber, bool state)
+*	void set_inverter_state(int pin_number, bool state)
 *	Inverse the high state position
 */
-void set_inverter_state(int pinnumber, bool state)
+void set_inverter_state(int pin_number, bool state)
 {
-	if(state==true)
+	if(state == true)
 	{
-		write_value_to_output_gpio(pinnumber,false);
+		write_value_to_output_gpio(pin_number,false);
 	}
 	else
 	{
-		write_value_to_output_gpio(pinnumber,true);
+		write_value_to_output_gpio(pin_number,true);
 	}
 	
 }
