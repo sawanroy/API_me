@@ -1,5 +1,10 @@
 var group__BLUETOOTH =
 [
+    [ "INTRODUCTION", "index.html#autotoc_md0", null ],
+    [ "OVERVIEW", "index.html#autotoc_md1", null ],
+    [ "LAYER MODEL", "index.html#autotoc_md2", null ],
+    [ "API Reference", "index.html#autotoc_md3", null ],
+    [ "Revision History", "index.html#autotoc_md4", null ],
     [ "bluetooth_connect_to_device", "df/d09/group__BLUETOOTH.html#ga7f418f407f4ba428492638581c8eb31c", null ],
     [ "bluetooth_get_config", "df/d09/group__BLUETOOTH.html#ga2c92a67463ed08b50b353e9c007b2bc7", null ],
     [ "bluetooth_off", "df/d09/group__BLUETOOTH.html#ga9830766fc1bdf38a6f27dda19bd49f6a", null ],

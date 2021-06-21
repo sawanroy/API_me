@@ -1,26 +1,4 @@
 var searchData=
 [
-  ['iw15_5frange_138',['iw15_range',['../d2/d4a/structiw15__range.html',1,'']]],
-  ['iw_5fdiscarded_139',['iw_discarded',['../db/d9e/structiw__discarded.html',1,'']]],
-  ['iw_5fencode_5fext_140',['iw_encode_ext',['../d0/dd1/structiw__encode__ext.html',1,'']]],
-  ['iw_5fevent_141',['iw_event',['../d8/d8b/structiw__event.html',1,'']]],
-  ['iw_5ffreq_142',['iw_freq',['../df/dca/structiw__freq.html',1,'']]],
-  ['iw_5fioctl_5fdescription_143',['iw_ioctl_description',['../d6/dac/structiw__ioctl__description.html',1,'']]],
-  ['iw_5fmichaelmicfailure_144',['iw_michaelmicfailure',['../d0/de6/structiw__michaelmicfailure.html',1,'']]],
-  ['iw_5fmissed_145',['iw_missed',['../d9/db9/structiw__missed.html',1,'']]],
-  ['iw_5fmlme_146',['iw_mlme',['../d5/d95/structiw__mlme.html',1,'']]],
-  ['iw_5fmodul_5fdescr_147',['iw_modul_descr',['../d4/ddb/structiw__modul__descr.html',1,'']]],
-  ['iw_5fparam_148',['iw_param',['../d1/d40/structiw__param.html',1,'']]],
-  ['iw_5fpmkid_5fcand_149',['iw_pmkid_cand',['../d0/dea/structiw__pmkid__cand.html',1,'']]],
-  ['iw_5fpmksa_150',['iw_pmksa',['../d8/dd8/structiw__pmksa.html',1,'']]],
-  ['iw_5fpoint_151',['iw_point',['../d6/db0/structiw__point.html',1,'']]],
-  ['iw_5fpriv_5fargs_152',['iw_priv_args',['../d8/d38/structiw__priv__args.html',1,'']]],
-  ['iw_5fquality_153',['iw_quality',['../d8/d76/structiw__quality.html',1,'']]],
-  ['iw_5frange_154',['iw_range',['../d2/dc6/structiw__range.html',1,'']]],
-  ['iw_5frange_5fraw_155',['iw_range_raw',['../db/d83/unioniw__range__raw.html',1,'']]],
-  ['iw_5fscan_5freq_156',['iw_scan_req',['../de/d82/structiw__scan__req.html',1,'']]],
-  ['iw_5fstatistics_157',['iw_statistics',['../d9/d59/structiw__statistics.html',1,'']]],
-  ['iw_5fthrspy_158',['iw_thrspy',['../d2/d71/structiw__thrspy.html',1,'']]],
-  ['iwreq_159',['iwreq',['../d6/d28/structiwreq.html',1,'']]],
-  ['iwreq_5fdata_160',['iwreq_data',['../de/dc7/unioniwreq__data.html',1,'']]]
+  ['stream_5fdescr_158',['stream_descr',['../df/d2c/structstream__descr.html',1,'']]]
 ];
