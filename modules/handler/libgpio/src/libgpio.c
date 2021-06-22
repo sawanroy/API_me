@@ -69,7 +69,6 @@ int gpio_unexport(unsigned int gpio)
 int check_if_exported(unsigned int gpio) 
 {
 	int fd;
-	/*, len*/
 	char buf[MAX_BUF];	
 	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR  "/gpio%d/direction", gpio);	
 	fd = open(buf, O_WRONLY);
@@ -93,9 +92,8 @@ int check_if_exported(unsigned int gpio)
 
 int gpio_set_dir(unsigned int gpio, unsigned int out_flag) 
 {
-	int fd/*, len*/;
+	int fd;
 	char buf[MAX_BUF];
-	/*len =*/ 
 	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR  "/gpio%d/direction", gpio);  
 	fd = open(buf, O_WRONLY);
 	if (fd < 0)
@@ -115,9 +113,8 @@ int gpio_set_dir(unsigned int gpio, unsigned int out_flag)
 
 int gpio_set_value(unsigned int gpio, unsigned int value)
 {    
-	int fd/*, len*/;    
-	char buf[MAX_BUF];  
-	/*len =*/ 
+	int fd;    
+	char buf[MAX_BUF];   
 	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);    
 	fd = open(buf, O_WRONLY);    
 	if (fd < 0)
@@ -137,10 +134,9 @@ int gpio_set_value(unsigned int gpio, unsigned int value)
 
 int gpio_get_value(unsigned int gpio, unsigned int *value)
 {
-	int fd/*, len*/;    
+	int fd;    
 	char buf[MAX_BUF];    
-	char ch;    
-	/*len =*/ 
+	char ch;
 	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);    
 	fd = open(buf, O_RDONLY);    
 	if (fd < 0)
@@ -165,10 +161,8 @@ int gpio_get_value(unsigned int gpio, unsigned int *value)
 
 int gpio_set_edge(unsigned int gpio, char *edge)
 {    
-	int fd;
-	/*, len*/   
-	char buf[MAX_BUF];    
-	/*len =*/ 
+	int fd;   
+	char buf[MAX_BUF];
 	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/edge", gpio);    
 	fd = open(buf, O_WRONLY);    
 	if (fd < 0)
@@ -198,7 +192,7 @@ int gpio_fd_open(unsigned int gpio)
 
 
 
-int gpio_fd_close(int fd)  ////gpio fd close
+int gpio_fd_close(int fd)
 {
     return close(fd);
 }
