@@ -53,7 +53,7 @@ int get_inverter_state(int pin_number);
   * @param[in] pin_number interger type variable(gpio pin_number to write)
   * @param[in] state boolean type variable
  */
-void set_inverter_state(int pin_number, bool state);    
+bool set_inverter_state(int pin_number, bool state);    
 
 
 /*! @} */

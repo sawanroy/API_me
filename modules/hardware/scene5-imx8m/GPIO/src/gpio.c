@@ -29,34 +29,18 @@
 int read_value_from_input_pin(int pin_number)
 {
     unsigned int value = 0;
-    int check;
-    if(gpio_get_value(pin_number, value))
+	 if(check_if_exported(pin_number))
+    {
+        gpio_export(pin_number);
+    }
+    if(gpio_get_value(pin_number, &value) == 0)
     {
         return value;
     }
     else
     {
-        check = check_if_exported(pin_number);
-        if(check == 0)
-        {
-            return -1;
-        }
-        else
-        {
-            if(gpio_export(pin_number) == 0)
-            {
-                if(gpio_get_value(pin_number, value))
-                {
-                    return value;
-                }
-            }
-            else
-            {
-                return -1;
-            }
-        }
+		return -1;       
     }
-	return -1;
 }
 
 
@@ -145,24 +129,28 @@ int get_inverter_state(int pin_number)
 *	void set_inverter_state(int pin_number, bool state)
 *	Inverse the high state position
 */
-void set_inverter_state(int pin_number, bool state)
+bool set_inverter_state(int pin_number, bool state)
 {
     int fd;
     char buf[MAX_BUF];
 
-    snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", pin_number);
+    snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/active_low", pin_number);
     fd = open(buf, O_WRONLY);
     if(fd < 0)
     {
         perror("gpio/set-value");
+        return false;
     }
+    printf("fd %d",fd);
     if(state)
     {
         write(fd, "1", 2);
+        return true;
     }
     else
     {
         write(fd, "0", 2);
+        return true;
     }
     close(fd);
 }

@@ -27,7 +27,7 @@ int gpio_set_dir(unsigned int gpio, unsigned int out_flag);  //gpio set dir
 
 int gpio_set_value(unsigned int gpio, unsigned int value);  //gpio set value
 
-int gpio_get_value(unsigned int gpio, unsigned int value);  //gpio get value
+int gpio_get_value(unsigned int gpio, unsigned int *value);  //gpio get value
 
 int gpio_set_edge(unsigned int gpio, char *edge);  //gpio set edge
 
