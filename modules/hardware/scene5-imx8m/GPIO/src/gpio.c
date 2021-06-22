@@ -141,15 +141,16 @@ bool set_inverter_state(int pin_number, bool state)
         perror("gpio/set-value");
         return false;
     }
-    printf("fd %d",fd);
     if(state)
     {
         write(fd, "1", 2);
+        close(fd);
         return true;
     }
     else
     {
         write(fd, "0", 2);
+        close(fd);
         return true;
     }
     close(fd);

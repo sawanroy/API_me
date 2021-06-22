@@ -72,17 +72,14 @@ int check_if_exported(unsigned int gpio)
 	char buf[MAX_BUF];	
 	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR  "/gpio%d/direction", gpio);	
 	fd = open(buf, O_WRONLY);
-	printf("value of fd=%d\n",fd);
 	if (fd < 0)
 	{
 		perror("gpio/direction");
-		printf("unable to open gpio port not exported  %d\n",gpio);
 		close(fd);
         return fd;
 	}	
 	else 
 	{
-		printf("able to open gpio port exported  %d\n",gpio);
 		close(fd);
     	return 0;
     }
