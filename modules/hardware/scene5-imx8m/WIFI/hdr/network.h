@@ -27,7 +27,7 @@
 /**
  * Enable/Disable logs
 */
-#define ENABLE_LOGS 1
+#define ENABLE_LOGS 0
 
 #if ENABLE_LOGS
     #define dbg_log(a) printf a
