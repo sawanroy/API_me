@@ -46,7 +46,7 @@ int read_value_from_input_pin(int pinnumber)
     }
     else
     {
-        return false;
+        return -1;
     }
 }
 
@@ -72,7 +72,7 @@ bool write_value_to_output_gpio(int pinnumber, bool state)
             }
             else
             {
-                return true;
+                return false;
             }
         }
         else
