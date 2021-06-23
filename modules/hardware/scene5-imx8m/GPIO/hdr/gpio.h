@@ -19,41 +19,42 @@
 #define gpio_h__
 
 /*! \addtogroup GPIO
-	Additional documentation for group 'GPIO'
+    Additional documentation for group 'GPIO'
       @{
 */
 
 /*!
  * Read value from Input pin
- * @param[in] pin_number interger type variable (gpio pin_number to read ) 
- * @return true when gpio value is 1 or false when gpio value is 0  
+ * @param[in] pinnumber interger type variable (gpio pinnumber to read ) 
+ * @return true -> gpio value 1, false -> gpio value is 0, -1 -> error  
  */
-int read_value_from_input_pin(int pin_number); 
+int read_value_from_input_pin(int pinnumber); 
 
 
  /*!
   * Write value to output pin 
-  * @param[in] pin_number interger type variable(gpio pin_number to write)
+  * @param[in] pinnumber interger type variable(gpio pinnumber to write)
   * @param[in] state boolean type variable
-  * @return ture or false 
+  * @return status of function (ture or false) 
  */                  
-bool write_value_to_output_gpio(int pin_number, bool state);
+bool write_value_to_output_gpio(int pinnumber, bool state);
 
 
 /*! 
  * get the high state position
- * @param[in] pin_number interger type variable (gpio pin_number to read )
- * @return value of inverter state
+ * @param[in] pinnumber interger type variable (gpio pinnumber to read )
+ * @return true -> inverter state 1, false -> inverter state 0, -1 -> error 
  */
-int get_inverter_state(int pin_number);
+int get_inverter_state(int pinnumber);
 
 
 /*! 
  * Inverse the high state position
-  * @param[in] pin_number interger type variable(gpio pin_number to write)
+  * @param[in] pinnumber interger type variable(gpio pinnumber to write)
   * @param[in] state boolean type variable
+  * @return status of function (ture or false)
  */
-bool set_inverter_state(int pin_number, bool state);    
+bool set_inverter_state(int pinnumber, bool state);    
 
 
 /*! @} */
