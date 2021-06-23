@@ -29,17 +29,24 @@
 int read_value_from_input_pin(int pin_number)
 {
     unsigned int value = 0;
-	 if(check_if_exported(pin_number))
+	if(check_if_exported(pin_number))
     {
         gpio_export(pin_number);
     }
-    if(gpio_get_value(pin_number, &value) == 0)
+    if(!gpio_set_dir(pin_number, 0))
     {
-        return value;
+        if(gpio_get_value(pin_number, &value) == 0)
+        {
+            return value;
+        }
+        else
+        {
+		    return -1;       
+        }
     }
     else
     {
-		return -1;       
+        return false;
     }
 }
 
