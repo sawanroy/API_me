@@ -112,14 +112,25 @@ $(document).ready(function(){initNavTree('d6/d7c/gpio_8h_source.html','../../');
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#ifndef gpio_h__</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#define gpio_h__</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../de/d2b/group__GPIO.html#gabb0b5c610e709b3deb46686da24c64f2">read_value_from_input_pin</a>(<span class="keywordtype">int</span> pinnumber);    </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../de/d2b/group__GPIO.html#gada63abb3a510c97a66bfe3104f2ab307">write_value_to_output_gpio</a>(<span class="keywordtype">int</span> pinnumber, <span class="keywordtype">bool</span> state);     </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../de/d2b/group__GPIO.html#gaae492d160315a42eee5d5e01e127a8b8">read_value_from_input_pin</a>(<span class="keywordtype">int</span> pinnumber); </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../de/d2b/group__GPIO.html#ga92b062bb231448c3005d795ba38b39bb">write_value_to_output_gpio</a>(<span class="keywordtype">int</span> pinnumber, <span class="keywordtype">bool</span> state);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../de/d2b/group__GPIO.html#ga2649d070a32185087674d7318ef66f1f">get_inverter_state</a>(<span class="keywordtype">int</span> pinnumber);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../de/d2b/group__GPIO.html#gaaf803c3feb0e2254a00d84834e4e3651">set_inverter_state</a>(<span class="keywordtype">int</span> pinnumber, <span class="keywordtype">bool</span> state);    </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="agroup__GPIO_html_gada63abb3a510c97a66bfe3104f2ab307"><div class="ttname"><a href="../../de/d2b/group__GPIO.html#gada63abb3a510c97a66bfe3104f2ab307">write_value_to_output_gpio</a></div><div class="ttdeci">int write_value_to_output_gpio(int pinnumber, bool state)</div><div class="ttdef"><b>Definition:</b> gpio.c:42</div></div>
-<div class="ttc" id="agroup__GPIO_html_gabb0b5c610e709b3deb46686da24c64f2"><div class="ttname"><a href="../../de/d2b/group__GPIO.html#gabb0b5c610e709b3deb46686da24c64f2">read_value_from_input_pin</a></div><div class="ttdeci">bool read_value_from_input_pin(int pinnumber)</div><div class="ttdef"><b>Definition:</b> gpio.c:27</div></div>
+<div class="ttc" id="agroup__GPIO_html_gaaf803c3feb0e2254a00d84834e4e3651"><div class="ttname"><a href="../../de/d2b/group__GPIO.html#gaaf803c3feb0e2254a00d84834e4e3651">set_inverter_state</a></div><div class="ttdeci">bool set_inverter_state(int pinnumber, bool state)</div><div class="ttdef"><b>Definition:</b> gpio.c:139</div></div>
+<div class="ttc" id="agroup__GPIO_html_ga2649d070a32185087674d7318ef66f1f"><div class="ttname"><a href="../../de/d2b/group__GPIO.html#ga2649d070a32185087674d7318ef66f1f">get_inverter_state</a></div><div class="ttdeci">int get_inverter_state(int pinnumber)</div><div class="ttdef"><b>Definition:</b> gpio.c:102</div></div>
+<div class="ttc" id="agroup__GPIO_html_gaae492d160315a42eee5d5e01e127a8b8"><div class="ttname"><a href="../../de/d2b/group__GPIO.html#gaae492d160315a42eee5d5e01e127a8b8">read_value_from_input_pin</a></div><div class="ttdeci">int read_value_from_input_pin(int pinnumber)</div><div class="ttdef"><b>Definition:</b> gpio.c:29</div></div>
+<div class="ttc" id="agroup__GPIO_html_ga92b062bb231448c3005d795ba38b39bb"><div class="ttname"><a href="../../de/d2b/group__GPIO.html#ga92b062bb231448c3005d795ba38b39bb">write_value_to_output_gpio</a></div><div class="ttdeci">bool write_value_to_output_gpio(int pinnumber, bool state)</div><div class="ttdef"><b>Definition:</b> gpio.c:59</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

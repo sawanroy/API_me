@@ -101,22 +101,51 @@ $(document).ready(function(){initNavTree('de/d2b/group__GPIO.html','../../'); in
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gabb0b5c610e709b3deb46686da24c64f2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d2b/group__GPIO.html#gabb0b5c610e709b3deb46686da24c64f2">read_value_from_input_pin</a> (int pinnumber)</td></tr>
-<tr class="separator:gabb0b5c610e709b3deb46686da24c64f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gada63abb3a510c97a66bfe3104f2ab307"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d2b/group__GPIO.html#gada63abb3a510c97a66bfe3104f2ab307">write_value_to_output_gpio</a> (int pinnumber, bool state)</td></tr>
-<tr class="separator:gada63abb3a510c97a66bfe3104f2ab307"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaae492d160315a42eee5d5e01e127a8b8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d2b/group__GPIO.html#gaae492d160315a42eee5d5e01e127a8b8">read_value_from_input_pin</a> (int pinnumber)</td></tr>
+<tr class="separator:gaae492d160315a42eee5d5e01e127a8b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga92b062bb231448c3005d795ba38b39bb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d2b/group__GPIO.html#ga92b062bb231448c3005d795ba38b39bb">write_value_to_output_gpio</a> (int pinnumber, bool state)</td></tr>
+<tr class="separator:ga92b062bb231448c3005d795ba38b39bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2649d070a32185087674d7318ef66f1f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d2b/group__GPIO.html#ga2649d070a32185087674d7318ef66f1f">get_inverter_state</a> (int pinnumber)</td></tr>
+<tr class="separator:ga2649d070a32185087674d7318ef66f1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaaf803c3feb0e2254a00d84834e4e3651"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d2b/group__GPIO.html#gaaf803c3feb0e2254a00d84834e4e3651">set_inverter_state</a> (int pinnumber, bool state)</td></tr>
+<tr class="separator:gaaf803c3feb0e2254a00d84834e4e3651"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Additional documentation for group 'GPIO' </p>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="gabb0b5c610e709b3deb46686da24c64f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gabb0b5c610e709b3deb46686da24c64f2">&#9670;&nbsp;</a></span>read_value_from_input_pin()</h2>
+<a id="ga2649d070a32185087674d7318ef66f1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2649d070a32185087674d7318ef66f1f">&#9670;&nbsp;</a></span>get_inverter_state()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool read_value_from_input_pin </td>
+          <td class="memname">int get_inverter_state </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pinnumber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>get the high state position </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pinnumber</td><td>interger type variable (gpio pinnumber to read ) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true -&gt; inverter state 1, false -&gt; inverter state 0, -1 -&gt; error </dd></dl>
+
+</div>
+</div>
+<a id="gaae492d160315a42eee5d5e01e127a8b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaae492d160315a42eee5d5e01e127a8b8">&#9670;&nbsp;</a></span>read_value_from_input_pin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int read_value_from_input_pin </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>pinnumber</em></td><td>)</td>
@@ -130,19 +159,55 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true when gpio value is 1 or false when gpio value is 0 <br  />
+<dl class="section return"><dt>Returns</dt><dd>true -&gt; gpio value 1, false -&gt; gpio value is 0, -1 -&gt; error <br  />
  </dd></dl>
 
 </div>
 </div>
-<a id="gada63abb3a510c97a66bfe3104f2ab307"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gada63abb3a510c97a66bfe3104f2ab307">&#9670;&nbsp;</a></span>write_value_to_output_gpio()</h2>
+<a id="gaaf803c3feb0e2254a00d84834e4e3651"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaaf803c3feb0e2254a00d84834e4e3651">&#9670;&nbsp;</a></span>set_inverter_state()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int write_value_to_output_gpio </td>
+          <td class="memname">bool set_inverter_state </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pinnumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>state</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Inverse the high state position </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pinnumber</td><td>interger type variable(gpio pinnumber to write) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">state</td><td>boolean type variable </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
+
+</div>
+</div>
+<a id="ga92b062bb231448c3005d795ba38b39bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga92b062bb231448c3005d795ba38b39bb">&#9670;&nbsp;</a></span>write_value_to_output_gpio()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool write_value_to_output_gpio </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>pinnumber</em>, </td>
@@ -163,10 +228,11 @@ Functions</h2></td></tr>
 <p>Write value to output pin </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pinnumber</td><td>interger type variable(gpio pinnumber to write) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">state</td><td>boolean type variable </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>ture or false </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
 
 </div>
 </div>
