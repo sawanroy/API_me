@@ -11,23 +11,27 @@
 #include <rtc.h>
 
 int fd, retval, irqcount = 0;
-
-void open_port(){
-        fd = open(default_rtc, O_RDONLY);
-
-        if (fd ==  -1) {
-                perror(default_rtc);
-                exit(errno);
-        }
-
-        fprintf(stderr, "\n\t\t\tRTC Driver Test Example.\n\n");
+/* internal function*/
+void open_port()
+{
+    fd = open(default_rtc, O_RDONLY);
+    if (fd == -1)
+    {
+        perror(default_rtc);
+        exit(errno);
+    }
 }
-void close_port(){
-     if ( close(fd)) {
-                perror(default_rtc);
-                exit(errno);
-        }
+/* internal function*/
+void close_port()
+{
+    if (close(fd))
+    {
+        perror(default_rtc);
+        exit(errno);
+    }
 }
+
+
 int set_time(struct rtc_time time){
         open_port();
         retval = ioctl(fd, RTC_SET_TIME, &time);

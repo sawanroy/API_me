@@ -24,7 +24,6 @@ struct rtc_time {
 	int tm_yday;
 	int tm_isdst;
 };
-Use above struct to ge
 */
 struct rtc_time get_time();
 /*! 
