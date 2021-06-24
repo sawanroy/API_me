@@ -27,46 +27,57 @@
 #include <unistd.h>
 #include <linux/watchdog.h>
 #include <stdbool.h>
- 
+
+
+
+/* Internal functions */
+int open_watchdog()
+{
+    int fd;
+    fd = open("/dev/watchdog", O_RDWR);		
+	return fd;
+}
+
 /*
 
 	gets the watchdog timeout
 	get_timeout()
 
 */
-int get_timeout() {
-	int fd,timeout_int=0;
-
-	fd = open("/dev/watchdog",O_RDWR);		
-	if(fd<0)					
-	{
-		return fd;
-	}
+int get_timeout()
+{
+    int fd,timeoutint=0;
+	fd = open_watchdog();
+    if(fd < 0)
+    {
+        return -1;
+    }
 
 	if(write(fd, "V", 1)<0)				
 	{
 		close(fd);
 		return -1;
 	}
-   	if (ioctl(fd, WDIOC_GETTIMEOUT, &timeout_int) == 0)	
+
+   	if (ioctl(fd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
 	{
-      		fprintf(stdout, "Current watchdog interval is %d\n", timeout_int);
+      	fprintf(stdout, "Current watchdog interval is %d\n", timeoutint);
    	}
 	else
 	{
-      		fprintf(stderr, "Error: Cannot read watchdog interval\n");
+      	fprintf(stderr, "Error: Cannot read watchdog interval\n");
 		close(fd);
-      		return -1;
+      	return -1;
    	}
-close(fd);	
-if(timeout_int > 0)
-{							
-return timeout_int;						 
-}
-else
-{
-return -1;
-}
+    close(fd);	
+    if(timeoutint > 0)
+    {							
+        return timeoutint;						 
+    }
+    else
+    {
+        return -1;
+    }
 
 }
 /*
