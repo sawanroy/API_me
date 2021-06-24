@@ -38,6 +38,8 @@ int open_watchdog()
 	return fd;
 }
 
+
+
 /*
 
 	gets the watchdog timeout
@@ -53,7 +55,7 @@ int get_timeout()
         return -1;
     }
 
-	if(write(fd, "V", 1)<0)				
+	if(write(fd, "V", 1) < 0)				
 	{
 		close(fd);
 		return -1;
@@ -80,39 +82,44 @@ int get_timeout()
     }
 
 }
+
+
+
 /*
   get the time left of watchdog timer
    get_timer()
 
 */
-
-int get_timer(){
+int get_timer()
+{
 	int fd;
-	fd = open("/dev/watchdog",O_RDWR);		
-	if(fd<0)					
-	{
-		return fd;
-	}
+    int timeleft;
+	fd = open_watchdog();
+    if(fd < 0)
+    {
+        return -1;
+    }
 
-	if(write(fd, "V", 1)<0)				
+	if(write(fd, "V", 1) < 0)				
 	{
 		close(fd);
 		return -1;
 	}
-	int timeleft;
 	
-	if(ioctl(fd,WDIOC_GETTIMELEFT, &timeleft)){
+	if(ioctl(fd, WDIOC_GETTIMELEFT, &timeleft))
+    {
 		printf("The timeout was is %d seconds\n", timeleft);
 	}
-	else{
+	else
+    {
 		printf("Error while getting time left");
 	}
         
-
-	//gets the current watchdog time count 
+    close(fd);
 	return timeleft;
 
-};
+}
+
 
 
 /*
@@ -121,7 +128,6 @@ int get_timer(){
 	
 
 */
-
 int Watchdog_setTime(int interval)
 {
 int fd;
