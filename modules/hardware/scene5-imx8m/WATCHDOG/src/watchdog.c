@@ -164,39 +164,53 @@ int Watchdog_setTime(int interval)
 	enables or disables the watchdog
 */
 
-bool wd_enable(bool state){
-	int fd;
-	fd = open("/dev/watchdog",O_RDWR);		
-	if(fd<0)					
-	{
-		return fd;
-	}
+bool wd_enable(bool state)
+{
+    int fd;
+    fd = open_watchdog();
+    if(fd < 0)
+    {
+        return -1;
+    }
 
-	if(write(fd, "V", 1)<0)				
-	{
-		close(fd);
-		return -1;
-	}
+    if(write(fd, "V", 1) < 0)				
+    {
+    	close(fd);
+    	return -1;
+    }
 	
-	if(state){
-		   int flags = WDIOS_ENABLECARD;
-			int ret = ioctl(fd, WDIOC_SETOPTIONS, &flags);
-			if (!ret)
-				printf("Watchdog card disabled.\n");
-			else {
-				printf("WDIOS_DISABLECARD error");
-}
-		return true;
+    if(state)
+    {
+    	int flags = WDIOS_ENABLECARD;
+    	int ret = ioctl(fd, WDIOC_SETOPTIONS, &flags);
+    	if(!ret)
+        {
+            printf("Watchdog card disabled.\n");
+        }
+        else 
+        {
+            printf("WDIOS_DISABLECARD error");
+            close(fd);
+            return false;
+        }
+        close(fd);
+        return true;
 	}
-	else{
+	else
+    {
 		int flags = WDIOS_DISABLECARD;
 		int	ret = ioctl(fd, WDIOC_SETOPTIONS, &flags);
-			if (!ret)
-				printf("Watchdog card enabled.\n");
-			else {
-				printf("WDIOS_ENABLECARD error ");
-			
-}
-		return true;
+		if(!ret)
+        {
+            printf("Watchdog card enabled.\n");
+        }
+        else
+        {
+            printf("WDIOS_ENABLECARD error ");
+            close(fd);
+            return false;
+        }
+        close(fd);
+        return true;
 	}
 }
