@@ -113,6 +113,8 @@ int get_timer()
 	else
     {
 		printf("Error while getting time left");
+        close(fd);
+        return -1;
 	}
         
     close(fd);
@@ -145,12 +147,12 @@ int fd;
 	if (interval > 0)					
 	{
 		
-      		if (ioctl(fd, WDIOC_SETTIMEOUT, &interval) != 0) 	
+      	if (ioctl(fd, WDIOC_SETTIMEOUT, &interval) != 0) 	
 		{
-         		fprintf(stderr,"Error: Set watchdog interval failed\n");
+         	fprintf(stderr,"Error: Set watchdog interval failed\n");
 			close(fd);
-         		return -1;
-      		}
+         	return -1;
+      	}
 		ioctl(fd, WDIOC_KEEPALIVE, NULL);			
 	}
 close(fd);						
