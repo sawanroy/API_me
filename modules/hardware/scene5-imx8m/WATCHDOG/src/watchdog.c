@@ -132,31 +132,31 @@ int get_timer()
 */
 int Watchdog_setTime(int interval)
 {
-int fd;
+    int fd;
+	fd = open_watchdog();
+    if(fd < 0)
+    {
+        return -1;
+    }
 
-	fd = open("/dev/watchdog",O_RDWR);			 
-	if(fd<0)						
-	{
-		return fd;
-	}
-	if(write(fd, "V", 1)<0)					
+	if(write(fd, "V", 1) < 0)					
 	{
 		close(fd);
 		return -1;
 	}
+
 	if (interval > 0)					
 	{
-		
-      	if (ioctl(fd, WDIOC_SETTIMEOUT, &interval) != 0) 	
+        if (ioctl(fd, WDIOC_SETTIMEOUT, &interval) != 0) 	
 		{
          	fprintf(stderr,"Error: Set watchdog interval failed\n");
 			close(fd);
          	return -1;
       	}
-		ioctl(fd, WDIOC_KEEPALIVE, NULL);			
+	    ioctl(fd, WDIOC_KEEPALIVE, NULL);			
 	}
-close(fd);						
-return 0;							
+    close(fd);						
+    return 0;							
 }
 
 /*
