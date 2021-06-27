@@ -316,24 +316,27 @@ char* sim_get_imsi()
     unsigned char cmd[] = "AT+CIMI\r\n";
     char *imsi = malloc(20);
     int len = sizeof(cmd);
+    int fd;
 
-    sim_open_port();
+    fd = sim_open_port();
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
-        if((size = usb_read(fd, imsi, bsize)) < 0)
+        if((size = usb_read(fd, (unsigned char *)imsi, bsize)) < 0)
         {
-            return "error while reading";
+            sim_close_port(fd);
+            return "ERROR";
         }
         else
         {
-            printf("%s", imsi);
+            sim_close_port(fd);
             return imsi;
         }
     }
     else
     {
-        return "error while writing";
+        sim_close_port(fd);
+        return "ERROR";
     }
 }
 
@@ -348,24 +351,28 @@ char* sim_get_imei()
     unsigned char cmd[] = "AT+CGSN\r\n";
     int len = sizeof(cmd);
     char *imei = malloc(20);
+    int fd;
 
-    sim_open_port();
+    fd = sim_open_port();
     tcflush(fd, TCIOFLUSH);
 
     if(usb_write(fd, cmd, len))
     {
         tcflush(fd, TCIOFLUSH);
-        if((size = usb_read(fd, imei, bsize)) < 0)
+        if((size = usb_read(fd, (unsigned char *)imei, bsize)) < 0)
         {
+            sim_close_port(fd);
             return "error while reading";
         }
         else
         {
+            sim_close_port(fd);
             return imei;
         }
     }
     else
     {
+        sim_close_port(fd);
         return "error while writing";
     }
 }
