@@ -51,6 +51,14 @@ int sim_open_port()
 
 
 
+/*Internal function*/
+void sim_close_port(int fd)
+{
+    usb_close(fd);
+}
+
+
+
 /*
 bool unlock_sim(int pincode)
 This function activates the sim card by using sim pin
@@ -88,22 +96,28 @@ This function tries to connect to telephone network
 bool sim_dialup_connect(unsigned char phone_no[])
 {
     unsigned char cmd[17];
-    snprintf((char *)cmd, sizeof(cmd), "ATD%s;\r\n", phone_no);
     int len = sizeof(cmd);
+    int fd;
+
+    snprintf((char *)cmd, sizeof(cmd), "ATD%s;\r\n", phone_no);
+    fd = sim_open_port();
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
-        if((size = usb_read(fd, buf, bsize)) < 0)
+        if(usb_read(fd, buf, bsize) < 0)
         {
+            sim_close_port(fd);
             return false;
         }
         else
         {
+            sim_close_port(fd);
             return true;
         }
     }
     else
     {
+        sim_close_port(fd);
         return false;
     }
 }
@@ -118,20 +132,26 @@ bool sim_dialup_disconnect()
 {
     unsigned char cmd[] = "AT+CHUP\r\n";
     int len = sizeof(cmd);
+    int fd;
+
+    fd = sim_open_port();
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
         if((size = usb_read(fd, buf, bsize)) < 0)
         {
+            sim_close_port(fd);
             return false;
         }
         else
         {
+            sim_close_port(fd);
             return true;
         }
     }
     else
     {
+        sim_close_port(fd);
         return false;
     }
 }
