@@ -385,27 +385,66 @@ char* sim_get_imei()
  */
 bool sim_send_sms(char *phone_no, char *message)
 {
-    unsigned char cmd[] = "AT+CMGF=1\r\n";
-    unsigned char cmd2[50];
-    sprintf(cmd2, "AT+CMGS=%s\r\n %s \x1a or \032 ", phone_no, message);
+    unsigned char cmd[3][30];
+    int len[3];
+    unsigned char msg[165];
+    int lenmsg = sizeof(msg);
+    int fd;
+    char sms[20];
+    
+    for(int i=0; i < 3; i++)
+    {
+        len[i] = sizeof(cmd[i]);
+    }
 
-    int len = sizeof(cmd);
+    sprintf(cmd[0], "AT+CMGF=1\r\n");
+    sprintf(cmd[1], "AT+CSCS=\"GSM\"\r\n");
+    sprintf(cmd[2], "AT+CMGS=\"%s\"\r\n", phone_no);
+    sprintf(msg, "%s\x1A", message); //message string should be max of 160 chars
+     
+    fd = sim_open_port();
     tcflush(fd, TCIOFLUSH);
-    char *imei = malloc(20);
-    if(usb_write(fd, cmd, len))
+   
+    for(int i=0; i < 3; i++)
     {
         tcflush(fd, TCIOFLUSH);
-        if((size = usb_read(fd, imei, bsize)) < 0)
+        if(usb_write(fd, cmd[i], len[i]))
         {
-            return -1;
+            if((size = usb_read(fd, (unsigned char *)sms, bsize)) < 0)
+            {
+                sim_close_port(fd);
+                return false;
+            }
+            else
+            {	
+                continue;
+            }
         }
         else
         {
-            return imei;
+            sim_close_port(fd);
+            return false;
+        }
+    }
+
+
+    if(usb_write(fd, msg, lenmsg))
+    {
+        if((size = usb_read(fd, (unsigned char *)sms, bsize)) < 0)
+        {
+            sim_close_port(fd);
+            return false;
+        }
+        else
+        {
+            sim_close_port(fd);
+            return true;
         }
     }
     else
     {
-        return -1;
+        sim_close_port(fd);
+        return false;
     }
+
 }
