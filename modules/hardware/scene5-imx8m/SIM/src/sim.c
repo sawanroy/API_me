@@ -243,34 +243,41 @@ This function tries to connect to internet
 */
 bool sim_connect_to_internet()
 {
+    unsigned char cmd[] = "AT$QCRMCALL=1,1\r\n";
+    int len = sizeof(cmd);
+    char ret[20];
     FILE *fp;
-    int n;
-    char path[1035];
-    const char *str1 = "Device 'eth1' successfully activated";
-    char cmd[50];
-    /* Open the command for reading. */
-    sprintf(cmd, "nmcli device connect eth1%d", SIM_PORT);
-    fp = popen(cmd, "r");
-    if(fp == NULL)
-    {
-        exit(1);
-    }
+    int fd;
 
-    /* Read the output a line at a time - output it. */
-    while(fgets(path, sizeof(path)-1, fp) != NULL)
+    fd = sim_open_port();
+    tcflush(fd, TCIOFLUSH);
+    if(usb_write(fd, cmd, len))
     {
-    }
-
-    if((n = match(path, (char *)str1) == 0))
-    {
-        return true;
+        if((size = usb_read(fd, (unsigned char *)ret, bsize)) < 0)
+        {
+            sim_close_port(fd);
+            return false;
+        }
+        else
+        {
+            sprintf(cmd, "dhclient -i eth1");
+            fp = popen(cmd, "r");
+            if(fp == NULL)
+            {
+                sim_close_port(fd);
+                pclose(fp);
+                return false;
+            }
+            sim_close_port(fd);
+            pclose(fp);
+            return true;
+        }
     }
     else
     {
+        sim_close_port(fd);
         return false;
     }
-
-    pclose(fp);
 }
 
 
