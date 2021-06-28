@@ -527,9 +527,16 @@ bool wifi_scan(vector* v)
     sleep(2);
     const GPtrArray *connections = nm_device_wifi_get_access_points ((NMDeviceWifi *)device);
     for(guint i =0; i < connections->len;i++)
-    {    
+    {
         //SSID
-        GBytes *bytes = nm_access_point_get_ssid(connections->pdata[i]); 
+        GBytes *bytes = nm_access_point_get_ssid(connections->pdata[i]);
+
+        if (!bytes)
+        {   
+            // don't crash if ssid is null
+            continue;
+        }
+
         const char *ssid = g_bytes_get_data(bytes,&size);
             
         //Signal strength
@@ -593,7 +600,6 @@ bool wifi_get_ssid_preferred_list(vector* con_list)
     char cmd[1024];
     char ret[1024];
     int comp;
-    int count=0;
     unsigned int i;
 
     if(!wifi_get_power_status())
@@ -640,8 +646,7 @@ bool wifi_get_ssid_preferred_list(vector* con_list)
                     wifi_info *con = (wifi_info *)malloc(sizeof(wifi_info));
                     con->ssid = strdup(id);
                     con->password = strdup(ret);
-                    vector_add(con_list, con);
-                    count++;        
+                    vector_add(con_list, con); 
                 }
             }
         }

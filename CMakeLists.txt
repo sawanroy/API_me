@@ -74,3 +74,6 @@ IF(COMBINE)
 	target_include_directories(${IMX_MODEL} PRIVATE ${LIBNM_INCLUDE_DIRS} ${GLIB_INCLUDE_DIRS} PUBLIC BLUETOOTH WIFI RS232 RS485 GPIO SIM GPS WATCHDOG CAN)
 	target_link_libraries(${IMX_MODEL} ${GLIB_LIBRARIES} ${LIBNM_LIBRARIES} ${LIBNM_GLIB_LIBRARIES} BLUETOOTH WIFI RS232 RS485 GPIO SIM GPS WATCHDOG CAN)
 ENDIF()
+
+# as it's not part of the project but copied, ignore warnings for this lib
+target_compile_options(IWLIB PUBLIC -w)
