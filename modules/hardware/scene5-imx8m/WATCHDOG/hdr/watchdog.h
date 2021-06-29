@@ -43,6 +43,5 @@ bool wd_enable(bool state);
 
 
 /*! @}*/                                          
-int Watchdog_setTime(int interval);
-int Watchdog_trigger();
+int Watchdog_resetTime();
 #endif

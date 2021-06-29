@@ -29,12 +29,12 @@
 #include <stdbool.h>
 
 
-
+int fd;
 /* Internal functions */
 int open_watchdog()
 {
-    int fd;
-    fd = open("/dev/watchdog", O_RDWR);		
+    
+    fd = open("/dev/watchdog0", O_RDWR);		
 	return fd;
 }
 
@@ -48,7 +48,7 @@ int open_watchdog()
 */
 int get_timeout()
 {
-    int fd,timeoutint=0;
+    int timeoutint=0;
 	fd = open_watchdog();
     if(fd < 0)
     {
@@ -80,7 +80,6 @@ int get_timeout()
     {
         return -1;
     }
-
 }
 
 
@@ -92,8 +91,7 @@ int get_timeout()
 */
 int get_timer()
 {
-	int fd;
-    int timeleft;
+    long long int timeleft;
 	fd = open_watchdog();
     if(fd < 0)
     {
@@ -106,20 +104,19 @@ int get_timer()
 		return -1;
 	}
 	
-	if(ioctl(fd, WDIOC_GETTIMELEFT, &timeleft))
+	if(!ioctl(fd, WDIOC_GETTIMELEFT, &timeleft))
     {
-		printf("The timeout was is %d seconds\n", timeleft);
+		printf("The timeout was is %lld seconds\n", timeleft);
 	}
 	else
     {
-		printf("Error while getting time left");
+		printf("WDIOC_GETTIMELEFT error '%s'\n", strerror(errno));
         close(fd);
         return -1;
 	}
         
     close(fd);
 	return timeleft;
-
 }
 
 
@@ -130,31 +127,20 @@ int get_timer()
 	
 
 */
-int Watchdog_setTime(int interval)
+int Watchdog_resetTime()
 {
-    int fd;
 	fd = open_watchdog();
     if(fd < 0)
     {
         return -1;
     }
 
-	if(write(fd, "V", 1) < 0)					
+	if(write(fd, "\0", 1) < 0)					
 	{
 		close(fd);
 		return -1;
 	}
-
-	if (interval > 0)					
-	{
-        if (ioctl(fd, WDIOC_SETTIMEOUT, &interval) != 0) 	
-		{
-         	fprintf(stderr,"Error: Set watchdog interval failed\n");
-			close(fd);
-         	return -1;
-      	}
 	    ioctl(fd, WDIOC_KEEPALIVE, NULL);			
-	}
     close(fd);						
     return 0;							
 }
@@ -163,10 +149,8 @@ int Watchdog_setTime(int interval)
 
 	enables or disables the watchdog
 */
-
 bool wd_enable(bool state)
 {
-    int fd;
     fd = open_watchdog();
     if(fd < 0)
     {
