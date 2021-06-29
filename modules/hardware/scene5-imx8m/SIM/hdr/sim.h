@@ -105,6 +105,13 @@ bool sim_connect_to_internet();
 
 
 /*!
+  Get ip address
+  @return ip address.
+*/
+char* sim_get_ipaddress();
+
+
+/*!
   Get the strengh of the signal (in dbm)
   @return single strength in dbm
 */

@@ -26,6 +26,7 @@
 #include <stdbool.h>
 #include <sim.h>
 #include <usb.h>
+#include <string.h>
 
 #define bsize 256
 
@@ -43,7 +44,7 @@ int sim_open_port()
     {
         return -1;
     }
-      else
+    else
     {
         return fd;
     }
@@ -55,6 +56,37 @@ int sim_open_port()
 void sim_close_port(int fd)
 {
     usb_close(fd);
+}
+
+
+
+/*Internal function*/
+bool runCommand(const char *cmd, char *output, int size)
+{
+    memset(output,'\0', size);
+    FILE* fp = popen(cmd, "r");
+    if(!fp)
+    {
+        printf("opening pipe failed\n");
+        return false;
+    }
+    while(NULL != fread(output, size , sizeof(char), fp))
+    {
+    }
+    if(!feof(fp))
+    {
+        printf("error while reading output\n");
+        pclose(fp);
+        return false;
+    }
+    int status = pclose(fp);
+    if(status < 0)
+    {
+        printf("command exist status%d\n",status);
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -281,6 +313,25 @@ bool sim_connect_to_internet()
 }
 
 
+/*
+char* sim_get_ipaddress()
+This function returns the ip address
+*/
+char* sim_get_ipaddress()
+{
+    char *cmd = "ifconfig eth1 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}'";
+    char *ret = malloc(50);
+
+    if(!runCommand(cmd, ret, 50))
+    {
+        strcpy(ret, "ERROR");
+        return ret;
+    }
+       
+    return ret;     
+}
+
+
 
 /*
 get_signal_strength()
@@ -408,10 +459,10 @@ bool sim_send_sms(char *phone_no, char *message)
     sprintf(cmd[1], "AT+CSCS=\"GSM\"\r\n");
     sprintf(cmd[2], "AT+CMGS=\"%s\"\r\n", phone_no);
     sprintf(msg, "%s\x1A", message); //message string should be max of 160 chars
-     
+
     fd = sim_open_port();
     tcflush(fd, TCIOFLUSH);
-   
+
     for(int i=0; i < 3; i++)
     {
         tcflush(fd, TCIOFLUSH);
