@@ -10,42 +10,21 @@
 #include <stdint.h>
 #include <rtc.h>
 
-int fd, retval, irqcount = 0;
+int retval, irqcount = 0;
 
 
 
-/* internal function*/
-void open_port()
+int set_time(struct rtc_time time)
 {
-    fd = open(default_rtc, O_RDONLY);
-    if (fd == -1)
-    {
-        perror(default_rtc);
-        exit(errno);
-    }
-}
-/* internal function*/
-void close_port()
-{
-    if (close(fd))
-    {
-        perror(default_rtc);
-        exit(errno);
-    }
-}
-
-
-
-void set_time(struct rtc_time time)
-{
-    open_port();
+    int fd;
+    fd = open("/dev/rtc0", O_RDWR);
     retval = ioctl(fd, RTC_SET_TIME, &time);
     if (retval == -1)
     {
         perror("RTC_SET_TIME ioctl");
-        exit(errno);
+        return -1;
     }
-    close_port();
+    close(fd);
 }
 
 
@@ -53,27 +32,24 @@ void set_time(struct rtc_time time)
 struct rtc_time get_time()
 {
     struct rtc_time rtc_tm;
-    open_port();
-    printf("linessss");
+    int fd;
+    fd = open("/dev/rtc0", O_RDWR);
     retval = ioctl(fd, RTC_RD_TIME, &rtc_tm);
-    printf("line1");
     if (retval == -1)
     {
         perror("RTC_RD_TIME ioctl");
         exit(errno);
     }
-    fprintf(stderr, "\n\nCurrent RTC date/time is %d-%d-%d, %02d:%02d:%02d.\n",
-    rtc_tm.tm_mday, rtc_tm.tm_mon + 1, rtc_tm.tm_year + 1900,
-    rtc_tm.tm_hour, rtc_tm.tm_min, rtc_tm.tm_sec);
-    close_port();
+    close(fd);
     return rtc_tm;
 }
 
 
 
-void set_Alarm(struct rtc_time time)
+int set_Alarm(struct rtc_time time)
 {
-    open_port();
+    int fd;
+    fd = open("/dev/rtc0", O_RDWR);
     retval = ioctl(fd, RTC_ALM_SET, &time);
     if (retval == -1)
     {
@@ -81,8 +57,8 @@ void set_Alarm(struct rtc_time time)
         {
             fprintf(stderr,"\n...Alarm IRQs not supported.\n");
         }
-        close_port();
+        close(fd);
         perror("RTC_ALM_SET ioctl");
-        exit(errno);
+        return -1;
     }
 }

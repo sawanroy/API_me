@@ -4,14 +4,14 @@
 
 #include <linux/rtc.h>
 
-static const char default_rtc[] = "/dev/rtc0";
+//const char default_rtc[] = "/dev/rtc0";
 
 /*!
    Set the time to rtc
    @return 
 
 */
-void set_time(struct rtc_time rtc_tm);
+int set_time(struct rtc_time time);
 /*!
 struct rtc_time {
 	int tm_sec;
@@ -30,5 +30,5 @@ struct rtc_time get_time();
  void set_Alarm()
  to set the Alarm for RTC
 */
-void set_Alarm(struct rtc_time time);
+int set_Alarm(struct rtc_time time);
 #endif
