@@ -32,8 +32,7 @@
 int fd;
 /* Internal functions */
 int open_watchdog()
-{
-    
+{ 
     fd = open("/dev/watchdog0", O_RDWR);		
 	return fd;
 }
@@ -61,16 +60,12 @@ int get_timeout()
 		return -1;
 	}
 
-   	if (ioctl(fd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
+   	if (!ioctl(fd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
 	{
-      	fprintf(stdout, "Current watchdog interval is %d\n", timeoutint);
-   	}
-	else
-	{
-      	fprintf(stderr, "Error: Cannot read watchdog interval\n");
 		close(fd);
       	return -1;
    	}
+       
     close(fd);	
     if(timeoutint > 0)
     {							
@@ -106,11 +101,6 @@ int get_timer()
 	
 	if(!ioctl(fd, WDIOC_GETTIMELEFT, &timeleft))
     {
-		printf("The timeout was is %lld seconds\n", timeleft);
-	}
-	else
-    {
-		printf("WDIOC_GETTIMELEFT error '%s'\n", strerror(errno));
         close(fd);
         return -1;
 	}
@@ -122,10 +112,7 @@ int get_timer()
 
 
 /*
-
 	Watchdog_setTime(int interval)
-	
-
 */
 int Watchdog_resetTime()
 {
@@ -140,13 +127,13 @@ int Watchdog_resetTime()
 		close(fd);
 		return -1;
 	}
-	    ioctl(fd, WDIOC_KEEPALIVE, NULL);			
+
+	ioctl(fd, WDIOC_KEEPALIVE, NULL);			
     close(fd);						
     return 0;							
 }
 
 /*
-
 	enables or disables the watchdog
 */
 bool wd_enable(bool state)
@@ -167,16 +154,12 @@ bool wd_enable(bool state)
     {
     	int flags = WDIOS_ENABLECARD;
     	int ret = ioctl(fd, WDIOC_SETOPTIONS, &flags);
-    	if(!ret)
+    	if(ret)
         {
-            printf("Watchdog card disabled.\n");
-        }
-        else 
-        {
-            printf("WDIOS_DISABLECARD error");
             close(fd);
             return false;
         }
+
         close(fd);
         return true;
 	}
@@ -186,14 +169,10 @@ bool wd_enable(bool state)
 		int	ret = ioctl(fd, WDIOC_SETOPTIONS, &flags);
 		if(!ret)
         {
-            printf("Watchdog card enabled.\n");
-        }
-        else
-        {
-            printf("WDIOS_ENABLECARD error ");
             close(fd);
             return false;
         }
+
         close(fd);
         return true;
 	}
