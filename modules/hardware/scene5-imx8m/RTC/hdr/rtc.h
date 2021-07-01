@@ -11,7 +11,7 @@
    @return 
 
 */
-int set_time(struct rtc_time time);
+int set_time(struct rtc_time rtc_tm);
 /*!
 struct rtc_time {
 	int tm_sec;
@@ -25,10 +25,10 @@ struct rtc_time {
 	int tm_isdst;
 };
 */
-struct rtc_time get_time();
+int64_t get_time();
 /*! 
  void set_Alarm()
  to set the Alarm for RTC
 */
-int set_Alarm(struct rtc_time time);
+int set_Alarm(struct rtc_time rtc_tm);
 #endif
