@@ -22,26 +22,42 @@
 	Additional documentation for group 'WATCHDOG'
       @{
 */
+
+
 /*! 
- * Get the watchdog timeout 
-   @return timeout of watchdog 
+ *  Get the watchdog timeout 
+    @param[in] fd file discriptor of open device node
+    @return timeout of watchdog
+
 */
-int get_timeout();                                          
+int get_timeout(int fd);                                          
+
+
 /*!
-  Get the current watchdog time count 
-  @return timeout of watchdog 
+    Get the current watchdog time count
+    @param[in] fd file discriptor of open device node
+    @return timeout of watchdog 
   
 */
-int get_timer();
+int get_timer(int fd);
+
+
 /*!
    Enable and disable the watchdog 
    @param[in] state bool type variable 
    @return true and false
 
 */
-bool wd_enable(bool state);
+int wd_enable(bool state);
 
 
+/*!
+   Reset watchdog timer
+   @param[in] fd file discriptor of open device node 
+   @return integer value 0 and -1 
+
+*/
+int wd_resettime(int fd);
 /*! @}*/                                          
-int Watchdog_resetTime();
+
 #endif

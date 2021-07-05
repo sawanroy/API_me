@@ -28,14 +28,7 @@
 #include <linux/watchdog.h>
 #include <stdbool.h>
 
-
 int fd;
-/* Internal functions */
-int open_watchdog()
-{ 
-    fd = open("/dev/watchdog0", O_RDWR);		
-	return fd;
-}
 
 
 
@@ -45,28 +38,19 @@ int open_watchdog()
 	get_timeout()
 
 */
-int get_timeout()
+int get_timeout(int fd)
 {
     int timeoutint=0;
-	fd = open_watchdog();
     if(fd < 0)
     {
         return -1;
     }
 
-	if(write(fd, "V", 1) < 0)				
+   	if(!ioctl(fd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
 	{
-		close(fd);
-		return -1;
-	}
-
-   	if (!ioctl(fd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
-	{
-		close(fd);
       	return -1;
    	}
-       
-    close(fd);	
+    	
     if(timeoutint > 0)
     {							
         return timeoutint;						 
@@ -84,28 +68,20 @@ int get_timeout()
    get_timer()
 
 */
-int get_timer()
+
+//////////deprecated function (because of timer function not supported in driver) ///////////////////////
+int get_timer(int fd)
 {
     long long int timeleft;
-	fd = open_watchdog();
     if(fd < 0)
     {
         return -1;
     }
-
-	if(write(fd, "V", 1) < 0)				
-	{
-		close(fd);
-		return -1;
-	}
 	
 	if(!ioctl(fd, WDIOC_GETTIMELEFT, &timeleft))
     {
-        close(fd);
         return -1;
 	}
-        
-    close(fd);
 	return timeleft;
 }
 
@@ -114,66 +90,45 @@ int get_timer()
 /*
 	Watchdog_setTime(int interval)
 */
-int Watchdog_resetTime()
+int wd_resettime(int fd)
 {
-	fd = open_watchdog();
-    if(fd < 0)
+    if(fd <= 0)
     {
         return -1;
     }
 
 	if(write(fd, "\0", 1) < 0)					
 	{
-		close(fd);
 		return -1;
 	}
 
-	ioctl(fd, WDIOC_KEEPALIVE, NULL);			
-    close(fd);						
+	ioctl(fd, WDIOC_KEEPALIVE, NULL);								
     return 0;							
 }
 
 /*
 	enables or disables the watchdog
 */
-bool wd_enable(bool state)
+ int wd_enable(bool state)
 {
-    fd = open_watchdog();
-    if(fd < 0)
-    {
-        return -1;
-    }
-
-    if(write(fd, "V", 1) < 0)				
-    {
-    	close(fd);
-    	return -1;
-    }
-	
     if(state)
     {
-    	int flags = WDIOS_ENABLECARD;
-    	int ret = ioctl(fd, WDIOC_SETOPTIONS, &flags);
-    	if(ret)
+        fd = open("/dev/watchdog0", O_RDWR);
+        if(fd < 0)
         {
-            close(fd);
-            return false;
+            return -1;
         }
-
-        close(fd);
-        return true;
+        return fd;
 	}
 	else
     {
-		int flags = WDIOS_DISABLECARD;
-		int	ret = ioctl(fd, WDIOC_SETOPTIONS, &flags);
-		if(!ret)
-        {
-            close(fd);
-            return false;
-        }
-
+        if(write(fd, "V", 1) < 0)				
+	    {
+		    close(fd);
+		    return -1;
+	    }
         close(fd);
-        return true;
+        return 0;
 	}
 }
+
