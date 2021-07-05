@@ -4,31 +4,27 @@
 
 #include <linux/rtc.h>
 
-//const char default_rtc[] = "/dev/rtc0";
 
 /*!
-   Set the time to rtc
-   @return 
+	@param[in] rtc_time structure type variable
+	@return 0 on success -1 on failure 
 
 */
 int set_time(struct rtc_time rtc_tm);
+
+
 /*!
-struct rtc_time {
-	int tm_sec;
-	int tm_min;
-	int tm_hour;
-	int tm_mday;
-	int tm_mon;
-	int tm_year;
-	int tm_wday;
-	int tm_yday;
-	int tm_isdst;
-};
+	Get the time from rtc
+	@return int64_t type variable return the time
 */
 int64_t get_time();
+
+
 /*! 
- void set_Alarm()
- to set the Alarm for RTC
+	To set the Alarm for RTC
+	@param[in] rtc_time structure type variable
+	@return 0 on success -1 on failure
 */
-int set_Alarm(struct rtc_time rtc_tm);
+int set_alarm(struct rtc_time rtc_tm);
+
 #endif

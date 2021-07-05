@@ -16,19 +16,17 @@ int retval, irqcount = 0;
 int set_time(struct rtc_time time)
 {
     int fd;
-    fd = open("/dev/rtc0", O_RDWR);
-    
-    if (fd < 0)
+    fd = open("/dev/rtc0", O_RDWR); 
+    if(fd < 0)
     {
         return -1;
     }
     
     retval = ioctl(fd, RTC_SET_TIME, &time);
-    
-    if (retval == -1)
+    if(retval == -1)
     {
         perror("RTC_SET_TIME ioctl");
-         close(fd);
+        close(fd);
         return -1;
     }
 
@@ -45,14 +43,13 @@ int64_t get_time()
     struct tm t;
     int fd;
     fd = open("/dev/rtc0", O_RDWR);
-   
     if (fd < 0)
     {
         return -1;
     }
+
     retval = ioctl(fd, RTC_RD_TIME, &rtc_tm);
-    
-    if (retval == -1)
+    if(retval == -1)
     {
         perror("RTC_RD_TIME ioctl");
         close(fd);
@@ -67,13 +64,14 @@ int64_t get_time()
     t.tm_sec = rtc_tm.tm_sec;
     t.tm_isdst = -1;
     timeofday = mktime(&t);
+
     close(fd);
     return timeofday;
 }
 
 
 
-int set_Alarm(struct rtc_time rtc_tm)
+int set_alarm(struct rtc_time rtc_tm)
 {
     int fd;
     fd = open("/dev/rtc0", O_RDWR);
@@ -84,8 +82,7 @@ int set_Alarm(struct rtc_time rtc_tm)
     }
     
     retval = ioctl(fd, RTC_ALM_SET, &rtc_tm);
-    
-    if (retval == -1)
+    if(retval == -1)
     {
         if (errno == ENOTTY) 
         {
