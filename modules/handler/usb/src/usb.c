@@ -352,8 +352,8 @@ int usb_write(int fd, unsigned char *write_buffer, int size)
 */
 int usb_close(int fd)
 {
-    close(fd);
     flock(fd, LOCK_UN);
+    close(fd); 
     printf("fd is closed %d \n",fd);
 
     return 0;

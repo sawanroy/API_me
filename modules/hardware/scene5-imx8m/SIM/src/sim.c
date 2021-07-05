@@ -278,30 +278,43 @@ bool sim_connect_to_internet()
     unsigned char cmd[] = "AT$QCRMCALL=1,1\r\n";
     int len = sizeof(cmd);
     char ret[20];
-    FILE *fp;
     int fd;
+	char *ip = "";
 
     fd = sim_open_port();
+    if(fd < 0)
+    {
+		sim_close_port(fd);
+        return false;
+    }
+
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
         if((size = usb_read(fd, (unsigned char *)ret, bsize)) < 0)
-        {
+        {   
             sim_close_port(fd);
             return false;
         }
         else
         {
-            sprintf(cmd, "dhclient -i eth1");
-            fp = popen(cmd, "r");
-            if(fp == NULL)
+			if(strstr(ret, "ERROR") != NULL)
+			{
+				ip = sim_get_ipaddress();
+				if(strcmp(ip, "") != 0 || strcmp(ip, "ERROR") != 0)
+				{
+					sim_close_port(fd);
+            		return true;
+				}
+			}
+			
+            sprintf((char *)cmd, "dhclient -i eth1");
+            if(!runCommand(cmd, ret, 20))
             {
                 sim_close_port(fd);
-                pclose(fp);
                 return false;
             }
             sim_close_port(fd);
-            pclose(fp);
             return true;
         }
     }
