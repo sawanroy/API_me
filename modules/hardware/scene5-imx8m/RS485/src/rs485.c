@@ -41,7 +41,7 @@ static int rs485bud;
 int rs485_open_port(int portnumber,int baudrate,bool parity,int dataBits, int stopBits) {
 	int filedescriptor;
 	rs485bud = baudrate;
-	filedescriptor=USB_open_rs(portnumber,baudrate,parity,dataBits,stopBits);
+	filedescriptor=usb_open_rs(portnumber,baudrate,parity,dataBits,stopBits);
 	if(filedescriptor==-10){
 		return -1;
 	}
@@ -64,7 +64,7 @@ int rs485_open_port(int portnumber,int baudrate,bool parity,int dataBits, int st
 int rs485_read_data(int filedescriptor, unsigned char *buf, int size,int Timeout) {	
 	if(filedescriptor>0) {
 		int usbrd;
-		usbrd=USB_read_t(filedescriptor, buf, size, Timeout);
+		usbrd=usb_read_t(filedescriptor, buf, size, Timeout);
 		if(usbrd<0) {
 			return -1;	
 		}
@@ -89,7 +89,7 @@ bool rs485_write_data(int filedescriptor, unsigned char *RS485_buf, int size) {
 	if(filedescriptor>0) {
 		int ret;	
 		float WAIT;	
-		ret = USB_write(filedescriptor, RS485_buf, size);
+		ret = usb_write(filedescriptor, RS485_buf, size);
 		if(ret<0) {	
 			return false;
 		}
@@ -114,7 +114,7 @@ bool rs485_write_data(int filedescriptor, unsigned char *RS485_buf, int size) {
 
 bool rs485_close_port(int filedescriptor){
 	if(filedescriptor>0){
-		if(!USB_close(filedescriptor)){
+		if(!usb_close(filedescriptor)){
 			return true;
 		}
 		else {

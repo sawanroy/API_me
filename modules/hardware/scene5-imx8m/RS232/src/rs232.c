@@ -40,7 +40,7 @@
 int rs232_open_port(int portnumber,int baudrate,bool parity,int dataBits, int stopBits)
 {
 	int filedescriptor;
-	filedescriptor=USB_open_rs(portnumber,baudrate,parity,dataBits,stopBits);
+	filedescriptor=usb_open_rs(portnumber,baudrate,parity,dataBits,stopBits);
 	if(filedescriptor==-10)
 	{
 		return -1;
@@ -71,7 +71,7 @@ int rs232_read_data(int filedescriptor, unsigned char *buf, int size,int Timeout
 	if(filedescriptor>0)
 	{
 		int usbrd;
-		usbrd=USB_read_t(filedescriptor, buf, size, Timeout);
+		usbrd=usb_read_t(filedescriptor, buf, size, Timeout);
 		if(usbrd<0)
 		{
 			return -1;	
@@ -100,7 +100,7 @@ bool rs232_write_data(int filedescriptor, unsigned char *write_buf, int size)
 	if(filedescriptor>0)
 	{
 		int ret;	
-		ret = USB_write(filedescriptor, write_buf, size);
+		ret = usb_write(filedescriptor, write_buf, size);
 		if(ret<0)
 		{
 			return false;
@@ -130,7 +130,7 @@ bool rs232_close_port(int filedescriptor)
 	if(filedescriptor>0)
 	{
 		
-		if(!USB_close(filedescriptor))
+		if(!usb_close(filedescriptor))
 		{
 			return false;
 		}
