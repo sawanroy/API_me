@@ -43,12 +43,20 @@ int get_timer(int fd);
 
 
 /*!
-   Enable and disable the watchdog 
-   @param[in] state bool type variable 
-   @return true and false
+   Enable the watchdog 
+   @return file descriptor of open device node
 
 */
-int wd_enable(bool state);
+int wd_enable();
+
+
+/*!
+   disable the watchdog
+   @param[in] fd file descriptor of open device node
+   @return integer value 0 and -1
+
+*/
+int wd_disable(int fd);
 
 
 /*!

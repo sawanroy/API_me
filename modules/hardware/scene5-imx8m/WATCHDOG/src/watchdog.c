@@ -41,22 +41,48 @@ int fd;
 int get_timeout(int fd)
 {
     int timeoutint=0;
-    if(fd < 0)
+    int local_fd = open("/dev/watchdog0", O_RDWR);
+    if(local_fd < 0)
     {
-        return -1;
+        if(fd <= 0)
+        {
+            return -1;
+        }
+        if(!ioctl(fd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
+	    {
+      	    return -1;
+   	    }
+    	
+        if(timeoutint > 0)
+        {							
+            return timeoutint;						 
+        }
+        else
+        {
+            return -1;
+        }
     }
-
-   	if(!ioctl(fd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
+ 
+    if(write(local_fd, "V", 1) < 0)				
 	{
+		close(local_fd);
+		return -1;
+	}
+
+   	if(!ioctl(local_fd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
+	{
+        close(local_fd);
       	return -1;
    	}
     	
     if(timeoutint > 0)
-    {							
+    {
+        close(local_fd);						
         return timeoutint;						 
     }
     else
     {
+        close(local_fd);
         return -1;
     }
 }
@@ -65,10 +91,8 @@ int get_timeout(int fd)
 
 /*
   get the time left of watchdog timer
-   get_timer()
 
 */
-
 //////////deprecated function (because of timer function not supported in driver) ///////////////////////
 int get_timer(int fd)
 {
@@ -82,6 +106,7 @@ int get_timer(int fd)
     {
         return -1;
 	}
+
 	return timeleft;
 }
 
@@ -89,6 +114,7 @@ int get_timer(int fd)
 
 /*
 	Watchdog_setTime(int interval)
+
 */
 int wd_resettime(int fd)
 {
@@ -106,29 +132,36 @@ int wd_resettime(int fd)
     return 0;							
 }
 
+
+
 /*
-	enables or disables the watchdog
+	enables the watchdog
 */
- int wd_enable(bool state)
+ int wd_enable()
 {
-    if(state)
+    fd = open("/dev/watchdog0", O_RDWR);
+    if(fd < 0)
     {
-        fd = open("/dev/watchdog0", O_RDWR);
-        if(fd < 0)
-        {
-            return -1;
-        }
-        return fd;
-	}
-	else
-    {
-        if(write(fd, "V", 1) < 0)				
+        return -1;
+    }
+
+    return fd;
+}
+
+
+
+/*
+    disables the watchdog
+*/
+int wd_disable(int fd)
+{
+    if(write(fd, "V", 1) < 0)				
 	    {
 		    close(fd);
 		    return -1;
 	    }
-        close(fd);
-        return 0;
-	}
+
+    close(fd);
+    return 0;
 }
 
