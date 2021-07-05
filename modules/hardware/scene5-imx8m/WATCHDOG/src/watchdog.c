@@ -41,8 +41,8 @@ int fd;
 int get_timeout(int fd)
 {
     int timeoutint=0;
-    int local_fd = open("/dev/watchdog0", O_RDWR);
-    if(local_fd < 0)
+    int localfd = open("/dev/watchdog0", O_RDWR);
+    if(localfd < 0)
     {
         if(fd <= 0)
         {
@@ -63,26 +63,26 @@ int get_timeout(int fd)
         }
     }
  
-    if(write(local_fd, "V", 1) < 0)				
+    if(write(localfd, "V", 1) < 0)				
 	{
-		close(local_fd);
+		close(localfd);
 		return -1;
 	}
 
-   	if(!ioctl(local_fd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
+   	if(!ioctl(localfd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
 	{
-        close(local_fd);
+        close(localfd);
       	return -1;
    	}
     	
     if(timeoutint > 0)
     {
-        close(local_fd);						
+        close(localfd);						
         return timeoutint;						 
     }
     else
     {
-        close(local_fd);
+        close(localfd);
         return -1;
     }
 }
