@@ -22,7 +22,6 @@
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
-#define DEV_NAME vcan0
 
 /*!
  *  opens the can node 
@@ -37,12 +36,15 @@ bool enable_can(bool state);
  *@return returns ID , Message , data size in form of Structure  
 */
 struct can_frame read_data();
+
+
 /**
  *writes the data to can node 
  *@return true and false 
  *
 */
 bool write_data(unsigned int id, int size, char * message);
+
 
 /*!
  *  Configuring can at perticular bitrate

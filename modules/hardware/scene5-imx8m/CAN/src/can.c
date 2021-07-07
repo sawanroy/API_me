@@ -26,6 +26,10 @@ struct can_frame frame;
 
 
 
+/*
+    Enable and Disable the CAN
+
+*/
 bool enable_can(bool state)
 {
     FILE *fp;
@@ -55,40 +59,64 @@ bool enable_can(bool state)
     }
 }
 
-struct can_frame read_data() {
-    int nbytes, i;   
-	nbytes = read(fileDesc, &frame, sizeof(struct can_frame));
-	while(1){
-        if (nbytes < 0) {
+
+
+/*
+    Read data from CAN
+*/
+struct can_frame read_data()
+{
+    int nbytes, i;
+    FILE *fp;
+    char cmd[20];
+    sprintf(cmd,"candump can0");
+  	fp = popen(cmd, "r");
+  	if (fp == NULL) 
+    {
+        perror("close");
+  	}
+	      
+	nbytes = read(fp, &frame, sizeof(struct can_frame));
+    
+    ////remove this part after final testing ///////////
+	while(1)
+    {
+        if(nbytes < 0)
+        {
             perror("Read");
             //return 1;
         }
-
         printf("0x%03X [%d] ",frame.can_id, frame.can_dlc);
-
         for (i = 0; i < frame.can_dlc; i++)
+        {
             printf("%02X ",frame.data[i]);
-
-        printf("\r\n");
+        }
     }
-	if (close(fileDesc) < 0) {
-		perror("Close");
-		//return 1;
-	}
+    //////////////////////////////////////////////////////////
+	pclose(fp); 
     return frame;
 }
 
-bool write_data(unsigned int id, int size, char * message) {
+
+
+/*
+    Write data to CAN
+*/
+bool write_data(unsigned int id, int size, char * message)
+{
     frame.can_id = id;
     frame.can_dlc = size;
     sprintf((char *)frame.data, message);
-    while(1){
-        if (write(fileDesc, &frame, sizeof(struct can_frame)) != sizeof(struct can_frame)) {
-        perror("Write");
-        return false;
+    while(1)
+    {
+        if (write(fileDesc, &frame, sizeof(struct can_frame)) != sizeof(struct can_frame))
+        {
+            perror("Write");
+            return false;
         }
     }
-    if (close(fileDesc) < 0) {
+    if (close(fileDesc) < 0)
+    {
         perror("Close");
         return false;
     }
@@ -96,12 +124,16 @@ bool write_data(unsigned int id, int size, char * message) {
 }
 
 
+
+
+/*
+    Configure the CAN
+
+*/
 bool can_configuration(int bitrate)
 {
-
     FILE *fp;
-  	char cmd[20];
-    printf(" bitrate -  %d\n", bitrate);
+  	char cmd[50];
     int speed;
 
     switch(bitrate)
@@ -120,15 +152,16 @@ bool can_configuration(int bitrate)
             break;
         default:
             printf("invalid baudrate\n");
-            return -1;
+            return false;
     }
-    printf("speed  - %d\n", speed);
+
   	sprintf(cmd,"ip link set can0 type can bitrate %d",speed);
   	fp = popen(cmd, "r");
   	if (fp == NULL) 
     {
         return false;
   	}
+
     return true;
 	pclose(fp);
 }
