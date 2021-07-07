@@ -94,3 +94,41 @@ bool write_data(unsigned int id, int size, char * message) {
     }
     return true;
 }
+
+
+bool can_configuration(int bitrate)
+{
+
+    FILE *fp;
+  	char cmd[20];
+    printf(" bitrate -  %d\n", bitrate);
+    int speed;
+
+    switch(bitrate)
+    {
+        case 125000:
+            speed = 125000;
+            break;
+        case 250000:
+            speed = 250000;
+            break;
+        case 500000:
+            speed = 500000;
+            break;
+        case 1000000:
+            speed = 1000000;
+            break;
+        default:
+            printf("invalid baudrate\n");
+            return -1;
+    }
+    printf("speed  - %d\n", speed);
+  	sprintf(cmd,"ip link set can0 type can bitrate %d",speed);
+  	fp = popen(cmd, "r");
+  	if (fp == NULL) 
+    {
+        return false;
+  	}
+    return true;
+	pclose(fp);
+}

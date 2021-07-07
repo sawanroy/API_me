@@ -44,5 +44,11 @@ struct can_frame read_data();
 */
 bool write_data(unsigned int id, int size, char * message);
 
+/*!
+ *  Configuring can at perticular bitrate
+ *  @param[in] bitrate bit per second tranfer speed
+ *  @return true and false
+*/
+bool can_configuration(int bitrate);
 
 #endif
