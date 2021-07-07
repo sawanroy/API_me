@@ -24,22 +24,35 @@ int fileDesc;              /**< File descriptor*/
 struct sockaddr_can addr;  /**< transport protocol class address information (e.g. ISOTP) stucture defined in linux/can.h */
 struct can_frame frame; 
 
-bool enable_can(){
-    struct ifreq ifr;          /**< Bluetooth MAC address */
-    if ((fileDesc = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-        perror("Socket");
-        return false;
+
+
+bool enable_can(bool state)
+{
+    FILE *fp;
+  	char cmd[20];
+    
+    if(state)
+    {
+  	    sprintf(cmd,"ifconfig can0 up");
+  	    fp = popen(cmd, "r");
+  	    if (fp == NULL) 
+        {
+    	    return false;
+  	    }
+        return true;
+	    pclose(fp);
     }
-    strcpy(ifr.ifr_name, "DEV_NAME" );
-    ioctl(fileDesc, SIOCGIFINDEX, &ifr);
-    memset(&addr, 0, sizeof(addr));
-    addr.can_family = AF_CAN;
-    addr.can_ifindex = ifr.ifr_ifindex;
-    if (bind(fileDesc, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-        perror("Bind");
-        return false;
+    else
+    {
+        sprintf(cmd,"ifconfig can0 down");
+  	    fp = popen(cmd, "r");
+  	    if (fp == NULL) 
+        {
+    	    return false;
+  	    }
+        return true;
+	    pclose(fp);
     }
-    return true;
 }
 
 struct can_frame read_data() {

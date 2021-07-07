@@ -24,11 +24,14 @@
 
 #define DEV_NAME vcan0
 
-/**
- *opens the can node 
- *@return true and false
+/*!
+ *  opens the can node 
+ *  @return true and false
+ *  @param[in] state true for enable  and false for disable 
 */
-bool enable_can();
+bool enable_can(bool state);
+
+
 /**
  * reads the data from can node 
  *@return returns ID , Message , data size in form of Structure  
