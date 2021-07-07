@@ -76,7 +76,7 @@ struct can_frame read_data()
         perror("close");
   	}
 	      
-	nbytes = read(fp, &frame, sizeof(struct can_frame));
+	nbytes = fread(&frame,1000,sizeof(struct can_frame),fp);
     
     ////remove this part after final testing ///////////
 	while(1)
