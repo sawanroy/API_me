@@ -6,11 +6,13 @@ target_include_directories(
   ${PROJECT_NAME}
   PUBLIC
   hdr
-  PRIVATE
   LIBGPIO
+  PRIVATE
 )
 
 target_link_libraries(
   ${PROJECT_NAME}
   LIBGPIO
 )
+
+install(TARGETS "${PROJECT_NAME}")
