@@ -107,19 +107,17 @@ bool write_data(unsigned int id, int size, char * message)
     frame.can_id = id;
     frame.can_dlc = size;
     sprintf((char *)frame.data, message);
-    while(1)
+    FILE *fp;
+    char cmd[20];
+
+    sprintf(cmd,"cansend can0 0x%03X %02X",frame.can_id,frame.data);
+  	fp = popen(cmd, "r");
+  	if (fp == NULL) 
     {
-        if (write(fileDesc, &frame, sizeof(struct can_frame)) != sizeof(struct can_frame))
-        {
-            perror("Write");
-            return false;
-        }
-    }
-    if (close(fileDesc) < 0)
-    {
-        perror("Close");
-        return false;
-    }
+        perror("close");
+  	}
+
+    pclose(fp);
     return true;
 }
 
