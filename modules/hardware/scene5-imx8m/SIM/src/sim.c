@@ -553,8 +553,7 @@ bool sim_send_sms(char *phoneno, char *message)
     unsigned char msg[165];
     int lenmsg = sizeof(msg);
     int fd;
-    char sms[20];
-    char *imsi = "";
+    unsigned char *ret = malloc(bsize);
     
     for(int i=0; i < 3; i++)
     {
@@ -574,23 +573,32 @@ bool sim_send_sms(char *phoneno, char *message)
     fd = sim_open_port();
     tcflush(fd, TCIOFLUSH);
 
-    for(int i=0; i < 3; i++)
+    for(int i = 0; i < 3; i++)
     {
         tcflush(fd, TCIOFLUSH);
         if(usb_write(fd, cmd[i], len[i]))
         {
-            if((size = usb_read(fd, (unsigned char *)sms, bsize)) < 0)
+            if((size = usb_read(fd, ret, bsize)) < 0)
             {
+                free(ret);
                 sim_close_port(fd);
                 return false;
             }
             else
             {	
+                if(strstr(ret, "ERROR") != NULL)
+                {
+                    free(ret);
+                    sim_close_port(fd);
+                    return false;
+                }
+
                 continue;
             }
         }
         else
         {
+            free(ret);
             sim_close_port(fd);
             return false;
         }
@@ -598,19 +606,29 @@ bool sim_send_sms(char *phoneno, char *message)
 
     if(usb_write(fd, msg, lenmsg))
     {
-        if((size = usb_read(fd, (unsigned char *)sms, bsize)) < 0)
+        if((size = usb_read(fd, ret, bsize)) < 0)
         {
+            free(ret);
             sim_close_port(fd);
             return false;
         }
         else
         {
+            if(strstr(ret, "ERROR") != NULL)
+            {
+                free(ret);
+                sim_close_port(fd);
+                return false;
+            }
+
+            free(ret);
             sim_close_port(fd);
             return true;
         }
     }
     else
     {
+        free(ret);
         sim_close_port(fd);
         return false;
     }
