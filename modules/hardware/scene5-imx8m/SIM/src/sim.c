@@ -147,25 +147,40 @@ bool sim_dialup_connect(unsigned char phone_no[])
     unsigned char cmd[17];
     int len = sizeof(cmd);
     int fd;
+    unsigned char *ret = malloc(bsize);
+    bool status = true;
 
-    snprintf((char *)cmd, sizeof(cmd), "ATD%s;\r\n", phone_no);
+    if(!sim_card_available())
+    {
+        free(ret);
+        return false;
+    }
+
+    snprintf((char *)cmd, len, "ATD%s;\r\n", phone_no);
     fd = sim_open_port();
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
-        if(usb_read(fd, buf, bsize) < 0)
+        if(usb_read(fd, ret, bsize) < 0)
         {
+            free(ret);
             sim_close_port(fd);
             return false;
         }
         else
         {
+            if(strstr(ret, "ERROR") != NULL)
+            {
+                status = false;
+            } 
+            free(ret);
             sim_close_port(fd);
-            return true;
+            return status;
         }
     }
     else
     {
+        free(ret);
         sim_close_port(fd);
         return false;
     }
@@ -182,20 +197,34 @@ bool sim_dialup_disconnect()
     unsigned char cmd[] = "AT+CHUP\r\n";
     int len = sizeof(cmd);
     int fd;
+    unsigned char *ret = malloc(bsize);
+    bool status = true;
+
+    if(!sim_card_available())
+    {
+        free(ret);
+        return false;
+    }
 
     fd = sim_open_port();
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
-        if((size = usb_read(fd, buf, bsize)) < 0)
+        if(usb_read(fd, ret, bsize) < 0)
         {
+            free(ret);
             sim_close_port(fd);
             return false;
         }
         else
         {
+            if(strstr(ret, "ERROR") != NULL)
+            {
+                status = false;
+            } 
+            free(ret);
             sim_close_port(fd);
-            return true;
+            return status;
         }
     }
     else
