@@ -463,6 +463,14 @@ char* sim_get_imsi()
         }
         else
         {
+            if(strstr(ret, "ERROR") != NULL)
+            {
+                free(ret);
+                sim_close_port(fd);
+                strcpy(imsi, "");
+                return imsi;
+            }
+
             char *tmp = strtok((char *)ret, "\n");
             if(tmp != NULL)
             {
