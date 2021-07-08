@@ -385,6 +385,7 @@ This function gets the IMSI
 char* sim_get_imsi()
 {
     unsigned char cmd[] = "AT+CIMI\r\n";
+    char *ret = malloc(bsize);
     char *imsi = malloc(20);
     int len = sizeof(cmd);
     int fd;
@@ -393,34 +394,46 @@ char* sim_get_imsi()
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
-        if((size = usb_read(fd, (unsigned char *)imsi, bsize)) < 0)
+        if((size = usb_read(fd, (unsigned char *)ret, bsize)) < 0)
         {
+            free(ret);
             sim_close_port(fd);
-            return "ERROR";
+            strcpy(imsi, "");
+            return imsi;
         }
         else
         {
+            char *tmp = strtok((char *)ret, "\n");
+            if(tmp != NULL)
+            {
+                tmp = strtok(NULL, "\n");
+            }
+            imsi = strdup(tmp);
+            free(ret);
             sim_close_port(fd);
             return imsi;
         }
     }
     else
     {
+        free(ret);
         sim_close_port(fd);
-        return "ERROR";
+        strcpy(imsi, "");
+        return imsi;
     }
 }
 
 
 
 /*
-get_imei()
+char* get_imei()
 This function gets the IMEI
 */
 char* sim_get_imei()
 {
     unsigned char cmd[] = "AT+CGSN\r\n";
     int len = sizeof(cmd);
+    char *ret = malloc(bsize);
     char *imei = malloc(20);
     int fd;
 
@@ -430,21 +443,32 @@ char* sim_get_imei()
     if(usb_write(fd, cmd, len))
     {
         tcflush(fd, TCIOFLUSH);
-        if((size = usb_read(fd, (unsigned char *)imei, bsize)) < 0)
+        if((size = usb_read(fd, (unsigned char *)ret, bsize)) < 0)
         {
+            free(ret);
             sim_close_port(fd);
-            return "error while reading";
+            strcpy(imei, "");
+            return imei;
         }
         else
         {
+            char *tmp = strtok((char *)ret, "\n");
+            if(tmp != NULL)
+            {
+                tmp = strtok(NULL, "\n");
+            }
+            imei = strdup(tmp);
+            free(ret);
             sim_close_port(fd);
             return imei;
         }
     }
     else
     {
+        free(ret);
         sim_close_port(fd);
-        return "error while writing";
+        strcpy(imei, "");
+        return imei;
     }
 }
 
