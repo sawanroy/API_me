@@ -91,6 +91,23 @@ bool runCommand(const char *cmd, char *output, int size)
 
 
 
+/*Internal function*/
+bool sim_card_available()
+{
+    char *imsi = sim_get_imsi();
+    if(strstr(imsi, "ERROR") != NULL || strcmp(imsi, "") == 0)
+    {
+        dbg_log(("SIM card not available\n"));
+        free(imsi);
+        return false;
+    }
+
+    free(imsi);
+    return true;
+}
+
+
+
 /*
 bool unlock_sim(int pincode)
 This function activates the sim card by using sim pin
@@ -478,7 +495,7 @@ char* sim_get_imei()
     send_sms(char* phone_no, char* message)
     This function send the sms.
  */
-bool sim_send_sms(char *phone_no, char *message)
+bool sim_send_sms(char *phoneno, char *message)
 {
     unsigned char cmd[3][30];
     int len[3];
@@ -486,15 +503,21 @@ bool sim_send_sms(char *phone_no, char *message)
     int lenmsg = sizeof(msg);
     int fd;
     char sms[20];
+    char *imsi = "";
     
     for(int i=0; i < 3; i++)
     {
         len[i] = sizeof(cmd[i]);
     }
 
+    if(!sim_card_available())
+    {
+        return false;
+    }
+
     sprintf(cmd[0], "AT+CMGF=1\r\n");
     sprintf(cmd[1], "AT+CSCS=\"GSM\"\r\n");
-    sprintf(cmd[2], "AT+CMGS=\"%s\"\r\n", phone_no);
+    sprintf(cmd[2], "AT+CMGS=\"%s\"\r\n", phoneno);
     sprintf(msg, "%s\x1A", message); //message string should be max of 160 chars
 
     fd = sim_open_port();
@@ -522,7 +545,6 @@ bool sim_send_sms(char *phone_no, char *message)
         }
     }
 
-
     if(usb_write(fd, msg, lenmsg))
     {
         if((size = usb_read(fd, (unsigned char *)sms, bsize)) < 0)
@@ -541,5 +563,4 @@ bool sim_send_sms(char *phone_no, char *message)
         sim_close_port(fd);
         return false;
     }
-
 }
