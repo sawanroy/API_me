@@ -95,7 +95,7 @@ bool runCommand(const char *cmd, char *output, int size)
 bool sim_card_available()
 {
     char *imsi = sim_get_imsi();
-    if(strstr(imsi, "ERROR") != NULL || strcmp(imsi, "") == 0)
+    if(strcmp(imsi, "") == 0)
     {
         dbg_log(("SIM card not available\n"));
         free(imsi);
