@@ -108,6 +108,21 @@ bool sim_card_available()
 
 
 
+/*Internal function*/
+int get_dbm(unsigned int rssi)
+{
+    int dbm = (int)rssi;
+
+    if(rssi >= 2 || rssi <= 30)
+    {
+        dbm = 2*(rssi-2)-109;
+    }
+    
+    return dbm;
+}
+
+
+
 /*
 bool sim_unlock(int pincode)
 This function activates the sim card by using sim pin
@@ -398,32 +413,56 @@ char* sim_get_ipaddress()
 
 
 /*
-unsigned int sim_get_signal_strength()
+int sim_get_signal_strength()
 This function gets the strengh of the signal (in dbm)
 */
-unsigned int sim_get_signal_strength()
+int sim_get_signal_strength()
 {
     unsigned char cmd[] = "AT+CSQ\r\n";
+    unsigned char ret[bsize];
+    int dbm = 99;
+    unsigned int rssi = 0;
     int len = sizeof(cmd);
-    char *strength;
+    int fd;
 
-    sim_open_port();
+    fd = sim_open_port();
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
-        if((size = usb_read(fd, strength, bsize)) < 0)
+        if((size = usb_read(fd, ret, bsize)) < 0)
         {
-            return false;
+            sim_close_port(fd);
+            return dbm;
         }
         else
         {
-            int signal = atoi(strength);
-            return signal;
+            if(strstr((const char *)ret, "ERROR") != NULL)
+            {
+                sim_close_port(fd);
+                return dbm;
+            }
+
+            char *tmp = strtok((char *)ret, "\n");
+            if(tmp != NULL)
+            {   
+                tmp = strtok(NULL, "\n");
+            }
+            char *tmp2 = strtok(tmp, ":");
+            if(tmp2 != NULL)
+            {
+                tmp2 = strtok(NULL, ",");
+            }
+
+            rssi = atoi(tmp2);
+            dbm = get_dbm(rssi);
+            sim_close_port(fd);
+            return dbm;
         }
     }
     else
     {
-        return false;
+        sim_close_port(fd);
+        return dbm;
     }
 }
 

@@ -126,9 +126,9 @@ char* sim_get_ipaddress();
 
 /*!
   Get the strengh of the signal (in dbm)
-  @return single strength in dbm
+  @return signal strength in dbm
 */
-unsigned int sim_get_signal_strength();
+int sim_get_signal_strength();
 
 
 /*!
