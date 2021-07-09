@@ -115,9 +115,9 @@ This function activates the sim card by using sim pin
 bool sim_unlock(int pincode)
 {
     unsigned char cmd[17];
+    unsigned char ret[bsize];
     int len = sizeof(cmd);
     int fd;
-    unsigned char *ret = malloc(bsize);
     bool status = true;
 
     snprintf((char *)cmd, sizeof(cmd), "AT+CPIN=%d\r\n", pincode);//AT+CPIN="1234"
@@ -127,24 +127,21 @@ bool sim_unlock(int pincode)
     {
         if(usb_read(fd, ret, bsize) < 0)
         {
-            free(ret);
             sim_close_port(fd);
             return false;
         }
         else
         {
-            if(strstr(ret, "ERROR") != NULL)
+            if(strstr((const char *)ret, "ERROR") != NULL)
             {
                 status = false;
             } 
-            free(ret);
             sim_close_port(fd);
             return status;
         }
     }
     else
     {
-        free(ret);
         sim_close_port(fd);
         return false;
     }
@@ -159,14 +156,13 @@ This function tries to connect to telephone network
 bool sim_dialup_connect(unsigned char phone_no[])
 {
     unsigned char cmd[17];
+    unsigned char ret[bsize];
     int len = sizeof(cmd);
     int fd;
-    unsigned char *ret = malloc(bsize);
     bool status = true;
 
     if(!sim_card_available())
     {
-        free(ret);
         return false;
     }
 
@@ -177,24 +173,21 @@ bool sim_dialup_connect(unsigned char phone_no[])
     {
         if(usb_read(fd, ret, bsize) < 0)
         {
-            free(ret);
             sim_close_port(fd);
             return false;
         }
         else
         {
-            if(strstr(ret, "ERROR") != NULL)
+            if(strstr((const char *)ret, "ERROR") != NULL)
             {
                 status = false;
             } 
-            free(ret);
             sim_close_port(fd);
             return status;
         }
     }
     else
     {
-        free(ret);
         sim_close_port(fd);
         return false;
     }
@@ -209,14 +202,13 @@ This function disconnect from telephone network
 bool sim_dialup_disconnect()
 {
     unsigned char cmd[] = "AT+CHUP\r\n";
+    unsigned char ret[bsize];
     int len = sizeof(cmd);
     int fd;
-    unsigned char *ret = malloc(bsize);
     bool status = true;
 
     if(!sim_card_available())
     {
-        free(ret);
         return false;
     }
 
@@ -226,17 +218,15 @@ bool sim_dialup_disconnect()
     {
         if(usb_read(fd, ret, bsize) < 0)
         {
-            free(ret);
             sim_close_port(fd);
             return false;
         }
         else
         {
-            if(strstr(ret, "ERROR") != NULL)
+            if(strstr((const char *)ret, "ERROR") != NULL)
             {
                 status = false;
             } 
-            free(ret);
             sim_close_port(fd);
             return status;
         }
@@ -336,8 +326,8 @@ This function tries to connect to internet
 bool sim_connect_to_internet()
 {
     unsigned char cmd[] = "AT$QCRMCALL=1,1\r\n";
+    unsigned char ret[bsize];
     int len = sizeof(cmd);
-    char ret[20];
     int fd;
 	char *ip = "";
 
@@ -351,17 +341,18 @@ bool sim_connect_to_internet()
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
-        if((size = usb_read(fd, (unsigned char *)ret, bsize)) < 0)
+        if((size = usb_read(fd, ret, bsize)) < 0)
         {   
             sim_close_port(fd);
+            printf("log1\n");
             return false;
         }
         else
         {
-			if(strstr(ret, "ERROR") != NULL)
+			if(strstr((const char *)ret, "ERROR") != NULL)
 			{
 				ip = sim_get_ipaddress();
-				if(strcmp(ip, "") != 0 || strcmp(ip, "ERROR") != 0)
+				if(strcmp(ip, "") != 0 || strstr(ip, "ERROR") != NULL)
 				{
 					sim_close_port(fd);
             		return true;
@@ -369,7 +360,7 @@ bool sim_connect_to_internet()
 			}
 			
             sprintf((char *)cmd, "dhclient -i eth1");
-            if(!runCommand(cmd, ret, 20))
+            if(!runCommand((const char *)cmd, (char *)ret, 20))
             {
                 sim_close_port(fd);
                 return false;
@@ -392,7 +383,7 @@ This function returns the ip address
 */
 char* sim_get_ipaddress()
 {
-    char *cmd = "ifconfig eth1 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}'";
+    const char *cmd = "ifconfig eth1 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}'";
     char *ret = malloc(50);
 
     if(!runCommand(cmd, ret, 50))
@@ -407,26 +398,26 @@ char* sim_get_ipaddress()
 
 
 /*
-get_signal_strength()
+unsigned int sim_get_signal_strength()
 This function gets the strengh of the signal (in dbm)
 */
 unsigned int sim_get_signal_strength()
 {
     unsigned char cmd[] = "AT+CSQ\r\n";
     int len = sizeof(cmd);
-    char *sig_strenght;
+    char *strength;
 
     sim_open_port();
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
-        if((size = usb_read(fd, sig_strenght, bsize)) < 0)
+        if((size = usb_read(fd, strength, bsize)) < 0)
         {
             return false;
         }
         else
         {
-            int signal = atoi(sig_strenght);
+            int signal = atoi(strength);
             return signal;
         }
     }
@@ -445,7 +436,7 @@ This function gets the IMSI
 char* sim_get_imsi()
 {
     unsigned char cmd[] = "AT+CIMI\r\n";
-    char *ret = malloc(bsize);
+    unsigned char ret[bsize];
     char *imsi = malloc(20);
     int len = sizeof(cmd);
     int fd;
@@ -454,18 +445,16 @@ char* sim_get_imsi()
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
-        if((size = usb_read(fd, (unsigned char *)ret, bsize)) < 0)
+        if((size = usb_read(fd, ret, bsize)) < 0)
         {
-            free(ret);
             sim_close_port(fd);
             strcpy(imsi, "");
             return imsi;
         }
         else
         {
-            if(strstr(ret, "ERROR") != NULL)
+            if(strstr((const char *)ret, "ERROR") != NULL)
             {
-                free(ret);
                 sim_close_port(fd);
                 strcpy(imsi, "");
                 return imsi;
@@ -477,14 +466,12 @@ char* sim_get_imsi()
                 tmp = strtok(NULL, "\n");
             }
             imsi = strdup(tmp);
-            free(ret);
             sim_close_port(fd);
             return imsi;
         }
     }
     else
     {
-        free(ret);
         sim_close_port(fd);
         strcpy(imsi, "");
         return imsi;
@@ -500,8 +487,8 @@ This function gets the IMEI
 char* sim_get_imei()
 {
     unsigned char cmd[] = "AT+CGSN\r\n";
+    unsigned char ret[bsize];
     int len = sizeof(cmd);
-    char *ret = malloc(bsize);
     char *imei = malloc(20);
     int fd;
 
@@ -511,9 +498,8 @@ char* sim_get_imei()
     if(usb_write(fd, cmd, len))
     {
         tcflush(fd, TCIOFLUSH);
-        if((size = usb_read(fd, (unsigned char *)ret, bsize)) < 0)
+        if((size = usb_read(fd, ret, bsize)) < 0)
         {
-            free(ret);
             sim_close_port(fd);
             strcpy(imei, "");
             return imei;
@@ -526,14 +512,12 @@ char* sim_get_imei()
                 tmp = strtok(NULL, "\n");
             }
             imei = strdup(tmp);
-            free(ret);
             sim_close_port(fd);
             return imei;
         }
     }
     else
     {
-        free(ret);
         sim_close_port(fd);
         strcpy(imei, "");
         return imei;
@@ -548,12 +532,12 @@ char* sim_get_imei()
  */
 bool sim_send_sms(char *phoneno, char *message)
 {
-    unsigned char cmd[3][30];
+    char cmd[3][30];
+    char msg[165];
+    unsigned char ret[bsize];
     int len[3];
-    unsigned char msg[165];
     int lenmsg = sizeof(msg);
     int fd;
-    unsigned char *ret = malloc(bsize);
     
     for(int i=0; i < 3; i++)
     {
@@ -576,19 +560,17 @@ bool sim_send_sms(char *phoneno, char *message)
     for(int i = 0; i < 3; i++)
     {
         tcflush(fd, TCIOFLUSH);
-        if(usb_write(fd, cmd[i], len[i]))
+        if(usb_write(fd, (unsigned char *)cmd[i], len[i]))
         {
             if((size = usb_read(fd, ret, bsize)) < 0)
             {
-                free(ret);
                 sim_close_port(fd);
                 return false;
             }
             else
             {	
-                if(strstr(ret, "ERROR") != NULL)
+                if(strstr((const char *)ret, "ERROR") != NULL)
                 {
-                    free(ret);
                     sim_close_port(fd);
                     return false;
                 }
@@ -598,37 +580,32 @@ bool sim_send_sms(char *phoneno, char *message)
         }
         else
         {
-            free(ret);
             sim_close_port(fd);
             return false;
         }
     }
 
-    if(usb_write(fd, msg, lenmsg))
+    if(usb_write(fd, (unsigned char *)msg, lenmsg))
     {
         if((size = usb_read(fd, ret, bsize)) < 0)
         {
-            free(ret);
             sim_close_port(fd);
             return false;
         }
         else
         {
-            if(strstr(ret, "ERROR") != NULL)
+            if(strstr((const char *)ret, "ERROR") != NULL)
             {
-                free(ret);
                 sim_close_port(fd);
                 return false;
             }
 
-            free(ret);
             sim_close_port(fd);
             return true;
         }
     }
     else
     {
-        free(ret);
         sim_close_port(fd);
         return false;
     }
