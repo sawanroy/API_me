@@ -367,10 +367,10 @@ bool sim_connect_to_internet()
 			if(strstr((const char *)ret, "ERROR") != NULL)
 			{
 				ip = sim_get_ipaddress();
-				if(strcmp(ip, "") != 0 || strstr(ip, "ERROR") != NULL)
+				if(strcmp(ip, "") == 0 || strstr(ip, "ERROR") != NULL)
 				{
 					sim_close_port(fd);
-            		return true;
+            		return false;
 				}
 			}
 			
@@ -380,6 +380,13 @@ bool sim_connect_to_internet()
                 sim_close_port(fd);
                 return false;
             }
+            ip = sim_get_ipaddress();
+            if(strcmp(ip, "") == 0 || strstr(ip, "ERROR") != NULL)
+            {
+                sim_close_port(fd);
+                return false;
+            }
+
             sim_close_port(fd);
             return true;
         }
