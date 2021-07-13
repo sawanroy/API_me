@@ -27,6 +27,7 @@
 #include <sim.h>
 #include <usb.h>
 #include <string.h>
+#include <vector.h>
 
 #define bsize 256
 
@@ -255,42 +256,366 @@ bool sim_dialup_disconnect()
 
 
 
+/*Internal function*/
+int sim_file_open(char *filename)
+{
+    unsigned char cmd[255];
+    unsigned char ret[bsize];
+    int filehandle;
+
+    sprintf(cmd, "AT+QFOPEN=\"%s\",0\r\n", filename);
+    printf("cmd:%s\n",cmd);
+    if(usb_write(fd, cmd, sizeof(cmd)))
+    {
+        if(usb_read(fd, ret, bsize) < 0)
+        {
+            printf("log3\n");
+            return false;
+        }
+        else
+        {
+            printf("%s\n", ret);
+            if(strstr((const char *)ret, "ERROR") != NULL)
+            {
+                return false;
+            }
+            //AT response: 1st line blank, so take data from 2nd line
+            char *tmp = strtok((char *)ret, "\n");
+            //printf("tmp1:%s\n", tmp);
+            if(tmp != NULL)
+            {   
+                tmp = strtok(NULL, "\n");
+            }
+            char *tmp2 = strtok(tmp, ":");
+            if(tmp != NULL)
+            {
+                tmp2 = strtok(NULL, ":");
+            }
+            filehandle = atoi(tmp2);
+            //printf("filehandle = %d\n",filehandle);
+            return filehandle;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+
+/*Internal function*/
+bool sim_file_close(int filehandle)
+{
+    unsigned char cmd[25];
+    unsigned char ret[255];
+
+    sprintf(cmd, "AT+QFCLOSE=%d\r\n", filehandle);
+    printf("cmd4:%s\n",cmd);
+    if(usb_write(fd, cmd, sizeof(cmd)))
+    {
+        if(usb_read(fd, ret, bsize) < 0)
+        {
+            return false;
+        }
+        else
+        {
+            printf("ret:%s\n",ret);
+            if(strstr((const char *)ret, "ERROR") != NULL)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+
 /*
 set_AP(struct apn setapn)
 This function creates or update an AP (identified by its name)
 */
 bool sim_set_ap(struct apn setapn)
 {
-    system("nmcli connection delete gprs");
-    FILE *fp;
-    int n;
-    char path[1035];
-    const char *str1 = "successfully added";
-    char cmd[50];
-    sprintf(cmd,"nmcli connection add type gsm con-name gprs ifname ttyUSB%d apn %s", SIM_PORT, setapn.apn_name);
+    unsigned char ret[bsize];
+    unsigned char ret2[bsize];
+    int fd;
+    bool status = true;
+    unsigned char cmd[100];
+    unsigned char cmd2[100];
+    int protocol = 1;
+    int auth = 0;
 
-    /* Open the command for reading. */
-    fp = popen(cmd, "r");
-    if(fp == NULL)
-    {
-        exit(1);
-    }
+    int filehandle;
 
-    /* Read the output a line at a time - output it. */
-    while(fgets(path, sizeof(path)-1, fp) != NULL)
+    fd = sim_open_port();
+    if(fd < 0)
     {
-    }
-
-    if((n = match(path, (char*)str1) == 0))
-    {
-        return true;
-    }
-    else
-    {
+		sim_close_port(fd);
         return false;
     }
 
-    pclose(fp);
+    int len = strlen(setapn.apn_name) + strlen(setapn.username) + strlen(setapn.password) + strlen(setapn.authentication) + strlen(setapn.apnProtocol) + strlen(setapn.mcc) + strlen(setapn.mnc);
+    unsigned char cmddata[len+7];    
+    sprintf((char *)cmddata, "%s,%s,%s,%s,%s,%s,%s", setapn.apn_name, setapn.username, setapn.password, setapn.authentication, setapn.apnProtocol, setapn.mcc, setapn.mnc);
+    
+    tcflush(fd, TCIOFLUSH);
+    
+    filehandle = sim_file_open(setapn.apn_name);
+
+    sprintf(cmd, "AT+QFWRITE=%d,%d,2\r\n", filehandle, sizeof(cmddata));
+    if(usb_write(fd, cmd, sizeof(cmd)))
+    {
+        if(usb_read(fd, ret, bsize) < 0)
+        {
+            printf("log6\n");
+            sim_file_close(filehandle);
+            sim_close_port(fd);
+            return false;
+        }
+        else
+        {
+            if(strstr((const char *)ret, "ERROR") != NULL)
+            {
+                printf("log7\n");
+                sim_file_close(filehandle);
+                sim_close_port(fd);
+                return false;
+            }
+            usleep(1000000);
+            if(strstr((const char *)ret, "CONNECT") != NULL)
+            {
+                if(usb_write(fd, cmddata, sizeof(cmddata)))
+                {
+                    usleep(2000000);
+                    if(usb_read(fd, ret, bsize) < 0)
+                    {
+                        printf("log8\n");
+                        sim_file_close(filehandle);
+                        sim_close_port(fd);
+                        return false;
+                    }
+                    else
+                    {
+                        printf("ret1:%s\n",ret);
+                        if(strstr((const char *)ret, "ERROR: 421") != NULL || strstr((const char *)ret, "OK") != NULL)
+                        {
+                            printf("log11\n");
+                            status = true;
+                        }
+                        else
+                        {
+                            printf("log10\n");
+                            status = false;
+                            sim_file_close(filehandle);
+                            sim_close_port(fd);
+                            return status;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        printf("log9\n");
+        sim_file_close(filehandle);
+        sim_close_port(fd);
+        return false;
+    }
+
+    if(!sim_file_close(filehandle))
+    {
+        sim_close_port(fd);
+        return false;
+    }
+    
+    if(strcmp(setapn.authentication, "PAP") == 0)
+    {
+        auth = 1;
+        printf("PAP\n");
+    }
+    else if(strcmp(setapn.authentication, "CHAP") == 0)
+    {
+        auth = 2;
+        printf("CHAP\n");
+    }
+
+    if(strcmp(setapn.apnProtocol, "IPV4") == 0)
+    {
+        protocol = 1;
+        printf("IPV4\n");
+    }
+    else if(strcmp(setapn.apnProtocol, "IPV4V6") == 0)
+    {
+        protocol = 2;
+        printf("IPV4V6\n");
+    }
+
+    sprintf(cmd2, "AT+QICSGP=1,%d,\"%s\",\"%s\",\"%s\",%d\r\n", protocol, setapn.apn_name, setapn.username, setapn.password, auth);
+    printf("cmd2:%s\n",cmd2);
+    if(usb_write(fd, cmd2, sizeof(cmd)))
+    {
+        if(usb_read(fd, ret2, bsize) < 0)
+        {
+            sim_close_port(fd);
+            return false;
+        }
+        else
+        {
+            printf("ret:%s\n",ret2);
+            if(strstr((const char *)ret2, "ERROR") != NULL)
+            {
+                sim_close_port(fd);
+                return false;
+            }
+            else
+            {
+                sim_close_port(fd);
+                return true;
+            }
+        }
+    }
+    else
+    {
+        sim_close_port(fd);
+        return false;
+    }
+    
+}
+
+
+
+/*list configgured AP*/
+bool sim_list_ap()
+{
+    //listfiles
+    //get names of files
+    //open file
+    //sort data
+    //add to vector
+    unsigned char cmd[100];
+    unsigned char cmd2[100];
+    unsigned char ret[bsize];
+    char filename[20][255];
+    char buff[20][255];
+    int filecount = 0;
+    int filehandle;
+    int fd;
+
+    fd = sim_open_port();
+    if(fd < 0)
+    {
+		sim_close_port(fd);
+        return false;
+    }
+
+    sprintf(cmd, "AT+QFLST=\"*\"\r\n");
+    printf("cmd:%s\n", cmd);
+
+    tcflush(fd, TCIOFLUSH);
+
+    if(usb_write(fd, cmd, sizeof(cmd)))
+    {
+        if(usb_read(fd, ret, bsize) < 0)
+        {
+            sim_close_port(fd);
+            return false;
+        }
+        else
+        {
+            printf("ret:%s\n",ret);
+            if(strstr((const char *)ret, "ERROR") != NULL)
+            {
+                sim_close_port(fd);
+                return false;
+            }
+            
+            char *tmp = strtok(ret, "\n");
+            int i = 0;
+            while(tmp != NULL)
+            {
+                strcpy(buff[i], tmp);
+                printf("buff%d:%s\n",i,buff[i]);
+                tmp = strtok(NULL, "\n");
+                i++;
+            }
+            for(int j = 0; j < i; j++)
+            {
+                tmp = strtok(buff[j], "\"");
+                if(tmp != NULL)
+                {
+                    tmp = strtok(NULL, "\"");
+                    if(tmp != NULL)
+                    {
+                        strcpy(filename[filecount], tmp);
+                        printf("fiilename%d:%s\n",filecount,filename[filecount]);
+                        filecount++;
+                    }
+                    
+                }
+            }  
+        }
+    }
+    else
+    {
+        sim_close_port(fd);
+        return false;
+    }
+
+    for(int count = 0; count < filecount; count++)
+    {
+        tcflush(fd, TCIOFLUSH);
+
+        filehandle = sim_file_open(filename[count]);
+        if(filehandle == 0)
+        {
+            sim_close_port(fd);
+            return false;
+        }
+
+        sprintf(cmd2, "AT+QFREAD=%d\r\n", filehandle);
+        printf("%s\n",cmd2);
+        if(usb_write(fd, cmd2, sizeof(cmd)))
+        {
+            unsigned char ret2[bsize];
+            usleep(100000);
+            if(usb_read(fd, ret2, bsize) < 0)
+            {
+                sim_file_close(filehandle);
+                sim_close_port(fd);
+                return false;
+            }
+            else
+            {
+                printf("%s\n",ret2);
+                if(strstr((const char *)ret2, "ERROR") != NULL)
+                {
+                    sim_file_close(filehandle);
+                    sim_close_port(fd);
+                    return false;
+                }
+                sim_file_close(filehandle);
+                strcpy(ret2, "");
+                strcpy(cmd2, "");
+            }
+        }
+        else
+        {
+            sim_file_close(filehandle);
+            sim_close_port(fd);
+            return false;
+        }
+    }
+    //accessing string elements and adding to structure part remianing
 }
 
 

@@ -43,16 +43,16 @@ struct apn
     char *apn_name;                          /**<	Acess point name */
     char Proxy[20];                             /**<	proxy url */
     int  Port;                                  /**<	port number */
-    char username[20];                          /**<	username */
-    char password[20];                          /**<	password */
+    char *username;                          /**<	username */
+    char *password;                          /**<	password */
     char mmsc[20];                              /**<	mmsc url */
     char mmsProxy[20];                          /**<	proxy ip */
     int  mmsPort[20];                           /**<	port number */
-    int  mcc;                                   /**<	Mobile Country Code */
-    int  mnc;                                   /**<	Mobile Network Code */
-    char authentication[20];                    /**<	type char security protocol : PAP or CHAP */
-    char apnType[20];                           /**<	type of data which must use this APN configuration */
-    char apnProtocol[20];                       /**<	protocol to be used to access internet (ipv4 ipv6) */
+    char *mcc;                                   /**<	Mobile Country Code */
+    char *mnc;                                   /**<	Mobile Network Code */
+    char *authentication;                    /**<	type char security protocol : PAP or CHAP */
+    char *apnType;                           /**<	type of data which must use this APN configuration */
+    char *apnProtocol;                       /**<	protocol to be used to access internet (ipv4 ipv6) */
     char apnRoamingProtocol[20];                /**<	protocol to be used to access internet via cellular data(ipv4 ipv6) */
 };
 
@@ -101,7 +101,7 @@ bool sim_dialup_disconnect();
 */
 bool sim_set_ap(struct apn setapn);
 
-
+bool sim_list_ap();
 /*!
   Remove an AP from the list (identified by its name)
   @param ap_name charater type variable
