@@ -20,7 +20,7 @@
 #define sim_h__
 
 #include <stdbool.h>
-
+#include <vector.h>
 
 /**
  * Enable/Disable logs
@@ -38,7 +38,7 @@
  * Structure for APN configuration
 */
 
-struct apn
+typedef struct
 {
     char *apn_name;                          /**<	Acess point name */
     char Proxy[20];                             /**<	proxy url */
@@ -54,7 +54,7 @@ struct apn
     char *apnType;                           /**<	type of data which must use this APN configuration */
     char *apnProtocol;                       /**<	protocol to be used to access internet (ipv4 ipv6) */
     char apnRoamingProtocol[20];                /**<	protocol to be used to access internet via cellular data(ipv4 ipv6) */
-};
+} sim_apn;
 
  /**
   * Structure for List if APN
@@ -99,9 +99,17 @@ bool sim_dialup_disconnect();
   @param[in] apn struct type argument
   @return true when success and false when failure.
 */
-bool sim_set_ap(struct apn setapn);
+bool sim_set_ap(sim_apn setapn);
 
-bool sim_list_ap();
+
+/*!
+  list already configured AP
+  @param[out] vector typedef structure for list of sim_apn.
+  @return true when success and false when failure.
+*/
+bool sim_list_ap(vector *aplist);
+
+
 /*!
   Remove an AP from the list (identified by its name)
   @param ap_name charater type variable
