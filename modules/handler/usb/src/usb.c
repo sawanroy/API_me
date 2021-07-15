@@ -354,8 +354,7 @@ int usb_close(int fd)
 {
     flock(fd, LOCK_UN);
     close(fd); 
-    printf("fd is closed %d \n",fd);
-
+    
     return 0;
 }
 
