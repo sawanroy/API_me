@@ -42,19 +42,10 @@
 typedef struct
 {
     char *apn_name;                          /**<	Acess point name */
-    char Proxy[20];                             /**<	proxy url */
-    int  Port;                                  /**<	port number */
     char *username;                          /**<	username */
     char *password;                          /**<	password */
-    char mmsc[20];                              /**<	mmsc url */
-    char mmsProxy[20];                          /**<	proxy ip */
-    int  mmsPort[20];                           /**<	port number */
-    char *mcc;                                   /**<	Mobile Country Code */
-    char *mnc;                                   /**<	Mobile Network Code */
     char *authentication;                    /**<	type char security protocol : PAP or CHAP */
-    char *apnType;                           /**<	type of data which must use this APN configuration */
     char *apnProtocol;                       /**<	protocol to be used to access internet (ipv4 ipv6) */
-    char apnRoamingProtocol[20];                /**<	protocol to be used to access internet via cellular data(ipv4 ipv6) */
 } sim_apn;
 
  /**
