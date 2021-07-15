@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['apn_0',['apn',['../d5/d6d/structapn.html',1,'']]],
-  ['apn_5fname_1',['apn_name',['../d5/d6d/structapn.html#adf5c30fc02e75f27fda8b06b837dfc85',1,'apn']]],
-  ['apnprotocol_2',['apnProtocol',['../d5/d6d/structapn.html#ae8ea32d0699f42edd3b8caa67ce0cc52',1,'apn']]],
-  ['apnroamingprotocol_3',['apnRoamingProtocol',['../d5/d6d/structapn.html#a0173d696ba5a48fd1b87ee6af583d7ab',1,'apn']]],
-  ['apntype_4',['apnType',['../d5/d6d/structapn.html#aef80e75a3b0d243d401ca477cd56aa9d',1,'apn']]],
-  ['authentication_5',['authentication',['../d5/d6d/structapn.html#ad18a91774015e198a45325636286cc8a',1,'apn']]],
-  ['authpin_6',['authpin',['../de/d5b/structauthpin.html',1,'']]]
+  ['apn_5fname_0',['apn_name',['../da/dc4/structsim__apn.html#ae7900fdb27b037735d004497ff5263da',1,'sim_apn']]],
+  ['apnprotocol_1',['apnProtocol',['../da/dc4/structsim__apn.html#a0e6534f6bfcb54f11498862624414572',1,'sim_apn']]],
+  ['authentication_2',['authentication',['../da/dc4/structsim__apn.html#a6303daffd780e4fb1b9e21450892962a',1,'sim_apn']]],
+  ['authpin_3',['authpin',['../de/d5b/structauthpin.html',1,'']]]
 ];

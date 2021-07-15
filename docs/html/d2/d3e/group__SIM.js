@@ -1,13 +1,16 @@
 var group__SIM =
 [
-    [ "connect_to_internet", "d2/d3e/group__SIM.html#ga587e0c6578d46678fd31241c3664e7b6", null ],
-    [ "dialup_connect", "d2/d3e/group__SIM.html#ga616cacaf4f3df49a065e19ec7a74fd18", null ],
-    [ "dialup_disconnect", "d2/d3e/group__SIM.html#gaf5b4604d7a7338a604f59e01c3a6f658", null ],
-    [ "get_imei", "d2/d3e/group__SIM.html#ga98296ea2949ed7e9d276bc74383137a1", null ],
-    [ "get_imsi", "d2/d3e/group__SIM.html#gaa44f059e1aa10df1415539ab8b218d82", null ],
-    [ "get_signal_strength", "d2/d3e/group__SIM.html#ga0376b90eb09742608c4bbc41eaf24a01", null ],
-    [ "remove_ap", "d2/d3e/group__SIM.html#ga37f4ed5cec776ebac781de4d12dd4ea1", null ],
-    [ "send_sms", "d2/d3e/group__SIM.html#gadb643e63a739c85e8d31f84df6ece60e", null ],
-    [ "set_ap", "d2/d3e/group__SIM.html#gaf0507aace7fa16083d89f4e3da6db687", null ],
-    [ "unlock_sim", "d2/d3e/group__SIM.html#ga64ee5192d08270a9670221e5dc943b37", null ]
+    [ "sim_connect_to_internet", "d2/d3e/group__SIM.html#ga29c8c250373be013f3be524a4b27b7d1", null ],
+    [ "sim_deactivate", "d2/d3e/group__SIM.html#ga807314014327658e1070b62cab9b9e1d", null ],
+    [ "sim_dialup_connect", "d2/d3e/group__SIM.html#ga7cbd614b980b29f0d7389f17bcfba374", null ],
+    [ "sim_dialup_disconnect", "d2/d3e/group__SIM.html#ga7c823fad99343a0d5ed4df0fd4c7a534", null ],
+    [ "sim_get_imei", "d2/d3e/group__SIM.html#gac28427e0e1bc22600d7b640fa6736867", null ],
+    [ "sim_get_imsi", "d2/d3e/group__SIM.html#ga909a3fd7fdf1830377d010b5492e120e", null ],
+    [ "sim_get_ipaddress", "d2/d3e/group__SIM.html#gabe28a55cd384e70c83936cc65cf7f515", null ],
+    [ "sim_get_signal_strength", "d2/d3e/group__SIM.html#gac054101dfd85b147cb108f27c5db5181", null ],
+    [ "sim_list_ap", "d2/d3e/group__SIM.html#gab7aad1013591d3237003b5242d701a56", null ],
+    [ "sim_remove_ap", "d2/d3e/group__SIM.html#gad7f9899a4998b9cea499d81d12d54962", null ],
+    [ "sim_send_sms", "d2/d3e/group__SIM.html#ga67c5bb5ca6c5a36481bbbaa6f4259a84", null ],
+    [ "sim_set_ap", "d2/d3e/group__SIM.html#ga36fe12b9d9424b0b28b5efffcfb105a8", null ],
+    [ "sim_unlock", "d2/d3e/group__SIM.html#ga1323868c06f4cb5f678cc177cc76bdc3", null ]
 ];

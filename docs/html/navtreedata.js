@@ -38,7 +38,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"db/dcb/structwifi__scanresult.html#a6764dc0f71e3a25e5d07535da2078fab"
+"dc/dea/structwireless__scan.html#a09529523db2a3928848c3e5e0be8b006"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

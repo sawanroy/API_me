@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LINUX API: vector_ Struct Reference</title>
+<title>LINUX API: sim_apn Struct Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -73,7 +73,7 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'Search');
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('dc/d3d/structvector__.html','../../'); initResizable(); });
+$(document).ready(function(){initNavTree('da/dc4/structsim__apn.html','../../'); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -95,28 +95,46 @@ $(document).ready(function(){initNavTree('dc/d3d/structvector__.html','../../');
   <div class="summary">
 <a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
-<div class="title">vector_ Struct Reference</div>  </div>
+<div class="title">sim_apn Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Structure for APN configuration.  
+ <a href="../../da/dc4/structsim__apn.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="../../d2/d94/sim_8h_source.html">sim.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:af9ebb6e8265071e3d406ecc59bbda94f"><td class="memItemLeft" align="right" valign="top"><a id="af9ebb6e8265071e3d406ecc59bbda94f"></a>
-void **&#160;</td><td class="memItemRight" valign="bottom"><b>data</b></td></tr>
-<tr class="separator:af9ebb6e8265071e3d406ecc59bbda94f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add89476a400c44f38e1ab1568de5c3ce"><td class="memItemLeft" align="right" valign="top"><a id="add89476a400c44f38e1ab1568de5c3ce"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>size</b></td></tr>
-<tr class="separator:add89476a400c44f38e1ab1568de5c3ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f0212b482f3d62fbd0d352944d3a611"><td class="memItemLeft" align="right" valign="top"><a id="a4f0212b482f3d62fbd0d352944d3a611"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>count</b></td></tr>
-<tr class="separator:a4f0212b482f3d62fbd0d352944d3a611"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7900fdb27b037735d004497ff5263da"><td class="memItemLeft" align="right" valign="top"><a id="ae7900fdb27b037735d004497ff5263da"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dc4/structsim__apn.html#ae7900fdb27b037735d004497ff5263da">apn_name</a></td></tr>
+<tr class="memdesc:ae7900fdb27b037735d004497ff5263da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Acess point name. <br /></td></tr>
+<tr class="separator:ae7900fdb27b037735d004497ff5263da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a537cda881600823ed118ee363fc45003"><td class="memItemLeft" align="right" valign="top"><a id="a537cda881600823ed118ee363fc45003"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dc4/structsim__apn.html#a537cda881600823ed118ee363fc45003">username</a></td></tr>
+<tr class="memdesc:a537cda881600823ed118ee363fc45003"><td class="mdescLeft">&#160;</td><td class="mdescRight">username <br /></td></tr>
+<tr class="separator:a537cda881600823ed118ee363fc45003"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3648a4073bb1d3d7abf920afa3ce03e"><td class="memItemLeft" align="right" valign="top"><a id="ad3648a4073bb1d3d7abf920afa3ce03e"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dc4/structsim__apn.html#ad3648a4073bb1d3d7abf920afa3ce03e">password</a></td></tr>
+<tr class="memdesc:ad3648a4073bb1d3d7abf920afa3ce03e"><td class="mdescLeft">&#160;</td><td class="mdescRight">password <br /></td></tr>
+<tr class="separator:ad3648a4073bb1d3d7abf920afa3ce03e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6303daffd780e4fb1b9e21450892962a"><td class="memItemLeft" align="right" valign="top"><a id="a6303daffd780e4fb1b9e21450892962a"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dc4/structsim__apn.html#a6303daffd780e4fb1b9e21450892962a">authentication</a></td></tr>
+<tr class="memdesc:a6303daffd780e4fb1b9e21450892962a"><td class="mdescLeft">&#160;</td><td class="mdescRight">type char security protocol&#160;: PAP or CHAP <br /></td></tr>
+<tr class="separator:a6303daffd780e4fb1b9e21450892962a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e6534f6bfcb54f11498862624414572"><td class="memItemLeft" align="right" valign="top"><a id="a0e6534f6bfcb54f11498862624414572"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dc4/structsim__apn.html#a0e6534f6bfcb54f11498862624414572">apnProtocol</a></td></tr>
+<tr class="memdesc:a0e6534f6bfcb54f11498862624414572"><td class="mdescLeft">&#160;</td><td class="mdescRight">protocol to be used to access internet (ipv4 ipv6) <br /></td></tr>
+<tr class="separator:a0e6534f6bfcb54f11498862624414572"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Structure for APN configuration. </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="../../dc/d3d/structvector__.html">vector_</a></li>
+    <li class="navelem"><a class="el" href="../../da/dc4/structsim__apn.html">sim_apn</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

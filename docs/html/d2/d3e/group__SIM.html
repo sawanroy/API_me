@@ -101,56 +101,84 @@ $(document).ready(function(){initNavTree('d2/d3e/group__SIM.html','../../'); ini
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga64ee5192d08270a9670221e5dc943b37"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga64ee5192d08270a9670221e5dc943b37">unlock_sim</a> (int pincode)</td></tr>
-<tr class="separator:ga64ee5192d08270a9670221e5dc943b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga616cacaf4f3df49a065e19ec7a74fd18"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga616cacaf4f3df49a065e19ec7a74fd18">dialup_connect</a> (unsigned char phone_no[])</td></tr>
-<tr class="separator:ga616cacaf4f3df49a065e19ec7a74fd18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf5b4604d7a7338a604f59e01c3a6f658"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#gaf5b4604d7a7338a604f59e01c3a6f658">dialup_disconnect</a> ()</td></tr>
-<tr class="separator:gaf5b4604d7a7338a604f59e01c3a6f658"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf0507aace7fa16083d89f4e3da6db687"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#gaf0507aace7fa16083d89f4e3da6db687">set_ap</a> (struct <a class="el" href="../../d5/d6d/structapn.html">apn</a> setapn)</td></tr>
-<tr class="separator:gaf0507aace7fa16083d89f4e3da6db687"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga37f4ed5cec776ebac781de4d12dd4ea1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga37f4ed5cec776ebac781de4d12dd4ea1">remove_ap</a> (char *ap_name)</td></tr>
-<tr class="separator:ga37f4ed5cec776ebac781de4d12dd4ea1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga587e0c6578d46678fd31241c3664e7b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga587e0c6578d46678fd31241c3664e7b6">connect_to_internet</a> ()</td></tr>
-<tr class="separator:ga587e0c6578d46678fd31241c3664e7b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0376b90eb09742608c4bbc41eaf24a01"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga0376b90eb09742608c4bbc41eaf24a01">get_signal_strength</a> ()</td></tr>
-<tr class="separator:ga0376b90eb09742608c4bbc41eaf24a01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa44f059e1aa10df1415539ab8b218d82"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#gaa44f059e1aa10df1415539ab8b218d82">get_imsi</a> ()</td></tr>
-<tr class="separator:gaa44f059e1aa10df1415539ab8b218d82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga98296ea2949ed7e9d276bc74383137a1"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga98296ea2949ed7e9d276bc74383137a1">get_imei</a> ()</td></tr>
-<tr class="separator:ga98296ea2949ed7e9d276bc74383137a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gadb643e63a739c85e8d31f84df6ece60e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#gadb643e63a739c85e8d31f84df6ece60e">send_sms</a> (char *phone_no, char *message)</td></tr>
-<tr class="separator:gadb643e63a739c85e8d31f84df6ece60e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1323868c06f4cb5f678cc177cc76bdc3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga1323868c06f4cb5f678cc177cc76bdc3">sim_unlock</a> (int pincode)</td></tr>
+<tr class="separator:ga1323868c06f4cb5f678cc177cc76bdc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga807314014327658e1070b62cab9b9e1d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga807314014327658e1070b62cab9b9e1d">sim_deactivate</a> ()</td></tr>
+<tr class="separator:ga807314014327658e1070b62cab9b9e1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7cbd614b980b29f0d7389f17bcfba374"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga7cbd614b980b29f0d7389f17bcfba374">sim_dialup_connect</a> (unsigned char phone_no[])</td></tr>
+<tr class="separator:ga7cbd614b980b29f0d7389f17bcfba374"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7c823fad99343a0d5ed4df0fd4c7a534"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga7c823fad99343a0d5ed4df0fd4c7a534">sim_dialup_disconnect</a> ()</td></tr>
+<tr class="separator:ga7c823fad99343a0d5ed4df0fd4c7a534"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga36fe12b9d9424b0b28b5efffcfb105a8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga36fe12b9d9424b0b28b5efffcfb105a8">sim_set_ap</a> (<a class="el" href="../../da/dc4/structsim__apn.html">sim_apn</a> setapn)</td></tr>
+<tr class="separator:ga36fe12b9d9424b0b28b5efffcfb105a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab7aad1013591d3237003b5242d701a56"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#gab7aad1013591d3237003b5242d701a56">sim_list_ap</a> (<a class="el" href="../../dc/d3d/structvector__.html">vector</a> *aplist)</td></tr>
+<tr class="separator:gab7aad1013591d3237003b5242d701a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad7f9899a4998b9cea499d81d12d54962"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#gad7f9899a4998b9cea499d81d12d54962">sim_remove_ap</a> (char *ap_name)</td></tr>
+<tr class="separator:gad7f9899a4998b9cea499d81d12d54962"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga29c8c250373be013f3be524a4b27b7d1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga29c8c250373be013f3be524a4b27b7d1">sim_connect_to_internet</a> ()</td></tr>
+<tr class="separator:ga29c8c250373be013f3be524a4b27b7d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabe28a55cd384e70c83936cc65cf7f515"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#gabe28a55cd384e70c83936cc65cf7f515">sim_get_ipaddress</a> ()</td></tr>
+<tr class="separator:gabe28a55cd384e70c83936cc65cf7f515"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac054101dfd85b147cb108f27c5db5181"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#gac054101dfd85b147cb108f27c5db5181">sim_get_signal_strength</a> ()</td></tr>
+<tr class="separator:gac054101dfd85b147cb108f27c5db5181"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga909a3fd7fdf1830377d010b5492e120e"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga909a3fd7fdf1830377d010b5492e120e">sim_get_imsi</a> ()</td></tr>
+<tr class="separator:ga909a3fd7fdf1830377d010b5492e120e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac28427e0e1bc22600d7b640fa6736867"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#gac28427e0e1bc22600d7b640fa6736867">sim_get_imei</a> ()</td></tr>
+<tr class="separator:gac28427e0e1bc22600d7b640fa6736867"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga67c5bb5ca6c5a36481bbbaa6f4259a84"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d3e/group__SIM.html#ga67c5bb5ca6c5a36481bbbaa6f4259a84">sim_send_sms</a> (char *phoneno, char *message)</td></tr>
+<tr class="separator:ga67c5bb5ca6c5a36481bbbaa6f4259a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Additional documention for group 'SIM' </p>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga587e0c6578d46678fd31241c3664e7b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga587e0c6578d46678fd31241c3664e7b6">&#9670;&nbsp;</a></span>connect_to_internet()</h2>
+<a id="ga29c8c250373be013f3be524a4b27b7d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga29c8c250373be013f3be524a4b27b7d1">&#9670;&nbsp;</a></span>sim_connect_to_internet()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool connect_to_internet </td>
+          <td class="memname">bool sim_connect_to_internet </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Connect to internet </p><dl class="section return"><dt>Returns</dt><dd>true when success and false when failure. </dd></dl>
+<p>Connect to internet </p><dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d2/d3e/group__SIM.html#gabe28a55cd384e70c83936cc65cf7f515">sim_get_ipaddress()</a>.</p>
 
 </div>
 </div>
-<a id="ga616cacaf4f3df49a065e19ec7a74fd18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga616cacaf4f3df49a065e19ec7a74fd18">&#9670;&nbsp;</a></span>dialup_connect()</h2>
+<a id="ga807314014327658e1070b62cab9b9e1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga807314014327658e1070b62cab9b9e1d">&#9670;&nbsp;</a></span>sim_deactivate()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool dialup_connect </td>
+          <td class="memname">bool sim_deactivate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Deactivate sim by powering the module off </p><dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
+
+<p class="reference">References <a class="el" href="../../de/d2b/group__GPIO.html#ga92b062bb231448c3005d795ba38b39bb">write_value_to_output_gpio()</a>.</p>
+
+</div>
+</div>
+<a id="ga7cbd614b980b29f0d7389f17bcfba374"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7cbd614b980b29f0d7389f17bcfba374">&#9670;&nbsp;</a></span>sim_dialup_connect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool sim_dialup_connect </td>
           <td>(</td>
           <td class="paramtype">unsigned char&#160;</td>
           <td class="paramname"><em>phone_no</em>[]</td><td>)</td>
@@ -164,36 +192,36 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true when success and false when failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
 
 </div>
 </div>
-<a id="gaf5b4604d7a7338a604f59e01c3a6f658"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaf5b4604d7a7338a604f59e01c3a6f658">&#9670;&nbsp;</a></span>dialup_disconnect()</h2>
+<a id="ga7c823fad99343a0d5ed4df0fd4c7a534"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7c823fad99343a0d5ed4df0fd4c7a534">&#9670;&nbsp;</a></span>sim_dialup_disconnect()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool dialup_disconnect </td>
+          <td class="memname">bool sim_dialup_disconnect </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Disconnect from telephone network </p><dl class="section return"><dt>Returns</dt><dd>true when success and false when failure. </dd></dl>
+<p>Disconnect from telephone network </p><dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
 
 </div>
 </div>
-<a id="ga98296ea2949ed7e9d276bc74383137a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga98296ea2949ed7e9d276bc74383137a1">&#9670;&nbsp;</a></span>get_imei()</h2>
+<a id="gac28427e0e1bc22600d7b640fa6736867"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac28427e0e1bc22600d7b640fa6736867">&#9670;&nbsp;</a></span>sim_get_imei()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char* get_imei </td>
+          <td class="memname">char* sim_get_imei </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -204,14 +232,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gaa44f059e1aa10df1415539ab8b218d82"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaa44f059e1aa10df1415539ab8b218d82">&#9670;&nbsp;</a></span>get_imsi()</h2>
+<a id="ga909a3fd7fdf1830377d010b5492e120e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga909a3fd7fdf1830377d010b5492e120e">&#9670;&nbsp;</a></span>sim_get_imsi()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char* get_imsi </td>
+          <td class="memname">char* sim_get_imsi </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -222,32 +250,79 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga0376b90eb09742608c4bbc41eaf24a01"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga0376b90eb09742608c4bbc41eaf24a01">&#9670;&nbsp;</a></span>get_signal_strength()</h2>
+<a id="gabe28a55cd384e70c83936cc65cf7f515"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabe28a55cd384e70c83936cc65cf7f515">&#9670;&nbsp;</a></span>sim_get_ipaddress()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned int get_signal_strength </td>
+          <td class="memname">char* sim_get_ipaddress </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the strengh of the signal (in dbm) </p><dl class="section return"><dt>Returns</dt><dd>single strength in dbm </dd></dl>
+<p>Get ip address </p><dl class="section return"><dt>Returns</dt><dd>ip address </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/d3e/group__SIM.html#ga29c8c250373be013f3be524a4b27b7d1">sim_connect_to_internet()</a>.</p>
 
 </div>
 </div>
-<a id="ga37f4ed5cec776ebac781de4d12dd4ea1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga37f4ed5cec776ebac781de4d12dd4ea1">&#9670;&nbsp;</a></span>remove_ap()</h2>
+<a id="gac054101dfd85b147cb108f27c5db5181"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac054101dfd85b147cb108f27c5db5181">&#9670;&nbsp;</a></span>sim_get_signal_strength()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool remove_ap </td>
+          <td class="memname">int sim_get_signal_strength </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the strengh of the signal (in dbm) </p><dl class="section return"><dt>Returns</dt><dd>signal strength in dbm </dd></dl>
+
+</div>
+</div>
+<a id="gab7aad1013591d3237003b5242d701a56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab7aad1013591d3237003b5242d701a56">&#9670;&nbsp;</a></span>sim_list_ap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool sim_list_ap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../dc/d3d/structvector__.html">vector</a> *&#160;</td>
+          <td class="paramname"><em>aplist</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>list already configured AP </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">vector</td><td>typedef structure for list of <a class="el" href="../../da/dc4/structsim__apn.html" title="Structure for APN configuration.">sim_apn</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
+
+<p class="reference">References <a class="el" href="../../da/dc4/structsim__apn.html#ae7900fdb27b037735d004497ff5263da">sim_apn::apn_name</a>, <a class="el" href="../../da/dc4/structsim__apn.html#a0e6534f6bfcb54f11498862624414572">sim_apn::apnProtocol</a>, <a class="el" href="../../da/dc4/structsim__apn.html#a6303daffd780e4fb1b9e21450892962a">sim_apn::authentication</a>, <a class="el" href="../../da/dc4/structsim__apn.html#ad3648a4073bb1d3d7abf920afa3ce03e">sim_apn::password</a>, and <a class="el" href="../../da/dc4/structsim__apn.html#a537cda881600823ed118ee363fc45003">sim_apn::username</a>.</p>
+
+</div>
+</div>
+<a id="gad7f9899a4998b9cea499d81d12d54962"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad7f9899a4998b9cea499d81d12d54962">&#9670;&nbsp;</a></span>sim_remove_ap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool sim_remove_ap </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
           <td class="paramname"><em>ap_name</em></td><td>)</td>
@@ -261,21 +336,21 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true when success and false when failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
 
 </div>
 </div>
-<a id="gadb643e63a739c85e8d31f84df6ece60e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gadb643e63a739c85e8d31f84df6ece60e">&#9670;&nbsp;</a></span>send_sms()</h2>
+<a id="ga67c5bb5ca6c5a36481bbbaa6f4259a84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga67c5bb5ca6c5a36481bbbaa6f4259a84">&#9670;&nbsp;</a></span>sim_send_sms()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool send_sms </td>
+          <td class="memname">bool sim_send_sms </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>phone_no</em>, </td>
+          <td class="paramname"><em>phoneno</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -297,45 +372,45 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true and false </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
 
 </div>
 </div>
-<a id="gaf0507aace7fa16083d89f4e3da6db687"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaf0507aace7fa16083d89f4e3da6db687">&#9670;&nbsp;</a></span>set_ap()</h2>
+<a id="ga36fe12b9d9424b0b28b5efffcfb105a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga36fe12b9d9424b0b28b5efffcfb105a8">&#9670;&nbsp;</a></span>sim_set_ap()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool set_ap </td>
+          <td class="memname">bool sim_set_ap </td>
           <td>(</td>
-          <td class="paramtype">struct <a class="el" href="../../d5/d6d/structapn.html">apn</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="../../da/dc4/structsim__apn.html">sim_apn</a>&#160;</td>
           <td class="paramname"><em>setapn</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Create or update an AP (identified by its name) </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Create or update an AP (identified by its name) &lt; Max 16 APs can be configured at a time &gt; </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">apn</td><td>struct type argument </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true when success and false when failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d5/d6d/structapn.html#adf5c30fc02e75f27fda8b06b837dfc85">apn::apn_name</a>.</p>
+<p class="reference">References <a class="el" href="../../da/dc4/structsim__apn.html#ae7900fdb27b037735d004497ff5263da">sim_apn::apn_name</a>, <a class="el" href="../../da/dc4/structsim__apn.html#a0e6534f6bfcb54f11498862624414572">sim_apn::apnProtocol</a>, <a class="el" href="../../da/dc4/structsim__apn.html#a6303daffd780e4fb1b9e21450892962a">sim_apn::authentication</a>, <a class="el" href="../../da/dc4/structsim__apn.html#ad3648a4073bb1d3d7abf920afa3ce03e">sim_apn::password</a>, and <a class="el" href="../../da/dc4/structsim__apn.html#a537cda881600823ed118ee363fc45003">sim_apn::username</a>.</p>
 
 </div>
 </div>
-<a id="ga64ee5192d08270a9670221e5dc943b37"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga64ee5192d08270a9670221e5dc943b37">&#9670;&nbsp;</a></span>unlock_sim()</h2>
+<a id="ga1323868c06f4cb5f678cc177cc76bdc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1323868c06f4cb5f678cc177cc76bdc3">&#9670;&nbsp;</a></span>sim_unlock()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool unlock_sim </td>
+          <td class="memname">bool sim_unlock </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>pincode</em></td><td>)</td>
@@ -345,12 +420,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Activate the sim card by using sim pin </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pincode</td><td>integer type variable <br  />
- </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pincode</td><td>integer type variable </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true when success and false when failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
 
 </div>
 </div>

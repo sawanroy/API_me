@@ -1,6 +1,5 @@
 var annotated_dup =
 [
-    [ "apn", "d5/d6d/structapn.html", "d5/d6d/structapn" ],
     [ "authpin", "de/d5b/structauthpin.html", "de/d5b/structauthpin" ],
     [ "bluetooth_devices", "dd/d0d/structbluetooth__devices.html", "dd/d0d/structbluetooth__devices" ],
     [ "bluetoothconfig", "d5/d63/structbluetoothconfig.html", "d5/d63/structbluetoothconfig" ],
@@ -28,7 +27,7 @@ var annotated_dup =
     [ "iw_thrspy", "d2/d71/structiw__thrspy.html", "d2/d71/structiw__thrspy" ],
     [ "iwreq", "d6/d28/structiwreq.html", "d6/d28/structiwreq" ],
     [ "iwreq_data", "de/dc7/unioniwreq__data.html", "de/dc7/unioniwreq__data" ],
-    [ "list_apn", "d8/de1/structlist__apn.html", "d8/de1/structlist__apn" ],
+    [ "sim_apn", "da/dc4/structsim__apn.html", "da/dc4/structsim__apn" ],
     [ "stream_descr", "df/d2c/structstream__descr.html", "df/d2c/structstream__descr" ],
     [ "vector_", "dc/d3d/structvector__.html", "dc/d3d/structvector__" ],
     [ "wifi_info", "dd/d8b/structwifi__info.html", "dd/d8b/structwifi__info" ],
