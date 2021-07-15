@@ -32,15 +32,13 @@
 
 #define bsize 256
 
-int fd ;
-unsigned char *buf;
-int size;
-
 
 
 /*Internal function*/
 int sim_open_port()
 {
+    int fd;
+
     fd = usb_open(SIM_PORT_AT, SIM_Baud_Rate);
     if(fd < 0)
     {
@@ -72,7 +70,7 @@ bool runCommand(const char *cmd, char *output, int size)
         printf("opening pipe failed\n");
         return false;
     }
-    while(NULL != fread(output, size , sizeof(char), fp))
+    while(fread(output, size , sizeof(char), fp) != 0)
     {
     }
     if(!feof(fp))
@@ -173,12 +171,8 @@ bool sim_deactivate()
     if(write_value_to_output_gpio(3, false))
     {
         usleep(500000); //delay recommended in datasheet
-        if(write_value_to_output_gpio(3, true))
-        {
-            return true;
-        }
+        return (write_value_to_output_gpio(3, true));
     }
-    
     else 
     {
         return false;
@@ -287,7 +281,6 @@ bool sim_set_ap(sim_apn setapn)
     unsigned char cmd[bsize];
     unsigned char ret[bsize];
     int len = sizeof(cmd);
-    int count;
     int proto = 1;
     int auth = 0;
     int cid = 0;
@@ -329,7 +322,7 @@ bool sim_set_ap(sim_apn setapn)
 
         tcflush(fd, TCIOFLUSH);
 
-        sprintf(cmd2, "AT+QICSGP=%d\r\n", count);
+        sprintf((char *)cmd2, "AT+QICSGP=%d\r\n", count);
 
         if(usb_write(fd, cmd2, sizeof(cmd2)))
         {
@@ -345,7 +338,7 @@ bool sim_set_ap(sim_apn setapn)
                     sim_close_port(fd);
                     return false;
                 }
-                char *tmp = strtok(ret2, "\n");
+                char *tmp = strtok((char *)ret2, "\n");
                 if(tmp != NULL)
                 {
                     tmp = strtok(NULL, "\n");
@@ -405,7 +398,7 @@ bool sim_set_ap(sim_apn setapn)
     
     if(cid)
     {
-        sprintf(cmd, "AT+QICSGP=%d,%d,\"%s\",\"%s\",\"%s\",%d\r\n", cid, proto, setapn.apn_name, setapn.username, setapn.password, auth);
+        sprintf((char *)cmd, "AT+QICSGP=%d,%d,\"%s\",\"%s\",\"%s\",%d\r\n", cid, proto, setapn.apn_name, setapn.username, setapn.password, auth);
 
         if(usb_write(fd, cmd, len))
         {
@@ -422,9 +415,9 @@ bool sim_set_ap(sim_apn setapn)
                     return false;
                 } 
 
-                unsigned char cmdact[20];
+                unsigned char cmdact[100];
                 unsigned char retact[bsize];
-                sprintf(cmdact, "AT+CGACT=1,%d\r\n", cid);
+                sprintf((char *)cmdact, "AT+CGACT=1,%d\r\n", cid);
                 if(usb_write(fd, cmdact, sizeof(cmdact)))
                 {
                     if(usb_read(fd, retact, bsize) < 0)
@@ -471,7 +464,6 @@ bool sim_set_ap(sim_apn setapn)
 bool sim_list_ap(vector *aplist)
 {   
     char datafield[5][255];
-    int id = 0;
     int fd;
     bool valid = true;
 
@@ -492,7 +484,7 @@ bool sim_list_ap(vector *aplist)
 
         tcflush(fd, TCIOFLUSH);
 
-        sprintf(cmd2, "AT+QICSGP=%d\r\n", count);
+        sprintf((char *)cmd2, "AT+QICSGP=%d\r\n", count);
 
         if(usb_write(fd, cmd2, sizeof(cmd2)))
         {
@@ -508,7 +500,7 @@ bool sim_list_ap(vector *aplist)
                     sim_close_port(fd);
                     return false;
                 }
-                char *tmp = strtok(ret2, "\n");
+                char *tmp = strtok((char *)ret2, "\n");
                 if(tmp != NULL)
                 {
                     tmp = strtok(NULL, "\n");
@@ -612,9 +604,7 @@ bool sim_remove_ap(char *ap_name)
     unsigned char ret[bsize];
     int len = sizeof(cmd);
     int cid = 0;
-    int count;
     int fd;
-    bool status = true;
 
     if(!sim_card_available())
     {
@@ -635,7 +625,7 @@ bool sim_remove_ap(char *ap_name)
 
         tcflush(fd, TCIOFLUSH);
 
-        sprintf(cmd2, "AT+QICSGP=%d\r\n", count);
+        sprintf((char *)cmd2, "AT+QICSGP=%d\r\n", count);
 
         if(usb_write(fd, cmd2, sizeof(cmd2)))
         {
@@ -651,7 +641,7 @@ bool sim_remove_ap(char *ap_name)
                     sim_close_port(fd);
                     return false;
                 }
-                char *tmp = strtok(ret2, "\n");
+                char *tmp = strtok((char *)ret2, "\n");
                 if(tmp != NULL)
                 {
                     tmp = strtok(NULL, "\n");
@@ -706,7 +696,7 @@ bool sim_remove_ap(char *ap_name)
 
     if(cid)
     {
-        sprintf(cmd, "AT+CGDCONT=%d\r\n", cid);
+        sprintf((char *)cmd, "AT+CGDCONT=%d\r\n", cid);
 
         if(usb_write(fd, cmd, len))
         {
@@ -763,7 +753,7 @@ bool sim_connect_to_internet()
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
-        if((size = usb_read(fd, ret, bsize)) < 0)
+        if((usb_read(fd, ret, bsize)) < 0)
         {   
             sim_close_port(fd);
             printf("log1\n");
@@ -843,7 +833,7 @@ int sim_get_signal_strength()
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
-        if((size = usb_read(fd, ret, bsize)) < 0)
+        if((usb_read(fd, ret, bsize)) < 0)
         {
             sim_close_port(fd);
             return dbm;
@@ -898,7 +888,7 @@ char* sim_get_imsi()
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
-        if((size = usb_read(fd, ret, bsize)) < 0)
+        if((usb_read(fd, ret, bsize)) < 0)
         {
             sim_close_port(fd);
             strcpy(imsi, "");
@@ -951,7 +941,7 @@ char* sim_get_imei()
     if(usb_write(fd, cmd, len))
     {
         tcflush(fd, TCIOFLUSH);
-        if((size = usb_read(fd, ret, bsize)) < 0)
+        if((usb_read(fd, ret, bsize)) < 0)
         {
             sim_close_port(fd);
             strcpy(imei, "");
@@ -1015,7 +1005,7 @@ bool sim_send_sms(char *phoneno, char *message)
         tcflush(fd, TCIOFLUSH);
         if(usb_write(fd, (unsigned char *)cmd[i], len[i]))
         {
-            if((size = usb_read(fd, ret, bsize)) < 0)
+            if((usb_read(fd, ret, bsize)) < 0)
             {
                 sim_close_port(fd);
                 return false;
@@ -1040,7 +1030,7 @@ bool sim_send_sms(char *phoneno, char *message)
 
     if(usb_write(fd, (unsigned char *)msg, lenmsg))
     {
-        if((size = usb_read(fd, ret, bsize)) < 0)
+        if((usb_read(fd, ret, bsize)) < 0)
         {
             sim_close_port(fd);
             return false;
