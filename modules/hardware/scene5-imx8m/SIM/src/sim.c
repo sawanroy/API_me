@@ -164,7 +164,10 @@ bool sim_unlock(int pincode)
 
 
 
-/*Deactivate sim*/
+/*
+bool sim_deactivate()
+This function power off the gsm module
+*/
 bool sim_deactivate()
 {
     //Reset pin is accesible on hardware side.
@@ -181,7 +184,7 @@ bool sim_deactivate()
 
 
 /*
-Dialup_connect(int pincode)
+bool sim_dialup_connect(unsigned char phone_no[])
 This function tries to connect to telephone network
 */
 bool sim_dialup_connect(unsigned char phone_no[])
@@ -227,7 +230,7 @@ bool sim_dialup_connect(unsigned char phone_no[])
 
 
 /*
-Dialup_disconnect()
+bool sim_dialup_disconnect()
 This function disconnect from telephone network
 */
 bool sim_dialup_disconnect()
@@ -272,7 +275,7 @@ bool sim_dialup_disconnect()
 
 
 /*
-set_AP(struct apn setapn)
+sim_set_ap(struct apn setapn)
 This function creates or update an AP (identified by its name)
 */
 bool sim_set_ap(sim_apn setapn)
@@ -461,7 +464,10 @@ bool sim_set_ap(sim_apn setapn)
 
 
 
-/*list configgured AP*/
+/*
+bool sim_list_ap(vector *aplist)
+This function gets the list of configured APs.
+*/
 bool sim_list_ap(vector *aplist)
 {   
     char datafield[5][255];
@@ -597,7 +603,7 @@ bool sim_list_ap(vector *aplist)
 
 
 /*
-remove_ap(char* ap_name)
+bool sim_remove_ap(char* ap_name)
 This function remove an AP from the list (identified by its name)
 */
 bool sim_remove_ap(char *ap_name)
@@ -737,7 +743,7 @@ bool sim_remove_ap(char *ap_name)
 
 
 /*
-bool Connect_to_internet()
+bool sim_connect_to_internet()
 This function tries to connect to internet
 */
 bool sim_connect_to_internet()
@@ -892,7 +898,7 @@ int sim_get_signal_strength()
 
 
 /*
-char* get_imsi()
+char* sim_get_imsi()
 This function gets the IMSI
 */
 char* sim_get_imsi()
@@ -949,7 +955,7 @@ char* sim_get_imsi()
 
 
 /*
-char* get_imei()
+char* sim_get_imei()
 This function gets the IMEI
 */
 char* sim_get_imei()
@@ -1001,8 +1007,8 @@ char* sim_get_imei()
 
 
 /*
-    send_sms(char* phone_no, char* message)
-    This function send the sms.
+sim_send_sms(char* phone_no, char* message)
+This function send the sms.
  */
 bool sim_send_sms(char *phoneno, char *message)
 {

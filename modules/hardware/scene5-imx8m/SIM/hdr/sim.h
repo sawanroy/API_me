@@ -48,13 +48,6 @@ typedef struct
     char *apnProtocol;                       /**<	protocol to be used to access internet (ipv4 ipv6) */
 } sim_apn;
 
- /**
-  * Structure for List if APN
- */
-struct list_apn
-{
-    char name[10];
-};
 
 
 /*! \addtogroup SIM
@@ -66,31 +59,37 @@ struct list_apn
 /*!
   Activate the sim card by using sim pin
   @param[in] pincode integer type variable
-  @return true when success and false when failure.
+  @return status of function (ture or false)
 */
 bool sim_unlock(int pincode);
 
 
+/*!
+  Deactivate sim by powering the module off
+  @return status of function (ture or false)
+*/
 bool sim_deactivate();
+
+
 /*!
   Connect to telephone network to dial
   @param[in] Phone_no unsigned char type variable
-  @return true when success and false when failure.
+  @return status of function (ture or false)
 */
 bool sim_dialup_connect(unsigned char phone_no[]);
 
 
 /*!
   Disconnect from telephone network
-  @return true when success and false when failure.
+  @return status of function (ture or false)
 */
 bool sim_dialup_disconnect();
 
 
 /*!
-  Create or update an AP (identified by its name)
+  Create or update an AP (identified by its name) < Max 16 APs can be configured at a time >
   @param[in] apn struct type argument
-  @return true when success and false when failure.
+  @return status of function (ture or false)
 */
 bool sim_set_ap(sim_apn setapn);
 
@@ -98,7 +97,7 @@ bool sim_set_ap(sim_apn setapn);
 /*!
   list already configured AP
   @param[out] vector typedef structure for list of sim_apn.
-  @return true when success and false when failure.
+  @return status of function (ture or false)
 */
 bool sim_list_ap(vector *aplist);
 
@@ -106,21 +105,21 @@ bool sim_list_ap(vector *aplist);
 /*!
   Remove an AP from the list (identified by its name)
   @param ap_name charater type variable
-  @return true when success and false when failure.
+  @return status of function (ture or false)
 */
 bool sim_remove_ap(char* ap_name);
 
 
 /*!
   Connect to internet
-  @return true when success and false when failure.
+  @return status of function (ture or false)
 */
 bool sim_connect_to_internet();
 
 
 /*!
   Get ip address
-  @return ip address.
+  @return ip address
 */
 char* sim_get_ipaddress();
 
@@ -150,7 +149,7 @@ char* sim_get_imei();
   Send the SMS
   @param[in] message character type variable.
   @param[in] phone_no character type variable.
-  @return true and false
+  @return status of function (ture or false)
 
 */
 bool sim_send_sms(char* phoneno, char* message);
