@@ -22,6 +22,7 @@
 #include <stdbool.h>
 #include <vector.h>
 
+
 /**
  * Enable/Disable logs
 */
@@ -79,6 +80,7 @@ struct list_apn
 bool sim_unlock(int pincode);
 
 
+bool sim_deactivate();
 /*!
   Connect to telephone network to dial
   @param[in] Phone_no unsigned char type variable

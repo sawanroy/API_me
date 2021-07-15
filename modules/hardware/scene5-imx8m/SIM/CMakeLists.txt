@@ -10,6 +10,7 @@ target_include_directories(
     ${PROJECT_NAME}
     PUBLIC
     hdr
+    GPIO
     PRIVATE
     USB
 )
@@ -17,4 +18,5 @@ target_include_directories(
 target_link_libraries(
     ${PROJECT_NAME}
     USB
+    GPIO
 )

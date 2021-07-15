@@ -27,6 +27,7 @@
 #include <sim.h>
 #include <usb.h>
 #include <string.h>
+#include <gpio.h>
 
 
 #define bsize 256
@@ -163,6 +164,26 @@ bool sim_unlock(int pincode)
     }
 }
 
+
+
+/*Deactivate sim*/
+bool sim_deactivate()
+{
+    //Reset pin is accesible on hardware side.
+    if(write_value_to_output_gpio(3, false))
+    {
+        usleep(500000); //delay recommended in datasheet
+        if(write_value_to_output_gpio(3, true))
+        {
+            return true;
+        }
+    }
+    
+    else 
+    {
+        return false;
+    }
+}
 
 
 /*
@@ -569,6 +590,11 @@ bool sim_remove_ap(char *ap_name)
     int fd;
     bool status = true;
 
+    if(!sim_card_available())
+    {
+        return false;
+    }
+    
     fd = sim_open_port();
     if(fd < 0)
     {
