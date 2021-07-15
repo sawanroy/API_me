@@ -421,8 +421,34 @@ bool sim_set_ap(sim_apn setapn)
                     sim_close_port(fd);
                     return false;
                 } 
-                sim_close_port(fd);
-                return true;
+
+                unsigned char cmdact[20];
+                unsigned char retact[bsize];
+                sprintf(cmdact, "AT+CGACT=1,%d\r\n", cid);
+                if(usb_write(fd, cmdact, sizeof(cmdact)))
+                {
+                    if(usb_read(fd, retact, bsize) < 0)
+                    {
+                        sim_close_port(fd);
+                        return false;
+                    }
+                    else
+                    {
+                        if(strstr((const char *)retact, "ERROR") != NULL)
+                        {
+                            sim_close_port(fd);
+                            return false;
+                        } 
+
+                        sim_close_port(fd);
+                        return true;
+                    }
+                }
+                else
+                {
+                    sim_close_port(fd);
+                    return false;
+                }
             }
         }
         else
@@ -594,7 +620,7 @@ bool sim_remove_ap(char *ap_name)
     {
         return false;
     }
-    
+
     fd = sim_open_port();
     if(fd < 0)
     {
