@@ -315,6 +315,7 @@ bool sim_set_ap(sim_apn setapn)
         return false;
     }
 
+    //check if apn already exists; only 16 apn can be configured at a time.
     for(int count = 1; count <= 16; count++)
     {
         unsigned char ret2[bsize];
@@ -484,6 +485,7 @@ bool sim_list_ap(vector *aplist)
 
         tcflush(fd, TCIOFLUSH);
 
+        //Get the datafields using below AT command
         sprintf((char *)cmd2, "AT+QICSGP=%d\r\n", count);
 
         if(usb_write(fd, cmd2, sizeof(cmd2)))
@@ -543,6 +545,7 @@ bool sim_list_ap(vector *aplist)
 
                                 if(valid)
                                 {
+                                    //create structure and add to list
                                     sim_apn *getapn = (sim_apn *)malloc(sizeof(sim_apn));
                                     getapn->apnProtocol = strdup(datafield[0]);
                                     getapn->apn_name = strdup(datafield[1]);
@@ -618,6 +621,7 @@ bool sim_remove_ap(char *ap_name)
         return false;
     }
 
+    //check if apn name mathches in the apn list
     for(int count = 1; count <= 16; count++)
     {
         unsigned char ret2[bsize];
@@ -676,7 +680,7 @@ bool sim_remove_ap(char *ap_name)
                                     }
                                 }
 
-                                if(strcmp(ap_name, datafield[1]) == 0)
+                                if(strcmp(ap_name, datafield[1]) == 0) //apn name matched
                                 {
                                     cid = count;
                                     break;
@@ -694,6 +698,7 @@ bool sim_remove_ap(char *ap_name)
         }
     }
 
+    //delete the required apn
     if(cid)
     {
         sprintf((char *)cmd, "AT+CGDCONT=%d\r\n", cid);
@@ -750,6 +755,10 @@ bool sim_connect_to_internet()
         return false;
     }
 
+    /*run the AT$QCRMCALL at command
+    * if success, get ip by dhclient command. Further check if ip address alloted or not.
+    * if at command fails, check if already connected by reading ip
+    */
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
@@ -830,6 +839,13 @@ int sim_get_signal_strength()
     int fd;
 
     fd = sim_open_port();
+    if(fd < 0)
+    {
+		sim_close_port(fd);
+        return false;
+    }
+
+    /*get the rssi data from AT+CSQ*/
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
@@ -885,6 +901,12 @@ char* sim_get_imsi()
     int fd;
 
     fd = sim_open_port();
+    if(fd < 0)
+    {
+		sim_close_port(fd);
+        return false;
+    }
+
     tcflush(fd, TCIOFLUSH);
     if(usb_write(fd, cmd, len))
     {
@@ -936,6 +958,12 @@ char* sim_get_imei()
     int fd;
 
     fd = sim_open_port();
+    if(fd < 0)
+    {
+		sim_close_port(fd);
+        return false;
+    }
+
     tcflush(fd, TCIOFLUSH);
 
     if(usb_write(fd, cmd, len))
@@ -998,8 +1026,15 @@ bool sim_send_sms(char *phoneno, char *message)
     sprintf(msg, "%s\x1A", message); //message string should be max of 160 chars
 
     fd = sim_open_port();
+    if(fd < 0)
+    {
+		sim_close_port(fd);
+        return false;
+    }
+
     tcflush(fd, TCIOFLUSH);
 
+    /*configure the sms setting*/
     for(int i = 0; i < 3; i++)
     {
         tcflush(fd, TCIOFLUSH);
@@ -1028,6 +1063,7 @@ bool sim_send_sms(char *phoneno, char *message)
         }
     }
 
+    /*enter the message to be send*/
     if(usb_write(fd, (unsigned char *)msg, lenmsg))
     {
         if((usb_read(fd, ret, bsize)) < 0)
