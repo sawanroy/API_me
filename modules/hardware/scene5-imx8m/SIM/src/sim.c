@@ -765,7 +765,6 @@ bool sim_connect_to_internet()
         if((usb_read(fd, ret, bsize)) < 0)
         {   
             sim_close_port(fd);
-            printf("log1\n");
             return false;
         }
         else
@@ -775,9 +774,11 @@ bool sim_connect_to_internet()
 				ip = sim_get_ipaddress();
 				if(strcmp(ip, "") == 0 || strstr(ip, "ERROR") != NULL)
 				{
+                    free(ip);
 					sim_close_port(fd);
             		return false;
 				}
+                free(ip);
 			}
 			
             sprintf((char *)cmd, "dhclient -i eth1");
@@ -789,10 +790,12 @@ bool sim_connect_to_internet()
             ip = sim_get_ipaddress();
             if(strcmp(ip, "") == 0 || strstr(ip, "ERROR") != NULL)
             {
+                free(ip);
                 sim_close_port(fd);
                 return false;
             }
 
+            free(ip);
             sim_close_port(fd);
             return true;
         }
@@ -930,7 +933,7 @@ char* sim_get_imsi()
             {
                 tmp = strtok(NULL, "\n");
             }
-            imsi = strdup(tmp);
+            imsi = strcpy(imsi, tmp);
             sim_close_port(fd);
             return imsi;
         }
@@ -982,7 +985,7 @@ char* sim_get_imei()
             {
                 tmp = strtok(NULL, "\n");
             }
-            imei = strdup(tmp);
+            imei = strcpy(imei, tmp);
             sim_close_port(fd);
             return imei;
         }
