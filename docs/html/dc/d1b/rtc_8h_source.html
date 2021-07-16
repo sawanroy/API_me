@@ -97,21 +97,29 @@ $(document).ready(function(){initNavTree('dc/d1b/rtc_8h_source.html','../../'); 
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#ifndef rtc_h__</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#define rtc_h__</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;/usr/include/linux/rtc.h&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span> default_rtc[] = <span class="stringliteral">&quot;/dev/rtc0&quot;</span>;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keywordtype">int</span> set_time(<span class="keyword">struct</span> rtc_time rtc_tm);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">struct </span>rtc_time get_time();</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">void</span> set_Alarm(<span class="keyword">struct</span> rtc_time time);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#ifndef rtc_h__</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#define rtc_h__</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;linux/rtc.h&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../d7/d44/group__RTC.html#gaba1d6718d5c82ef1f9c1c38b4b70ddd1">set_time</a>(<span class="keyword">struct</span> rtc_time rtc_tm);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;int64_t <a class="code" href="../../d7/d44/group__RTC.html#ga1e6ba2a4611ae3949ea794171404fc0b">get_time</a>();</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../d7/d44/group__RTC.html#ga3fe6ba41f46fc257352ba8f481645dd2">set_alarm</a>(<span class="keyword">struct</span> rtc_time rtc_tm);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="agroup__RS485_html_gae86c0d0ee90cc7ee9f6b3b27073b6e55"><div class="ttname"><a href="../../d1/dad/group__RS485.html#gae86c0d0ee90cc7ee9f6b3b27073b6e55">rs485_open_port</a></div><div class="ttdeci">int rs485_open_port(int portnumber, int baudrate, bool parity, int dataBits, int stopBits)</div><div class="ttdef"><b>Definition:</b> rs485.c:41</div></div>
 <div class="ttc" id="agroup__RS485_html_ga333f150757686291cda9834d74c99595"><div class="ttname"><a href="../../d1/dad/group__RS485.html#ga333f150757686291cda9834d74c99595">rs485_write_data</a></div><div class="ttdeci">bool rs485_write_data(int filedescriptor, unsigned char *RS485_buf, int size)</div><div class="ttdef"><b>Definition:</b> rs485.c:88</div></div>
+<div class="ttc" id="agroup__RTC_html_ga1e6ba2a4611ae3949ea794171404fc0b"><div class="ttname"><a href="../../d7/d44/group__RTC.html#ga1e6ba2a4611ae3949ea794171404fc0b">get_time</a></div><div class="ttdeci">int64_t get_time()</div><div class="ttdef"><b>Definition:</b> rtc.c:49</div></div>
+<div class="ttc" id="agroup__RTC_html_gaba1d6718d5c82ef1f9c1c38b4b70ddd1"><div class="ttname"><a href="../../d7/d44/group__RTC.html#gaba1d6718d5c82ef1f9c1c38b4b70ddd1">set_time</a></div><div class="ttdeci">bool set_time(struct rtc_time rtc_tm)</div><div class="ttdef"><b>Definition:</b> rtc.c:22</div></div>
+<div class="ttc" id="agroup__RTC_html_ga3fe6ba41f46fc257352ba8f481645dd2"><div class="ttname"><a href="../../d7/d44/group__RTC.html#ga3fe6ba41f46fc257352ba8f481645dd2">set_alarm</a></div><div class="ttdeci">bool set_alarm(struct rtc_time rtc_tm)</div><div class="ttdef"><b>Definition:</b> rtc.c:88</div></div>
 <div class="ttc" id="agroup__RS485_html_ga847f93f747d23608201e131c1b16b650"><div class="ttname"><a href="../../d1/dad/group__RS485.html#ga847f93f747d23608201e131c1b16b650">rs485_close_port</a></div><div class="ttdeci">bool rs485_close_port(int filedescriptor)</div><div class="ttdef"><b>Definition:</b> rs485.c:115</div></div>
 <div class="ttc" id="agroup__RS485_html_ga569c605af16bf28bff2f8d56a118b899"><div class="ttname"><a href="../../d1/dad/group__RS485.html#ga569c605af16bf28bff2f8d56a118b899">rs485_read_data</a></div><div class="ttdeci">int rs485_read_data(int filedescriptor, unsigned char *buf, int size, int Timeout)</div><div class="ttdef"><b>Definition:</b> rs485.c:64</div></div>
 <!-- start footer part -->
