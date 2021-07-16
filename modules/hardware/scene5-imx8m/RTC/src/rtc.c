@@ -53,7 +53,7 @@ int64_t get_time()
     struct tm t;
     int fd;
     fd = open("/dev/rtc0", O_RDWR);
-    if (fd < 0)
+    if(fd < 0)
     {
         return -1;
     }
@@ -90,7 +90,7 @@ bool set_alarm(struct rtc_time rtc_tm)
     int fd;
     fd = open("/dev/rtc0", O_RDWR);
     
-    if (fd < 0)
+    if(fd < 0)
     {
         return false;
     }
