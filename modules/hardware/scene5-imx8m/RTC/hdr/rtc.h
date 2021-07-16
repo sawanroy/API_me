@@ -1,9 +1,19 @@
+/**
+ * @file 
+ * @brief API refrence for RTC
+*/
+
 
 #ifndef rtc_h__
 #define rtc_h__
 
+/*! \addtogroup RTC
+	Additional documentation for group 'RTC'
+      @{
+*/
 #include <linux/rtc.h>
 #include <stdbool.h>
+
 
 /*!
 	Set the RTC time
@@ -28,4 +38,5 @@ int64_t get_time();
 */
 bool set_alarm(struct rtc_time rtc_tm);
 
+/*! @}*/  
 #endif
