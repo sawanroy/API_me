@@ -13,6 +13,12 @@
 
 int retval, irqcount = 0;
 
+
+
+/*
+    int set_time(struct rtc_time time)
+    Set the timestamp
+*/
 int set_time(struct rtc_time time)
 {
     int fd;
@@ -36,6 +42,10 @@ int set_time(struct rtc_time time)
 
 
 
+/*
+    int64_t get_time()
+    Get the timestamp
+*/
 int64_t get_time()
 {
     time_t timeofday;;
@@ -71,6 +81,10 @@ int64_t get_time()
 
 
 
+/*
+    int set_alarm(struct rtc_time rtc_tm)
+    Set the alarm timestamp
+*/
 int set_alarm(struct rtc_time rtc_tm)
 {
     int fd;
@@ -84,7 +98,7 @@ int set_alarm(struct rtc_time rtc_tm)
     retval = ioctl(fd, RTC_ALM_SET, &rtc_tm);
     if(retval == -1)
     {
-        if (errno == ENOTTY) 
+        if(errno == ENOTTY) 
         {
             fprintf(stderr,"\n...Alarm IRQs not supported.\n");
         }
