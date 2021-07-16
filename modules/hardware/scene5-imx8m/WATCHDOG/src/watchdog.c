@@ -33,10 +33,8 @@ int fd;
 
 
 /*
-
 	gets the watchdog timeout
 	get_timeout()
-
 */
 int get_timeout(int fd)
 {
@@ -114,7 +112,7 @@ int get_timer(int fd)
 
 /*
 	Watchdog_setTime(int interval)
-
+    int wd_resettime(int fd)
 */
 int wd_resettime(int fd)
 {
@@ -136,6 +134,7 @@ int wd_resettime(int fd)
 
 /*
 	enables the watchdog
+    int wd_enable()
 */
  int wd_enable()
 {
@@ -152,6 +151,7 @@ int wd_resettime(int fd)
 
 /*
     disables the watchdog
+    int wd_disable(int fd)
 */
 int wd_disable(int fd)
 {
