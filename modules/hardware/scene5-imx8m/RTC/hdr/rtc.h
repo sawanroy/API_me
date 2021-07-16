@@ -6,8 +6,9 @@
 #include <stdbool.h>
 
 /*!
+	Set the RTC time
 	@param[in] rtc_time structure type variable
-	@return true on success false on failure 
+	@return status of function (ture or false) 
 
 */
 bool set_time(struct rtc_time rtc_tm);
@@ -23,7 +24,7 @@ int64_t get_time();
 /*! 
 	To set the Alarm for RTC
 	@param[in] rtc_time structure type variable
-	@return true on success false on failure
+	@return status of function (ture or false)
 */
 bool set_alarm(struct rtc_time rtc_tm);
 
