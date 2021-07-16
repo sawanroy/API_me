@@ -3,14 +3,14 @@
 #define rtc_h__
 
 #include <linux/rtc.h>
-
+#include <stdbool.h>
 
 /*!
 	@param[in] rtc_time structure type variable
-	@return 0 on success -1 on failure 
+	@return true on success false on failure 
 
 */
-int set_time(struct rtc_time rtc_tm);
+bool set_time(struct rtc_time rtc_tm);
 
 
 /*!
@@ -23,8 +23,8 @@ int64_t get_time();
 /*! 
 	To set the Alarm for RTC
 	@param[in] rtc_time structure type variable
-	@return 0 on success -1 on failure
+	@return true on success false on failure
 */
-int set_alarm(struct rtc_time rtc_tm);
+bool set_alarm(struct rtc_time rtc_tm);
 
 #endif

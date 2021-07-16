@@ -16,16 +16,16 @@ int retval, irqcount = 0;
 
 
 /*
-    int set_time(struct rtc_time time)
+    bool set_time(struct rtc_time time)
     Set the timestamp
 */
-int set_time(struct rtc_time time)
+bool set_time(struct rtc_time time)
 {
     int fd;
     fd = open("/dev/rtc0", O_RDWR); 
     if(fd < 0)
     {
-        return -1;
+        return false;
     }
     
     retval = ioctl(fd, RTC_SET_TIME, &time);
@@ -33,11 +33,11 @@ int set_time(struct rtc_time time)
     {
         perror("RTC_SET_TIME ioctl");
         close(fd);
-        return -1;
+        return false;
     }
 
     close(fd);
-    return 0;
+    return true;
 }
 
 
@@ -82,17 +82,17 @@ int64_t get_time()
 
 
 /*
-    int set_alarm(struct rtc_time rtc_tm)
+    bool set_alarm(struct rtc_time rtc_tm)
     Set the alarm timestamp
 */
-int set_alarm(struct rtc_time rtc_tm)
+bool set_alarm(struct rtc_time rtc_tm)
 {
     int fd;
     fd = open("/dev/rtc0", O_RDWR);
     
     if (fd < 0)
     {
-        return -1;
+        return false;
     }
     
     retval = ioctl(fd, RTC_ALM_SET, &rtc_tm);
@@ -104,9 +104,9 @@ int set_alarm(struct rtc_time rtc_tm)
         }
         close(fd);
         perror("RTC_ALM_SET ioctl");
-        return -1;
+        return false;
     }
 
     close(fd);
-    return 0;
+    return true;
 }
