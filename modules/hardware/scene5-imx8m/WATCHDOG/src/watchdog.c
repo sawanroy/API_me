@@ -35,7 +35,7 @@
 	gets the watchdog timeout
 	get_timeout()
 */
-int get_timeout(int fd)
+int wd_get_timeout(int fd)
 {
     int timeoutint=0;
     int localfd = open("/dev/watchdog0", O_RDWR);
@@ -91,7 +91,7 @@ int get_timeout(int fd)
 
 */
 //////////deprecated function (because of timer function not supported in driver) ///////////////////////
-int get_timer(int fd)
+int wd_get_timer(int fd)
 {
     long long int timeleft;
     if(fd < 0)
@@ -113,20 +113,20 @@ int get_timer(int fd)
 	Watchdog_setTime(int interval)
     int wd_resettime(int fd)
 */
-int wd_resettime(int fd)
+bool wd_resettime(int fd)
 {
     if(fd <= 0)
     {
-        return -1;
+        return false;
     }
 
 	if(write(fd, "\0", 1) < 0)					
 	{
-		return -1;
+		return false;
 	}
 
 	ioctl(fd, WDIOC_KEEPALIVE, NULL);								
-    return 0;							
+    return true;							
 }
 
 
@@ -152,14 +152,14 @@ int wd_resettime(int fd)
     disables the watchdog
     int wd_disable(int fd)
 */
-int wd_disable(int fd)
+bool wd_disable(int fd)
 {
     if(write(fd, "V", 1) < 0)				
 	{
-		return -1;
+		return false;
 	}
 
     close(fd);
-    return 0;
+    return true;
 }
 

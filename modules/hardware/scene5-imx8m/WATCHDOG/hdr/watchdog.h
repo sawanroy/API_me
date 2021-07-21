@@ -30,16 +30,16 @@
     @return timeout of watchdog
 
 */
-int get_timeout(int fd);                                          
+int wd_get_timeout(int fd);                                          
 
 
-/*!
+/*
     Get the current watchdog time count
     @param[in] fd file discriptor of open device node
     @return timeout of watchdog 
   
 */
-int get_timer(int fd);
+//int wd_get_timer(int fd);
 
 
 /*!
@@ -56,7 +56,7 @@ int wd_enable();
    @return integer value 0 and -1
 
 */
-int wd_disable(int fd);
+bool wd_disable(int fd);
 
 
 /*!
@@ -65,7 +65,7 @@ int wd_disable(int fd);
    @return integer value 0 and -1 
 
 */
-int wd_resettime(int fd);
+bool wd_resettime(int fd);
 /*! @}*/                                          
 
 #endif
