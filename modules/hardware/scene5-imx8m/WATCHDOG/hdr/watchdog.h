@@ -27,8 +27,7 @@
 /*! 
  *  Get the watchdog timeout 
     @param[in] fd file discriptor of open device node
-    @return timeout of watchdog
-
+    @return timeout of watchdog / -1 on error
 */
 int wd_get_timeout(int fd);                                          
 
@@ -36,25 +35,22 @@ int wd_get_timeout(int fd);
 /*
     Get the current watchdog time count
     @param[in] fd file discriptor of open device node
-    @return timeout of watchdog 
-  
+    @return timeout of watchdog  
 */
 //int wd_get_timer(int fd);
 
 
 /*!
    Enable the watchdog 
-   @return file descriptor of open device node
-
+   @return file descriptor on success / -1 on failure
 */
-int wd_enable();
+int wd_enable(void);
 
 
 /*!
    disable the watchdog
    @param[in] fd file descriptor of open device node
-   @return integer value 0 and -1
-
+   @return status of function (ture or false)
 */
 bool wd_disable(int fd);
 
@@ -62,8 +58,7 @@ bool wd_disable(int fd);
 /*!
    Reset watchdog timer
    @param[in] fd file discriptor of open device node 
-   @return integer value 0 and -1 
-
+   @return status of function (ture or false) 
 */
 bool wd_resettime(int fd);
 /*! @}*/                                          
