@@ -28,7 +28,6 @@
 #include <linux/watchdog.h>
 #include <stdbool.h>
 
-int fd;
 
 
 
@@ -138,7 +137,7 @@ int wd_resettime(int fd)
 */
  int wd_enable()
 {
-    fd = open("/dev/watchdog0", O_RDWR);
+    int fd = open("/dev/watchdog0", O_RDWR);
     if(fd < 0)
     {
         return -1;
@@ -156,10 +155,9 @@ int wd_resettime(int fd)
 int wd_disable(int fd)
 {
     if(write(fd, "V", 1) < 0)				
-	    {
-		    close(fd);
-		    return -1;
-	    }
+	{
+		return -1;
+	}
 
     close(fd);
     return 0;
