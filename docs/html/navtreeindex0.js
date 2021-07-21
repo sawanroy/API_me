@@ -225,9 +225,10 @@ var NAVTREEINDEX0 =
 "da/d4e/group__RS232.html#ga92ffe3396edef3d3e6d4bb63a60c8fc5":[1,3,2],
 "da/d4e/group__RS232.html#gaf8a9fc40b3f402e7f0cc8758554ca1ec":[1,3,3],
 "da/d7d/group__WATCHDOG.html":[1,7],
-"da/d7d/group__WATCHDOG.html#ga09852056b62c5392b0496a5e6858bdf3":[1,7,2],
-"da/d7d/group__WATCHDOG.html#ga1a5c0d9e7e6245c12973c860abaa277c":[1,7,0],
-"da/d7d/group__WATCHDOG.html#gaae0c77a4f85c8707617e0da6983c382f":[1,7,1],
+"da/d7d/group__WATCHDOG.html#ga136d1714ec3602d8f8e903697890a53e":[1,7,2],
+"da/d7d/group__WATCHDOG.html#ga739b39382234fae43b1c6feb40fee09b":[1,7,0],
+"da/d7d/group__WATCHDOG.html#gac2326562ffcd7177c7ab6bfb1594cefd":[1,7,3],
+"da/d7d/group__WATCHDOG.html#gaf8e7c159cd29bca644b80f83e5b942ff":[1,7,1],
 "da/dc4/structsim__apn.html":[2,0,27],
 "da/dc4/structsim__apn.html#a0e6534f6bfcb54f11498862624414572":[2,0,27,1],
 "da/dc4/structsim__apn.html#a537cda881600823ed118ee363fc45003":[2,0,27,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "db/dcb/structwifi__scanresult.html#a1e3edd1f74d063c5436475706ace3d0f":[2,0,31,2],
 "db/dcb/structwifi__scanresult.html#a6764dc0f71e3a25e5d07535da2078fab":[2,0,31,1],
 "db/dcb/structwifi__scanresult.html#a724d34a3cd50951f4eb2c4aed0aa1e65":[2,0,31,0],
-"dc/d3d/structvector__.html":[2,0,29],
-"dc/d3d/structvector__.html#a4f0212b482f3d62fbd0d352944d3a611":[2,0,29,0]
+"dc/d3d/structvector__.html":[2,0,29]
 };

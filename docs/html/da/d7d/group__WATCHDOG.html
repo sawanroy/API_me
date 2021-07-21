@@ -101,74 +101,109 @@ $(document).ready(function(){initNavTree('da/d7d/group__WATCHDOG.html','../../')
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga1a5c0d9e7e6245c12973c860abaa277c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d7d/group__WATCHDOG.html#ga1a5c0d9e7e6245c12973c860abaa277c">get_timeout</a> ()</td></tr>
-<tr class="separator:ga1a5c0d9e7e6245c12973c860abaa277c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaae0c77a4f85c8707617e0da6983c382f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d7d/group__WATCHDOG.html#gaae0c77a4f85c8707617e0da6983c382f">get_timer</a> ()</td></tr>
-<tr class="separator:gaae0c77a4f85c8707617e0da6983c382f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga09852056b62c5392b0496a5e6858bdf3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d7d/group__WATCHDOG.html#ga09852056b62c5392b0496a5e6858bdf3">wd_enable</a> (bool state)</td></tr>
-<tr class="separator:ga09852056b62c5392b0496a5e6858bdf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga136d1714ec3602d8f8e903697890a53e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d7d/group__WATCHDOG.html#ga136d1714ec3602d8f8e903697890a53e">wd_get_timeout</a> (int fd)</td></tr>
+<tr class="separator:ga136d1714ec3602d8f8e903697890a53e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf8e7c159cd29bca644b80f83e5b942ff"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d7d/group__WATCHDOG.html#gaf8e7c159cd29bca644b80f83e5b942ff">wd_enable</a> (void)</td></tr>
+<tr class="separator:gaf8e7c159cd29bca644b80f83e5b942ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga739b39382234fae43b1c6feb40fee09b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d7d/group__WATCHDOG.html#ga739b39382234fae43b1c6feb40fee09b">wd_disable</a> (int fd)</td></tr>
+<tr class="separator:ga739b39382234fae43b1c6feb40fee09b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac2326562ffcd7177c7ab6bfb1594cefd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d7d/group__WATCHDOG.html#gac2326562ffcd7177c7ab6bfb1594cefd">wd_resettime</a> (int fd)</td></tr>
+<tr class="separator:gac2326562ffcd7177c7ab6bfb1594cefd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Additional documentation for group 'WATCHDOG' </p>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga1a5c0d9e7e6245c12973c860abaa277c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga1a5c0d9e7e6245c12973c860abaa277c">&#9670;&nbsp;</a></span>get_timeout()</h2>
+<a id="ga739b39382234fae43b1c6feb40fee09b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga739b39382234fae43b1c6feb40fee09b">&#9670;&nbsp;</a></span>wd_disable()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int get_timeout </td>
+          <td class="memname">bool wd_disable </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fd</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the watchdog timeout </p><dl class="section return"><dt>Returns</dt><dd>timeout of watchdog </dd></dl>
-
-</div>
-</div>
-<a id="gaae0c77a4f85c8707617e0da6983c382f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaae0c77a4f85c8707617e0da6983c382f">&#9670;&nbsp;</a></span>get_timer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int get_timer </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get the current watchdog time count </p><dl class="section return"><dt>Returns</dt><dd>timeout of watchdog </dd></dl>
-
-</div>
-</div>
-<a id="ga09852056b62c5392b0496a5e6858bdf3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga09852056b62c5392b0496a5e6858bdf3">&#9670;&nbsp;</a></span>wd_enable()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool wd_enable </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>state</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Enable and disable the watchdog </p><dl class="params"><dt>Parameters</dt><dd>
+<p>disable the watchdog </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">state</td><td>bool type variable </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">fd</td><td>file descriptor of open device node </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true and false </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
+
+</div>
+</div>
+<a id="gaf8e7c159cd29bca644b80f83e5b942ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf8e7c159cd29bca644b80f83e5b942ff">&#9670;&nbsp;</a></span>wd_enable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int wd_enable </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enable the watchdog </p><dl class="section return"><dt>Returns</dt><dd>file descriptor on success / -1 on failure </dd></dl>
+
+</div>
+</div>
+<a id="ga136d1714ec3602d8f8e903697890a53e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga136d1714ec3602d8f8e903697890a53e">&#9670;&nbsp;</a></span>wd_get_timeout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int wd_get_timeout </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the watchdog timeout </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">fd</td><td>file discriptor of open device node </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>timeout of watchdog / -1 on error </dd></dl>
+
+</div>
+</div>
+<a id="gac2326562ffcd7177c7ab6bfb1594cefd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac2326562ffcd7177c7ab6bfb1594cefd">&#9670;&nbsp;</a></span>wd_resettime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool wd_resettime </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Reset watchdog timer </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">fd</td><td>file discriptor of open device node </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>status of function (ture or false) </dd></dl>
 
 </div>
 </div>
