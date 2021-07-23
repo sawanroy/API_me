@@ -7,3 +7,5 @@ target_include_directories(
   PUBLIC
   hdr
 )
+
+install(TARGETS "${PROJECT_NAME}")
