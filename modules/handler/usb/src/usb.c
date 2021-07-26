@@ -202,7 +202,7 @@ int usb_open(int portname, int buadrate)
   usb_open_rs(portnumber,baudrate,parity,dataBits,stopBits)
   use open
 */
-int usb_open_rs(int portnumber, int baudrate, bool parity, int dataBits, int stopBits)
+int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBits, int stopBits, enum RS_FLOWCONTROL flowcontrol)
 {
     char buf[15];
     snprintf(buf, sizeof(buf), "/dev/ttyUSB%d", portnumber);
@@ -220,6 +220,123 @@ int usb_open_rs(int portnumber, int baudrate, bool parity, int dataBits, int sto
         return -1;
     }
     set_tty_attribs(fd, baudrate);
+
+    struct termios tty;
+    if(tcgetattr(fd, &tty) < 0)
+    {
+        printf("Error from tcgetattr: %s\n", strerror(errno));
+        return -1;
+    }
+
+    // cfsetospeed(&tty, (speed_t)speed);
+    switch(dataBits)
+    {
+        case 8:
+            tty.c_cflag |= CS8;                                                                       /* 8-bit characters */
+            break;     break;
+        
+        case 7:
+            tty.c_cflag |= CS7;                                                                       /* 7-bit characters */
+            break;
+        
+        case 6:
+            tty.c_cflag |= CS6;                                                                       /* 6-bit characters */
+            break;
+        
+        case 5:
+            tty.c_cflag |= CS5;                                                                       /* 5-bit characters */
+            break;
+        
+        default:
+            tty.c_cflag |= CS8;                                                                       /* 8-bit characters */
+            break;
+    }
+
+    switch(parity)
+    {
+        case NONE:
+            tty.c_cflag &= ~PARENB;                                                                   /* no parity bit */
+            break;
+        
+        case ODD:
+            tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
+            tty.c_cflag |= PARODD;                                                                   /* ODD parity bit */
+            tty.c_cflag &= ~CMSPAR;
+            break;
+        
+        case EVEN:
+            tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
+            tty.c_cflag &= ~PARODD;                                                                   /* EVEN parity bit */
+            tty.c_cflag &= ~CMSPAR;
+            break;
+        
+        case MARK:
+            tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
+            tty.c_cflag |= CMSPAR;
+            tty.c_cflag |= PARODD;                                                                   /* MARK parity bit */
+            break;
+
+        case SPACE:
+            tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
+            tty.c_cflag |= CMSPAR;
+            tty.c_cflag &= ~PARODD;                                                                   /* SPACE parity bit */
+            break;
+        
+        default:
+            tty.c_cflag &= ~PARENB;                                                                   /* no parity bit */
+            break;
+    }
+    
+    switch(stopBits)
+    {
+        case 1:
+            tty.c_cflag &= ~CSTOPB;                                                                   /*1 stop bit */
+            break;
+        
+        case 2:
+            tty.c_cflag |= CSTOPB;                                                                    /*2 stop bit */
+            break;
+        
+        default:
+            tty.c_cflag &= ~CSTOPB;                                                                   /*1 stop bit */
+            break;
+    }
+
+    switch(flowcontrol)
+    {
+        case HARDWARE:
+            tty.c_cflag |= CRTSCTS;                                                                   /*hardware flowcontrol */
+            tty.c_cflag &= ~IXON;
+            tty.c_cflag &= ~IXOFF;                                                                 
+            break;
+
+        case SOFTWARE:
+            tty.c_cflag &= ~CRTSCTS;                                                                  /* software flowcontrol */
+            tty.c_cflag |= IXON;
+            tty.c_cflag |= IXOFF;
+            break;
+        
+        default:
+            tty.c_cflag &= ~CRTSCTS;                                                                  /* NONE flowcontrol */
+            tty.c_cflag &= ~IXON;
+            tty.c_cflag &= ~IXOFF;
+            break;
+    }
+
+    /* setup for non-canonical mode */
+    tty.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+    tty.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+    tty.c_oflag &= ~OPOST;
+
+    /* fetch bytes as they become available */
+    tty.c_cc[VMIN] = 1;
+    tty.c_cc[VTIME] = 1;
+
+    if(tcsetattr(fd, TCSANOW, &tty) != 0)
+    {
+        printf("Error from tcsetattr: %s\n", strerror(errno));
+        return -1;
+    }
 
     return fd;
 }

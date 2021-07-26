@@ -19,10 +19,12 @@
 #ifndef librs485_h__
 #define librs485_h__
 
+#include <usb.h>
 /*! \addtogroup RS485
 	Additional documentation for group 'RS485'
       @{
 */
+
 /*!
  *  Open rs485 serial link  
  * @param[in] portnumber serial port number 
@@ -33,7 +35,7 @@
  * 
  * @return filedescriptor for open port
 */
-int rs485_open_port(int portnumber,int baudrate,bool parity,int dataBits, int stopBits);
+int rs485_open_port(int portnumber,int baudrate,enum RS_PARITY parity,int dataBits, int stopBits, enum RS_FLOWCONTROL flowcontrol);
 /*! 
  * Read from rs485 serial link  
  * @param[in] filedescriptor  FD of opened port

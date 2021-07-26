@@ -18,9 +18,25 @@
 #define SIM_Baud_Rate 115200
 #include <stdbool.h>
 
+enum RS_PARITY
+{
+    NONE,
+    ODD,
+    EVEN,
+    MARK,
+    SPACE,
+}
+
+enum RS_FLOWCONTROL
+{
+    NONE,
+    HARDWARE,
+    SOFTWARE,
+}
+
 int set_tty_attribs(int fd, int baudrate);						/* sets the baudrate */
 int usb_open(int portname, int buadrate);						/* open the usb port */
-int usb_open_rs(int portnumber, int baudrate, bool parity, int dataBits, int stopBits);	/* open the usb port for rs485 and rs232*/
+int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBits, int stopBits, enum RS_FLOWCONTROL flowcontrol);	/* open the usb port for rs485 and rs232*/
 int usb_read(int fd, unsigned char *buf, int size);					/* Read data from opened USB port */
 int usb_read_t(int fd, unsigned char *buf, int size,int T);				/* Read data from opened USB port with timeout*/
 int usb_write(int fd, unsigned char *write_buffer, int size);				/* write data to opened USB port */

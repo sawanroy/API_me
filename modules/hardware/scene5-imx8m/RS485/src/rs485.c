@@ -38,10 +38,10 @@ static int rs485bud;
 
 */
 
-int rs485_open_port(int portnumber,int baudrate,bool parity,int dataBits, int stopBits) {
+int rs485_open_port(int portnumber,int baudrate, enum RS_PARITY parity, int dataBits, int stopBits, enum RS_FLOWCONTROL flowcontrol ) {
 	int filedescriptor;
 	rs485bud = baudrate;
-	filedescriptor=usb_open_rs(portnumber,baudrate,parity,dataBits,stopBits);
+	filedescriptor=usb_open_rs(portnumber,baudrate,parity,dataBits,stopBits,flowcontrol);
 	if(filedescriptor==-10){
 		return -1;
 	}
