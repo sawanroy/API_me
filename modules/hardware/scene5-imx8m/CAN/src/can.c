@@ -64,39 +64,64 @@ bool enable_can(bool state)
 /*
     Read data from CAN
 */
-struct can_frame read_data()
-{
-    int nbytes, i;
-    FILE *fp;
-    char cmd[20];
-    sprintf(cmd,"candump can0");
-  	fp = popen(cmd, "r");
-  	if (fp == NULL) 
-    {
-        perror("close");
-  	}
-	      
-	nbytes = fread(&frame,1000,sizeof(struct can_frame),fp);
-    
-    ////remove this part after final testing ///////////
-	while(1)
-    {
-        if(nbytes < 0)
-        {
+// struct can_frame read_data()
+// {
+//     int nbytes, i;
+//     FILE *fp;
+//     char cmd[20];
+//     printf("foo1_dump_start"); 
+//     sprintf(cmd,"candump can0");
+//   	fp = popen(cmd, "r");
+//   	if (fp == NULL) 
+//     {
+//         perror("close");
+//   	}
+// 	printf("foo1_read");    
+// 	//nbytes = fread(&frame,1000,sizeof(struct can_frame),fp);
+//     printf("foo1");
+//     ////remove this part after final testing ///////////
+// 	while(1)
+//     {
+//         nbytes = fread(&frame,1000,sizeof(struct can_frame),fp);
+//         printf("foo_while");
+//         if(nbytes < 0)
+//         {
+//             perror("Read");
+//             //return 1;
+//         }
+//         printf("0x%03X [%d] ",frame.can_id, frame.can_dlc);
+//         for (i = 0; i < frame.can_dlc; i++)
+//         {
+//             printf("%02X ",frame.data[i]);
+//         }
+//     }
+//     //////////////////////////////////////////////////////////
+// 	pclose(fp); 
+//     return frame;
+// }
+
+struct can_frame read_data() {
+    int nbytes, i;   
+	nbytes = read(fileDesc, &frame, sizeof(struct can_frame));
+	while(1){
+        if (nbytes < 0) {
             perror("Read");
             //return 1;
         }
+
         printf("0x%03X [%d] ",frame.can_id, frame.can_dlc);
+
         for (i = 0; i < frame.can_dlc; i++)
-        {
             printf("%02X ",frame.data[i]);
-        }
+
+        printf("\r\n");
     }
-    //////////////////////////////////////////////////////////
-	pclose(fp); 
+	if (close(fileDesc) < 0) {
+		perror("Close");
+		//return 1;
+	}
     return frame;
 }
-
 
 
 /*
@@ -110,7 +135,7 @@ bool write_data(unsigned int id, int size, char * message)
     FILE *fp;
     char cmd[20];
 
-    sprintf(cmd,"cansend can0 0x%03X %02X",frame.can_id,frame.data);
+    sprintf(cmd,"cansend can0 %d#%s",frame.can_id,frame.data);
   	fp = popen(cmd, "r");
   	if (fp == NULL) 
     {
