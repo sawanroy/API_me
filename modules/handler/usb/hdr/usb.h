@@ -25,14 +25,13 @@ enum RS_PARITY
     EVEN,
     MARK,
     SPACE,
-}
+};
 
 enum RS_FLOWCONTROL
 {
-    NONE,
     HARDWARE,
     SOFTWARE,
-}
+};
 
 int set_tty_attribs(int fd, int baudrate);						/* sets the baudrate */
 int usb_open(int portname, int buadrate);						/* open the usb port */

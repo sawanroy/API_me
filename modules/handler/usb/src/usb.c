@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include <linux/watchdog.h>
 #include <usb.h>
+#include <math.h>
 
 
 /*
@@ -87,6 +88,7 @@ int set_tty_attribs(int fd, int baudrate)
             speed = B57600;
             break;
         case 115200:
+            printf("baudrate set\n");
             speed = B115200;
             break;
         case 230400:
@@ -232,8 +234,9 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
     switch(dataBits)
     {
         case 8:
+            printf("8 bits\n");
             tty.c_cflag |= CS8;                                                                       /* 8-bit characters */
-            break;     break;
+            break;
         
         case 7:
             tty.c_cflag |= CS7;                                                                       /* 7-bit characters */
@@ -255,6 +258,7 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
     switch(parity)
     {
         case NONE:
+            printf("none parity\n");
             tty.c_cflag &= ~PARENB;                                                                   /* no parity bit */
             break;
         
@@ -290,10 +294,12 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
     switch(stopBits)
     {
         case 1:
+            printf("1 bits\n");
             tty.c_cflag &= ~CSTOPB;                                                                   /*1 stop bit */
             break;
         
         case 2:
+            printf("2 bits\n");
             tty.c_cflag |= CSTOPB;                                                                    /*2 stop bit */
             break;
         
@@ -311,12 +317,14 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
             break;
 
         case SOFTWARE:
+            printf("software\n");
             tty.c_cflag &= ~CRTSCTS;                                                                  /* software flowcontrol */
             tty.c_cflag |= IXON;
             tty.c_cflag |= IXOFF;
             break;
         
         default:
+            printf("none\n");
             tty.c_cflag &= ~CRTSCTS;                                                                  /* NONE flowcontrol */
             tty.c_cflag &= ~IXON;
             tty.c_cflag &= ~IXOFF;
@@ -371,7 +379,7 @@ int usb_read(int fd, unsigned char *buf, int size)
 int usb_read_t(int fd, unsigned char *buf, int size, int T)
 {
     fd_set set;
-    struct timeval timeout = {0, T};
+    struct timeval timeout;
     int ready = 0;
     int TotalBytes = 0;
     int r = 0;
@@ -384,7 +392,12 @@ int usb_read_t(int fd, unsigned char *buf, int size, int T)
     FD_SET(filedisc, &set); /* add our file descriptor to the set */
 
 
-    double sec = ((double)T/(double)1000000);
+    double sec = ((double)T)/(double)1000000;
+    double usec = T % 1000000;
+
+    timeout.tv_sec = sec;
+    timeout.tv_usec = usec; 
+
     ready = select(fd + 1 , &set, NULL, NULL, &timeout);
 
     if(ready == -1)
@@ -404,31 +417,27 @@ int usb_read_t(int fd, unsigned char *buf, int size, int T)
     {
         /* there was data to read */
         TotalBytes = read(fd, buf, expected_Byte);
-
-        if(TotalBytes < expected_Byte)
+        sizetoread = expected_Byte - TotalBytes;
+        ntoread = sizetoread;
+  
+        while(TotalBytes < expected_Byte)
         {
-            sizetoread = expected_Byte - TotalBytes;
-            ntoread = sizetoread;
-
-            clock_t  total_t;
-            total_t = clock() + sec * CLOCKS_PER_SEC;
-            while(clock() < total_t)
+            ntoread = ntoread - r;
+            FD_ZERO(&set);  /* clear the set */
+            FD_SET(filedisc, &set); /* add our file descriptor to the set */
+            if(select(fd + 1 , &set, NULL, NULL, &timeout) > 0)
             {
-                ntoread = ntoread - r;
-                long int time = ((double)total_t - (double)clock())/ (double)CLOCKS_PER_SEC ;
-                struct timeval t = {0, time};
-                if(select(fd + 1 , &set, NULL, NULL, &t) > 0)
-                {
-                    r = read(fd, &buf[TotalBytes], ntoread);
-                    TotalBytes += r;
-                }
-                else
-                {
-                    break;
-                }
+                printf("read\n");
+                r = read(fd, &buf[TotalBytes], ntoread);
+                TotalBytes += r;
             }
+            else
+            {
+                break;
+            }          
         }
     }
+
     if(TotalBytes == 0)
     {
         printf("TIMEOUT 2&");
