@@ -237,19 +237,19 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
             printf("8 bits\n");
             tty.c_cflag |= CS8;                                                                       /* 8-bit characters */
             break;
-        
+
         case 7:
             tty.c_cflag |= CS7;                                                                       /* 7-bit characters */
             break;
-        
+
         case 6:
             tty.c_cflag |= CS6;                                                                       /* 6-bit characters */
             break;
-        
+
         case 5:
             tty.c_cflag |= CS5;                                                                       /* 5-bit characters */
             break;
-        
+
         default:
             tty.c_cflag |= CS8;                                                                       /* 8-bit characters */
             break;
@@ -261,19 +261,19 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
             printf("none parity\n");
             tty.c_cflag &= ~PARENB;                                                                   /* no parity bit */
             break;
-        
+
         case ODD:
             tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
             tty.c_cflag |= PARODD;                                                                   /* ODD parity bit */
             tty.c_cflag &= ~CMSPAR;
             break;
-        
+
         case EVEN:
             tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
             tty.c_cflag &= ~PARODD;                                                                   /* EVEN parity bit */
             tty.c_cflag &= ~CMSPAR;
             break;
-        
+
         case MARK:
             tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
             tty.c_cflag |= CMSPAR;
@@ -285,24 +285,24 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
             tty.c_cflag |= CMSPAR;
             tty.c_cflag &= ~PARODD;                                                                   /* SPACE parity bit */
             break;
-        
+
         default:
             tty.c_cflag &= ~PARENB;                                                                   /* no parity bit */
             break;
     }
-    
+
     switch(stopBits)
     {
         case 1:
             printf("1 bits\n");
             tty.c_cflag &= ~CSTOPB;                                                                   /*1 stop bit */
             break;
-        
+
         case 2:
             printf("2 bits\n");
             tty.c_cflag |= CSTOPB;                                                                    /*2 stop bit */
             break;
-        
+
         default:
             tty.c_cflag &= ~CSTOPB;                                                                   /*1 stop bit */
             break;
@@ -313,7 +313,7 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
         case HARDWARE:
             tty.c_cflag |= CRTSCTS;                                                                   /*hardware flowcontrol */
             tty.c_cflag &= ~IXON;
-            tty.c_cflag &= ~IXOFF;                                                                 
+            tty.c_cflag &= ~IXOFF;
             break;
 
         case SOFTWARE:
@@ -322,7 +322,7 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
             tty.c_cflag |= IXON;
             tty.c_cflag |= IXOFF;
             break;
-        
+
         default:
             printf("none\n");
             tty.c_cflag &= ~CRTSCTS;                                                                  /* NONE flowcontrol */
@@ -361,7 +361,7 @@ int usb_read(int fd, unsigned char *buf, int size)
     n = read(fd, buf, size-1);
     if(n < 0)
     {
-        if(errno == EAGAIN)  
+        if(errno == EAGAIN)
         {
             return -1;
         }
@@ -396,7 +396,7 @@ int usb_read_t(int fd, unsigned char *buf, int size, int T)
     double usec = T % 1000000;
 
     timeout.tv_sec = sec;
-    timeout.tv_usec = usec; 
+    timeout.tv_usec = usec;
 
     ready = select(fd + 1 , &set, NULL, NULL, &timeout);
 
@@ -419,7 +419,7 @@ int usb_read_t(int fd, unsigned char *buf, int size, int T)
         TotalBytes = read(fd, buf, expected_Byte);
         sizetoread = expected_Byte - TotalBytes;
         ntoread = sizetoread;
-  
+
         while(TotalBytes < expected_Byte)
         {
             ntoread = ntoread - r;
@@ -427,14 +427,13 @@ int usb_read_t(int fd, unsigned char *buf, int size, int T)
             FD_SET(filedisc, &set); /* add our file descriptor to the set */
             if(select(fd + 1 , &set, NULL, NULL, &timeout) > 0)
             {
-                printf("read\n");
                 r = read(fd, &buf[TotalBytes], ntoread);
                 TotalBytes += r;
             }
             else
             {
                 break;
-            }          
+            }
         }
     }
 
@@ -479,8 +478,8 @@ int usb_write(int fd, unsigned char *write_buffer, int size)
 int usb_close(int fd)
 {
     flock(fd, LOCK_UN);
-    close(fd); 
-    
+    close(fd);
+
     return 0;
 }
 
