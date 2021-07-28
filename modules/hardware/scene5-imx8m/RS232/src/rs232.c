@@ -39,24 +39,24 @@
 
 int rs232_open_port(int portnumber,int baudrate,bool parity,int dataBits, int stopBits)
 {
-	int filedescriptor;
-	filedescriptor=usb_open_rs(portnumber,baudrate,parity,dataBits,stopBits);
-	if(filedescriptor==-10)
-	{
-		return -1;
+	// int filedescriptor;
+	// filedescriptor=usb_open_rs(portnumber,baudrate,parity,dataBits,stopBits);
+	// if(filedescriptor==-10)
+	// {
+	// 	return -1;
 		
-	}
-	else
-	{	
-		if(filedescriptor<0)
-		{
-			return -1;
-		}
-		else
-		{
-			return filedescriptor;
-		}
-	}
+	// }
+	// else
+	// {	
+	// 	if(filedescriptor<0)
+	// 	{
+	// 		return -1;
+	// 	}
+	// 	else
+	// 	{
+	// 		return filedescriptor;
+	// 	}
+	// }
 }
 
 /*
