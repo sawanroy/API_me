@@ -19,6 +19,13 @@
 #ifndef can_h__
 #define can_h__
 
+
+/*! \addtogroup CAN
+    Additional documentation for group 'CAN'
+      @{
+*/
+
+
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
@@ -53,4 +60,6 @@ bool write_data(unsigned int id, int size, char * message);
 */
 bool can_configuration(int bitrate);
 
+
+/*! @} */
 #endif
