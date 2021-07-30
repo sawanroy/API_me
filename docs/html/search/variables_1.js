@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['channel_232',['channel',['../db/dcb/structwifi__scanresult.html#a724d34a3cd50951f4eb2c4aed0aa1e65',1,'wifi_scanresult']]]
+  ['channel_241',['channel',['../db/dcb/structwifi__scanresult.html#a724d34a3cd50951f4eb2c4aed0aa1e65',1,'wifi_scanresult']]]
 ];

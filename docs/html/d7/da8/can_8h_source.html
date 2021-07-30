@@ -113,23 +113,33 @@ $(document).ready(function(){initNavTree('d7/da8/can_8h_source.html','../../'); 
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#ifndef can_h__</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define can_h__</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;linux/can.h&gt;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;linux/can/raw.h&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#define DEV_NAME vcan0</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keywordtype">bool</span> enable_can();</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">struct </span>can_frame read_data();</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">bool</span> write_data(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <span class="keywordtype">id</span>, <span class="keywordtype">int</span> size, <span class="keywordtype">char</span> * message);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;linux/can.h&gt;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;linux/can/raw.h&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../d6/d6e/group__CAN.html#ga554828eafa96f5f5c7c566878b53edc5">can_enable</a>(<span class="keywordtype">bool</span> state);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">struct </span>can_frame <a class="code" href="../../d6/d6e/group__CAN.html#ga59b0743545ebbae4df8af147b8685c8c">can_read</a>();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../d6/d6e/group__CAN.html#ga6d2152ca7cff83c016afded873a557de">can_write</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <span class="keywordtype">id</span>, <span class="keywordtype">int</span> size, <span class="keywordtype">char</span> *message);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../d6/d6e/group__CAN.html#gacef7e977a023fdd04c4e150d9bae9585">can_configuration</a>(<span class="keywordtype">int</span> bitrate);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="astructbluetoothconfig_html_a088ec342d0287f6ee1a41c17d1b41ab7"><div class="ttname"><a href="../../d5/d63/structbluetoothconfig.html#a088ec342d0287f6ee1a41c17d1b41ab7">bluetoothconfig::enabled</a></div><div class="ttdeci">bool enabled</div><div class="ttdoc">Enable Bluetooth connections</div><div class="ttdef"><b>Definition:</b> bluetooth.h:66</div></div>
+<div class="ttc" id="agroup__CAN_html_ga6d2152ca7cff83c016afded873a557de"><div class="ttname"><a href="../../d6/d6e/group__CAN.html#ga6d2152ca7cff83c016afded873a557de">can_write</a></div><div class="ttdeci">bool can_write(unsigned int id, int size, char *message)</div><div class="ttdef"><b>Definition:</b> can.c:129</div></div>
 <div class="ttc" id="astructvector___html"><div class="ttname"><a href="../../dc/d3d/structvector__.html">vector_</a></div><div class="ttdef"><b>Definition:</b> vector.h:16</div></div>
 <div class="ttc" id="astructbluetoothconfig_html_a13b89798df7d54d2d288960ce50e71ec"><div class="ttname"><a href="../../d5/d63/structbluetoothconfig.html#a13b89798df7d54d2d288960ce50e71ec">bluetoothconfig::name</a></div><div class="ttdeci">char * name</div><div class="ttdoc">Device name.</div><div class="ttdef"><b>Definition:</b> bluetooth.h:67</div></div>
 <div class="ttc" id="astructbluetoothconfig_html_a12d0aa468165b0481acd9e2a5429ae94"><div class="ttname"><a href="../../d5/d63/structbluetoothconfig.html#a12d0aa468165b0481acd9e2a5429ae94">bluetoothconfig::radioOn</a></div><div class="ttdeci">bool radioOn</div><div class="ttdoc">Enable Bluetooth radio device.</div><div class="ttdef"><b>Definition:</b> bluetooth.h:65</div></div>
+<div class="ttc" id="agroup__CAN_html_gacef7e977a023fdd04c4e150d9bae9585"><div class="ttname"><a href="../../d6/d6e/group__CAN.html#gacef7e977a023fdd04c4e150d9bae9585">can_configuration</a></div><div class="ttdeci">bool can_configuration(int bitrate)</div><div class="ttdef"><b>Definition:</b> can.c:164</div></div>
+<div class="ttc" id="agroup__CAN_html_ga554828eafa96f5f5c7c566878b53edc5"><div class="ttname"><a href="../../d6/d6e/group__CAN.html#ga554828eafa96f5f5c7c566878b53edc5">can_enable</a></div><div class="ttdeci">bool can_enable(bool state)</div><div class="ttdef"><b>Definition:</b> can.c:64</div></div>
 <div class="ttc" id="agroup__BLUETOOTH_html_ga29bc4b04ddc6b8ecef6a5f9dcf041aea"><div class="ttname"><a href="../../df/d09/group__BLUETOOTH.html#ga29bc4b04ddc6b8ecef6a5f9dcf041aea">bluetooth_unpair_to_device</a></div><div class="ttdeci">bool bluetooth_unpair_to_device(unsigned char *deviceName, int size)</div><div class="ttdef"><b>Definition:</b> bluetooth.c:372</div></div>
 <div class="ttc" id="agroup__BLUETOOTH_html_gabdc33e2808620445c6a36c04442890ad"><div class="ttname"><a href="../../df/d09/group__BLUETOOTH.html#gabdc33e2808620445c6a36c04442890ad">bluetooth_pair_to_device</a></div><div class="ttdeci">bool bluetooth_pair_to_device(unsigned char *deviceName, int size)</div><div class="ttdef"><b>Definition:</b> bluetooth.c:276</div></div>
 <div class="ttc" id="astructbluetoothconfig_html"><div class="ttname"><a href="../../d5/d63/structbluetoothconfig.html">bluetoothconfig</a></div><div class="ttdoc">Structure for bluetooth configuration.</div><div class="ttdef"><b>Definition:</b> bluetooth.h:63</div></div>
@@ -139,6 +149,7 @@ $(document).ready(function(){initNavTree('d7/da8/can_8h_source.html','../../'); 
 <div class="ttc" id="agroup__BLUETOOTH_html_ga7f418f407f4ba428492638581c8eb31c"><div class="ttname"><a href="../../df/d09/group__BLUETOOTH.html#ga7f418f407f4ba428492638581c8eb31c">bluetooth_connect_to_device</a></div><div class="ttdeci">bool bluetooth_connect_to_device(char *name)</div><div class="ttdef"><b>Definition:</b> bluetooth.c:611</div></div>
 <div class="ttc" id="astructbluetoothconfig_html_afef45eadcd4f7d1da79cfc736629967c"><div class="ttname"><a href="../../d5/d63/structbluetoothconfig.html#afef45eadcd4f7d1da79cfc736629967c">bluetoothconfig::discoverable</a></div><div class="ttdeci">bool discoverable</div><div class="ttdoc">Enable device discoverable for Bluetooth pairing.</div><div class="ttdef"><b>Definition:</b> bluetooth.h:68</div></div>
 <div class="ttc" id="agroup__BLUETOOTH_html_ga9830766fc1bdf38a6f27dda19bd49f6a"><div class="ttname"><a href="../../df/d09/group__BLUETOOTH.html#ga9830766fc1bdf38a6f27dda19bd49f6a">bluetooth_off</a></div><div class="ttdeci">bool bluetooth_off()</div><div class="ttdef"><b>Definition:</b> bluetooth.c:258</div></div>
+<div class="ttc" id="agroup__CAN_html_ga59b0743545ebbae4df8af147b8685c8c"><div class="ttname"><a href="../../d6/d6e/group__CAN.html#ga59b0743545ebbae4df8af147b8685c8c">can_read</a></div><div class="ttdeci">struct can_frame can_read()</div><div class="ttdef"><b>Definition:</b> can.c:98</div></div>
 <div class="ttc" id="agroup__BLUETOOTH_html_ga2c92a67463ed08b50b353e9c007b2bc7"><div class="ttname"><a href="../../df/d09/group__BLUETOOTH.html#ga2c92a67463ed08b50b353e9c007b2bc7">bluetooth_get_config</a></div><div class="ttdeci">struct bluetoothconfig bluetooth_get_config()</div><div class="ttdef"><b>Definition:</b> bluetooth.c:537</div></div>
 <div class="ttc" id="agroup__BLUETOOTH_html_gac125fc6591009670234eff6fd69ed70c"><div class="ttname"><a href="../../df/d09/group__BLUETOOTH.html#gac125fc6591009670234eff6fd69ed70c">bluetooth_scan</a></div><div class="ttdeci">int bluetooth_scan(vector *v)</div><div class="ttdef"><b>Definition:</b> bluetooth.c:425</div></div>
 <!-- start footer part -->
