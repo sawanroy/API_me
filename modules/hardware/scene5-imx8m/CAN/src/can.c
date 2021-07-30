@@ -24,7 +24,7 @@
 
 int fileDesc;              
 struct sockaddr_can addr;
-struct can_frame frame;  
+
 
 
 
@@ -74,8 +74,8 @@ bool can_enable(bool state)
         {
             return false;
         }
-        return true;
         pclose(fp);
+        return true;
     }
     else
     {
@@ -85,8 +85,8 @@ bool can_enable(bool state)
         {
             return false;
         }
-        return true;
         pclose(fp);
+        return true;
     }
 }
 
@@ -97,18 +97,27 @@ bool can_enable(bool state)
 */
 struct can_frame can_read()
 {
-    socket_connect();
-    int nbytes;   
-    nbytes = read(fileDesc, &frame, sizeof(struct can_frame));
-    if(nbytes < 0)
+    struct can_frame frame;  
+    
+    if(!socket_connect())
     {
-        close(fileDesc);
-        perror("read");
+        perror("socket not opened");
     }
-    if(close(fileDesc) < 0)
+    else
     {
-        perror("Close");
+        int nbytes;   
+        nbytes = read(fileDesc, &frame, sizeof(struct can_frame));
+        if(nbytes < 0)
+        {
+            close(fileDesc);
+            perror("read");
+        }
+        if(close(fileDesc) < 0)
+        {
+            perror("Close");
+        }
     }
+
     return frame;
 }
 
@@ -119,14 +128,22 @@ struct can_frame can_read()
 */
 bool can_write(unsigned int id, int size, char *message) 
 { 
-    socket_connect();
+    struct can_frame frame;
+
+    if(!socket_connect())
+    {
+        perror("socket not opened");
+        return false;
+    }
+    
     frame.can_id = id;
     frame.can_dlc = size;
     sprintf((char *)frame.data, message);
     
-    if(write(fileDesc, &frame, sizeof(struct can_frame))) 
+    if(write(fileDesc, &frame, sizeof(struct can_frame)) != sizeof(struct can_frame)) 
     {
         perror("Write");
+        close(fileDesc);
         return false;
     }
     
@@ -169,13 +186,13 @@ bool can_configuration(int bitrate)
             return false;
     }
 
-    sprintf(cmd,"ip link set can0 type can bitrate %d",speed);
+    sprintf(cmd, "ip link set can0 type can bitrate %d", speed);
     fp = popen(cmd, "r");
     if(fp == NULL) 
     {
         return false;
     }
 
-    return true;
     pclose(fp);
+    return true;
 }
