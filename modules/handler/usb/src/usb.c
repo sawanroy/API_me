@@ -231,6 +231,10 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
     }
 
     // cfsetospeed(&tty, (speed_t)speed);
+
+    //clear default initialization in set_tty_attribs
+    tty.c_cflag &= ~CSIZE; 
+    tty.c_cflag &= ~CS8;  
     switch(dataBits)
     {
         case 8:
@@ -239,14 +243,17 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
             break;
 
         case 7:
+            printf("7 bits\n");
             tty.c_cflag |= CS7;                                                                       /* 7-bit characters */
             break;
 
         case 6:
+            printf("6 bits\n");
             tty.c_cflag |= CS6;                                                                       /* 6-bit characters */
             break;
 
         case 5:
+            printf("5 bits\n");
             tty.c_cflag |= CS5;                                                                       /* 5-bit characters */
             break;
 
@@ -263,24 +270,28 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
             break;
 
         case ODD:
+            printf("odd parity\n");
             tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
             tty.c_cflag |= PARODD;                                                                   /* ODD parity bit */
             tty.c_cflag &= ~CMSPAR;
             break;
 
         case EVEN:
+            printf("even parity\n");
             tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
             tty.c_cflag &= ~PARODD;                                                                   /* EVEN parity bit */
             tty.c_cflag &= ~CMSPAR;
             break;
 
         case MARK:
+            printf("mark parity\n");
             tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
             tty.c_cflag |= CMSPAR;
             tty.c_cflag |= PARODD;                                                                   /* MARK parity bit */
             break;
 
         case SPACE:
+            printf("space parity\n");
             tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
             tty.c_cflag |= CMSPAR;
             tty.c_cflag &= ~PARODD;                                                                   /* SPACE parity bit */
@@ -326,8 +337,8 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
         default:
             printf("none\n");
             tty.c_cflag &= ~CRTSCTS;                                                                  /* NONE flowcontrol */
-            tty.c_cflag &= ~IXON;
-            tty.c_cflag &= ~IXOFF;
+            // tty.c_cflag &= ~IXON;
+            // tty.c_cflag &= ~IXOFF;
             break;
     }
 
