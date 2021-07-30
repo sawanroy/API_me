@@ -61,32 +61,32 @@ bool socket_connect()
 /*
     Enable and Disable the CAN
 */
-bool enable_can(bool state)
+bool can_enable(bool state)
 {
     FILE *fp;
-  	char cmd[20];
+    char cmd[20];
     
     if(state)
     {
-  	    sprintf(cmd,"ifconfig can0 up");
-  	    fp = popen(cmd, "r");
-  	    if(fp == NULL) 
+        sprintf(cmd, "ifconfig can0 up");
+        fp = popen(cmd, "r");
+        if(fp == NULL) 
         {
-    	    return false;
-  	    }
+            return false;
+        }
         return true;
-	    pclose(fp);
+        pclose(fp);
     }
     else
     {
-        sprintf(cmd,"ifconfig can0 down");
-  	    fp = popen(cmd, "r");
-  	    if(fp == NULL) 
+        sprintf(cmd, "ifconfig can0 down");
+        fp = popen(cmd, "r");
+        if(fp == NULL) 
         {
-    	    return false;
-  	    }
+            return false;
+        }
         return true;
-	    pclose(fp);
+        pclose(fp);
     }
 }
 
@@ -95,26 +95,29 @@ bool enable_can(bool state)
 /*
     Read data from CAN
 */
-struct can_frame read_data()
+struct can_frame can_read()
 {
     socket_connect();
     int nbytes;   
-	nbytes = read(fileDesc, &frame, sizeof(struct can_frame));
+    nbytes = read(fileDesc, &frame, sizeof(struct can_frame));
     if(nbytes < 0)
     {
         close(fileDesc);
         perror("read");
     }
-	if(close(fileDesc) < 0)
+    if(close(fileDesc) < 0)
     {
-		perror("Close");
-	}
+        perror("Close");
+    }
     return frame;
 }
 
 
 
-bool write_data(unsigned int id, int size, char * message) 
+/*
+    Write data to CAN
+*/
+bool can_write(unsigned int id, int size, char *message) 
 { 
     socket_connect();
     frame.can_id = id;
@@ -144,7 +147,7 @@ bool write_data(unsigned int id, int size, char * message)
 bool can_configuration(int bitrate)
 {
     FILE *fp;
-  	char cmd[50];
+    char cmd[50];
     int speed;
 
     switch(bitrate)
@@ -166,13 +169,13 @@ bool can_configuration(int bitrate)
             return false;
     }
 
-  	sprintf(cmd,"ip link set can0 type can bitrate %d",speed);
-  	fp = popen(cmd, "r");
-  	if(fp == NULL) 
+    sprintf(cmd,"ip link set can0 type can bitrate %d",speed);
+    fp = popen(cmd, "r");
+    if(fp == NULL) 
     {
         return false;
-  	}
+    }
 
     return true;
-	pclose(fp);
+    pclose(fp);
 }

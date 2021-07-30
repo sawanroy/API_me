@@ -35,29 +35,31 @@
  *  @return true and false
  *  @param[in] state true for enable  and false for disable 
 */
-bool enable_can(bool state);
+bool can_enable(bool state);
 
 
-/**
- * reads the data from can node 
- *@return returns ID , Message , data size in form of Structure  
-*/
-struct can_frame read_data();
+/*!
+ *  reads the data from can node 
+ *  @return returns ID , Message , data size in form of Structure  
+ */
+struct can_frame can_read();
 
 
-/**
- *writes the data to can node 
- *@return true and false 
- *
-*/
-bool write_data(unsigned int id, int size, char * message);
+/*!
+ *  writes the data to can node
+ *  @param[in] id CAN ID 
+ *  @param[in] size CAN message size
+ *  @param[in] message CAN message 
+ *  @return true and false 
+ */
+bool can_write(unsigned int id, int size, char *message);
 
 
 /*!
  *  Configuring can at perticular bitrate
  *  @param[in] bitrate bit per second tranfer speed
  *  @return true and false
-*/
+ */
 bool can_configuration(int bitrate);
 
 
