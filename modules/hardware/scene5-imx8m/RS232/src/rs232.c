@@ -89,7 +89,7 @@ int rs232_read_data(int filedescriptor, unsigned char *buf, int size, int timeou
    write_data(int filedescriptor, unsigned char *RS485_buf, int size)
    This function Write rs232 serial link
 */
-bool rs232_write_data(int filedescriptor, unsigned char *buf, int size)
+int rs232_write_data(int filedescriptor, unsigned char *buf, int size)
 {
     if(filedescriptor > 0)
     {
@@ -98,18 +98,18 @@ bool rs232_write_data(int filedescriptor, unsigned char *buf, int size)
         ret = usb_write(filedescriptor, buf, size);
         if(ret < 0)
         {
-            return false;
+            return -1;
         }
         else
         {
             WAIT = (1 / (float)rs232bud) * 8 * size * 1000000+5000;
             usleep(WAIT);
-            return true;
+            return ret;
         }
     }
     else
     {
-        return false;
+        return -1;
     }
 }
 
