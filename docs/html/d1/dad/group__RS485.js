@@ -1,7 +1,7 @@
 var group__RS485 =
 [
-    [ "rs485_close_port", "d1/dad/group__RS485.html#ga847f93f747d23608201e131c1b16b650", null ],
-    [ "rs485_open_port", "d1/dad/group__RS485.html#gae86c0d0ee90cc7ee9f6b3b27073b6e55", null ],
-    [ "rs485_read_data", "d1/dad/group__RS485.html#ga569c605af16bf28bff2f8d56a118b899", null ],
-    [ "rs485_write_data", "d1/dad/group__RS485.html#ga333f150757686291cda9834d74c99595", null ]
+    [ "rs485_close_port", "d1/dad/group__RS485.html#gad562dcf2d0dcbbcec6bcaa900a8674db", null ],
+    [ "rs485_open_port", "d1/dad/group__RS485.html#ga43bdf033b4c71db64e8da581c5563bd8", null ],
+    [ "rs485_read_data", "d1/dad/group__RS485.html#gaca43f71f403789b030d3c25da6b6de5b", null ],
+    [ "rs485_write_data", "d1/dad/group__RS485.html#ga5b3ae7dd9edaec305ce3846387ee9713", null ]
 ];

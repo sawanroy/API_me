@@ -101,26 +101,26 @@ $(document).ready(function(){initNavTree('d1/dad/group__RS485.html','../../'); i
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gae86c0d0ee90cc7ee9f6b3b27073b6e55"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/dad/group__RS485.html#gae86c0d0ee90cc7ee9f6b3b27073b6e55">rs485_open_port</a> (int portnumber, int baudrate, bool parity, int dataBits, int stopBits)</td></tr>
-<tr class="separator:gae86c0d0ee90cc7ee9f6b3b27073b6e55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga569c605af16bf28bff2f8d56a118b899"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/dad/group__RS485.html#ga569c605af16bf28bff2f8d56a118b899">rs485_read_data</a> (int filedescriptor, unsigned char *buf, int size, int Timeout)</td></tr>
-<tr class="separator:ga569c605af16bf28bff2f8d56a118b899"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga333f150757686291cda9834d74c99595"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/dad/group__RS485.html#ga333f150757686291cda9834d74c99595">rs485_write_data</a> (int filedescriptor, unsigned char *RS485_buf, int size)</td></tr>
-<tr class="separator:ga333f150757686291cda9834d74c99595"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga847f93f747d23608201e131c1b16b650"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/dad/group__RS485.html#ga847f93f747d23608201e131c1b16b650">rs485_close_port</a> (int filedescriptor)</td></tr>
-<tr class="separator:ga847f93f747d23608201e131c1b16b650"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga43bdf033b4c71db64e8da581c5563bd8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/dad/group__RS485.html#ga43bdf033b4c71db64e8da581c5563bd8">rs485_open_port</a> (int portnumber, int baudrate, enum RS_PARITY parity, int databits, int stopbits, enum RS_FLOWCONTROL flowcontrol)</td></tr>
+<tr class="separator:ga43bdf033b4c71db64e8da581c5563bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaca43f71f403789b030d3c25da6b6de5b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/dad/group__RS485.html#gaca43f71f403789b030d3c25da6b6de5b">rs485_read_data</a> (int filedescriptor, unsigned char *buf, int size, int timeout)</td></tr>
+<tr class="separator:gaca43f71f403789b030d3c25da6b6de5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5b3ae7dd9edaec305ce3846387ee9713"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/dad/group__RS485.html#ga5b3ae7dd9edaec305ce3846387ee9713">rs485_write_data</a> (int filedescriptor, unsigned char *buf, int size)</td></tr>
+<tr class="separator:ga5b3ae7dd9edaec305ce3846387ee9713"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad562dcf2d0dcbbcec6bcaa900a8674db"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/dad/group__RS485.html#gad562dcf2d0dcbbcec6bcaa900a8674db">rs485_close_port</a> (int filedescriptor)</td></tr>
+<tr class="separator:gad562dcf2d0dcbbcec6bcaa900a8674db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Additional documentation for group 'RS485' </p>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga847f93f747d23608201e131c1b16b650"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga847f93f747d23608201e131c1b16b650">&#9670;&nbsp;</a></span>rs485_close_port()</h2>
+<a id="gad562dcf2d0dcbbcec6bcaa900a8674db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad562dcf2d0dcbbcec6bcaa900a8674db">&#9670;&nbsp;</a></span>rs485_close_port()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int rs485_close_port </td>
+          <td class="memname">bool rs485_close_port </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>filedescriptor</em></td><td>)</td>
@@ -138,8 +138,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gae86c0d0ee90cc7ee9f6b3b27073b6e55"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gae86c0d0ee90cc7ee9f6b3b27073b6e55">&#9670;&nbsp;</a></span>rs485_open_port()</h2>
+<a id="ga43bdf033b4c71db64e8da581c5563bd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga43bdf033b4c71db64e8da581c5563bd8">&#9670;&nbsp;</a></span>rs485_open_port()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -159,20 +159,26 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
+          <td class="paramtype">enum RS_PARITY&#160;</td>
           <td class="paramname"><em>parity</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>dataBits</em>, </td>
+          <td class="paramname"><em>databits</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>stopBits</em>&#160;</td>
+          <td class="paramname"><em>stopbits</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">enum RS_FLOWCONTROL&#160;</td>
+          <td class="paramname"><em>flowcontrol</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -181,14 +187,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Open rs485 serial link <br  />
- </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Open rs485 serial link </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">portnumber</td><td>serial port number </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">baudrate</td><td>baudrate for device </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">parity</td><td>set the parity true or false </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">databit</td><td>databit </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">stopbits</td><td></td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">parity</td><td>set the parity from the RS_PARITY enum in <a class="el" href="../../dc/de4/usb_8h_source.html">usb.h</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">databits</td><td>number of databits </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">stopbits</td><td>number of stopbits </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">flowcontrol</td><td>set the flowcontrol from the RS_FLOWCONTROL enum in <a class="el" href="../../dc/de4/usb_8h_source.html">usb.h</a> </td></tr>
   </table>
   </dd>
 </dl>
@@ -196,8 +202,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga569c605af16bf28bff2f8d56a118b899"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga569c605af16bf28bff2f8d56a118b899">&#9670;&nbsp;</a></span>rs485_read_data()</h2>
+<a id="gaca43f71f403789b030d3c25da6b6de5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaca43f71f403789b030d3c25da6b6de5b">&#9670;&nbsp;</a></span>rs485_read_data()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -224,7 +230,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>Timeout</em>&#160;</td>
+          <td class="paramname"><em>timeout</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -233,13 +239,12 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Read from rs485 serial link <br  />
- </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Read from rs485 serial link </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">filedescriptor</td><td>FD of opened port </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">buf</td><td>buffer needeed to store data </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">buf</td><td>buffer needed to store data </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>size for buffer </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">timeout</td><td>timeout time to read data</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">timeout</td><td>timeout time to read data </td></tr>
   </table>
   </dd>
 </dl>
@@ -247,8 +252,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga333f150757686291cda9834d74c99595"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga333f150757686291cda9834d74c99595">&#9670;&nbsp;</a></span>rs485_write_data()</h2>
+<a id="ga5b3ae7dd9edaec305ce3846387ee9713"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5b3ae7dd9edaec305ce3846387ee9713">&#9670;&nbsp;</a></span>rs485_write_data()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -263,7 +268,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned char *&#160;</td>
-          <td class="paramname"><em>RS485_buf</em>, </td>
+          <td class="paramname"><em>buf</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -282,11 +287,11 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">filedescriptor</td><td>FD of opened port </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">write_buf</td><td>data to write on serial port </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>write_buf buffer size</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>write_buf buffer size </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true or false </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>buffer size or -1 in case of error </dd></dl>
 
 </div>
 </div>

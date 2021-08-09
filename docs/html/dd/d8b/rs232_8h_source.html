@@ -97,40 +97,50 @@ $(document).ready(function(){initNavTree('dd/d8b/rs232_8h_source.html','../../')
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">***************************************************************************</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">***************************************************************************</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">*</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">* Author: Sawan roy</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">*</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">* Author: Sawan roy </span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">* Copyright (C) 2021 TRUNEXA INC</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">*</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">* Copyright (C) 2021 TRUNEXA INC</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">* Email: sawan.roy@trunexa.com</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">*</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">* Email: sawan.roy@trunexa.com</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">*</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">***************************************************************************</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">***************************************************************************</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#ifndef librs232_h__</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define librs232_h__</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../da/d4e/group__RS232.html#ga81a91cded0d71eec9d2e9ca0e0921570">rs232_open_port</a>(<span class="keywordtype">int</span> portnumber,<span class="keywordtype">int</span> baudrate,<span class="keywordtype">bool</span> parity,<span class="keywordtype">int</span> dataBits, <span class="keywordtype">int</span> stopbits);        </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../da/d4e/group__RS232.html#ga92ffe3396edef3d3e6d4bb63a60c8fc5">rs232_read_data</a>(<span class="keywordtype">int</span> filedescriptor, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buf, <span class="keywordtype">int</span> size,<span class="keywordtype">int</span> Timeout);            </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../da/d4e/group__RS232.html#gaf8a9fc40b3f402e7f0cc8758554ca1ec">rs232_write_data</a>(<span class="keywordtype">int</span> filedescriptor, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *write_buf, <span class="keywordtype">int</span> size);  </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../da/d4e/group__RS232.html#ga281f88cfe8d121902415a9b82e8d41f1">rs232_close_port</a>(<span class="keywordtype">int</span> filedescriptor);                                                      </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;usb.h&gt;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../da/d4e/group__RS232.html#ga956fff6551351d91d2374aab42ada35e">rs232_open_port</a>(<span class="keywordtype">int</span> portnumber, <span class="keywordtype">int</span> baudrate, <span class="keyword">enum</span> RS_PARITY parity, <span class="keywordtype">int</span> databits, <span class="keywordtype">int</span> stopbits, <span class="keyword">enum</span> RS_FLOWCONTROL flowcontrol);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../da/d4e/group__RS232.html#gaba62655e6efcbf9587d1b1dc7ac686f4">rs232_read_data</a>(<span class="keywordtype">int</span> filedescriptor, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buf, <span class="keywordtype">int</span> size, <span class="keywordtype">int</span> timeout);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keywordtype">int</span> <a class="code" href="../../da/d4e/group__RS232.html#ga027087854ec67186810989582c9537de">rs232_write_data</a>(<span class="keywordtype">int</span> filedescriptor, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buf, <span class="keywordtype">int</span> size);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="../../da/d4e/group__RS232.html#ga281f88cfe8d121902415a9b82e8d41f1">rs232_close_port</a>(<span class="keywordtype">int</span> filedescriptor);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="agroup__RS232_html_ga027087854ec67186810989582c9537de"><div class="ttname"><a href="../../da/d4e/group__RS232.html#ga027087854ec67186810989582c9537de">rs232_write_data</a></div><div class="ttdeci">int rs232_write_data(int filedescriptor, unsigned char *buf, int size)</div><div class="ttdef"><b>Definition:</b> rs232.c:92</div></div>
 <div class="ttc" id="agroup__GPS_html_gaff39464ac06c0b0030bac3a8e251b49a"><div class="ttname"><a href="../../d1/d24/group__GPS.html#gaff39464ac06c0b0030bac3a8e251b49a">read_data_gpgga_parse</a></div><div class="ttdeci">char * read_data_gpgga_parse(int filedescriptor, int index)</div><div class="ttdef"><b>Definition:</b> gps.c:236</div></div>
+<div class="ttc" id="agroup__RS232_html_ga956fff6551351d91d2374aab42ada35e"><div class="ttname"><a href="../../da/d4e/group__RS232.html#ga956fff6551351d91d2374aab42ada35e">rs232_open_port</a></div><div class="ttdeci">int rs232_open_port(int portnumber, int baudrate, enum RS_PARITY parity, int databits, int stopbits, enum RS_FLOWCONTROL flowcontrol)</div><div class="ttdef"><b>Definition:</b> rs232.c:39</div></div>
 <div class="ttc" id="agroup__GPS_html_ga6878645d3cb44b3f1af68740add3c195"><div class="ttname"><a href="../../d1/d24/group__GPS.html#ga6878645d3cb44b3f1af68740add3c195">state_gps</a></div><div class="ttdeci">char * state_gps(int filedescriptor)</div><div class="ttdef"><b>Definition:</b> gps.c:59</div></div>
 <div class="ttc" id="agroup__GPS_html_ga20986206405e1ad3bceb1064c825e478"><div class="ttname"><a href="../../d1/d24/group__GPS.html#ga20986206405e1ad3bceb1064c825e478">read_data_gprmc_parse</a></div><div class="ttdeci">char * read_data_gprmc_parse(int filedescriptor, int index)</div><div class="ttdef"><b>Definition:</b> gps.c:149</div></div>
-<div class="ttc" id="agroup__RS232_html_ga281f88cfe8d121902415a9b82e8d41f1"><div class="ttname"><a href="../../da/d4e/group__RS232.html#ga281f88cfe8d121902415a9b82e8d41f1">rs232_close_port</a></div><div class="ttdeci">bool rs232_close_port(int filedescriptor)</div><div class="ttdef"><b>Definition:</b> rs232.c:128</div></div>
-<div class="ttc" id="agroup__RS232_html_gaf8a9fc40b3f402e7f0cc8758554ca1ec"><div class="ttname"><a href="../../da/d4e/group__RS232.html#gaf8a9fc40b3f402e7f0cc8758554ca1ec">rs232_write_data</a></div><div class="ttdeci">bool rs232_write_data(int filedescriptor, unsigned char *write_buf, int size)</div><div class="ttdef"><b>Definition:</b> rs232.c:98</div></div>
+<div class="ttc" id="agroup__RS232_html_ga281f88cfe8d121902415a9b82e8d41f1"><div class="ttname"><a href="../../da/d4e/group__RS232.html#ga281f88cfe8d121902415a9b82e8d41f1">rs232_close_port</a></div><div class="ttdeci">bool rs232_close_port(int filedescriptor)</div><div class="ttdef"><b>Definition:</b> rs232.c:122</div></div>
 <div class="ttc" id="agroup__GPS_html_ga5150bad0cf61b5b272fba1590281d425"><div class="ttname"><a href="../../d1/d24/group__GPS.html#ga5150bad0cf61b5b272fba1590281d425">close_port</a></div><div class="ttdeci">bool close_port(int filedescriptor)</div><div class="ttdef"><b>Definition:</b> gps.c:278</div></div>
-<div class="ttc" id="agroup__RS232_html_ga92ffe3396edef3d3e6d4bb63a60c8fc5"><div class="ttname"><a href="../../da/d4e/group__RS232.html#ga92ffe3396edef3d3e6d4bb63a60c8fc5">rs232_read_data</a></div><div class="ttdeci">int rs232_read_data(int filedescriptor, unsigned char *buf, int size, int Timeout)</div><div class="ttdef"><b>Definition:</b> rs232.c:69</div></div>
 <div class="ttc" id="agroup__GPS_html_ga46f71d9d15985af4a12534c823de2781"><div class="ttname"><a href="../../d1/d24/group__GPS.html#ga46f71d9d15985af4a12534c823de2781">read_data_gprmc</a></div><div class="ttdeci">char * read_data_gprmc(int filedescriptor)</div><div class="ttdef"><b>Definition:</b> gps.c:104</div></div>
-<div class="ttc" id="agroup__RS232_html_ga81a91cded0d71eec9d2e9ca0e0921570"><div class="ttname"><a href="../../da/d4e/group__RS232.html#ga81a91cded0d71eec9d2e9ca0e0921570">rs232_open_port</a></div><div class="ttdeci">int rs232_open_port(int portnumber, int baudrate, bool parity, int dataBits, int stopbits)</div><div class="ttdef"><b>Definition:</b> rs232.c:40</div></div>
 <div class="ttc" id="agroup__GPS_html_gadb1c9d71eb3782e2c1ffa2bde03ab90e"><div class="ttname"><a href="../../d1/d24/group__GPS.html#gadb1c9d71eb3782e2c1ffa2bde03ab90e">read_data_gpgga</a></div><div class="ttdeci">char * read_data_gpgga(int filedescriptor)</div><div class="ttdef"><b>Definition:</b> gps.c:191</div></div>
 <div class="ttc" id="agroup__GPS_html_gabe553924eef0ba8079dc745caf1f348c"><div class="ttname"><a href="../../d1/d24/group__GPS.html#gabe553924eef0ba8079dc745caf1f348c">open_port</a></div><div class="ttdeci">int open_port()</div><div class="ttdef"><b>Definition:</b> gps.c:39</div></div>
+<div class="ttc" id="agroup__RS232_html_gaba62655e6efcbf9587d1b1dc7ac686f4"><div class="ttname"><a href="../../da/d4e/group__RS232.html#gaba62655e6efcbf9587d1b1dc7ac686f4">rs232_read_data</a></div><div class="ttdeci">int rs232_read_data(int filedescriptor, unsigned char *buf, int size, int timeout)</div><div class="ttdef"><b>Definition:</b> rs232.c:65</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
