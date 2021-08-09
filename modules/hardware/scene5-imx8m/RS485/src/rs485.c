@@ -31,31 +31,23 @@
 
 static int rs485bud;
 
-/*
 
+/*
   open_port(int portnumber,int baudrate,bool parity,int dataBits, int stopBits)
   This function Open rs485 serial link
-
 */
-int rs485_open_port(int portnumber,int baudrate, enum RS_PARITY parity, int dataBits, int stopBits, enum RS_FLOWCONTROL flowcontrol )
+int rs485_open_port(int portnumber, int baudrate, enum RS_PARITY parity, int dataBits, int stopBits, enum RS_FLOWCONTROL flowcontrol )
 {
     int filedescriptor;
     rs485bud = baudrate;
     filedescriptor = usb_open_rs(portnumber, baudrate, parity, dataBits, stopBits, flowcontrol);
-    if(filedescriptor == -10)
+    if(filedescriptor < 0)
     {
         return -1;
     }
     else
     {
-        if(filedescriptor < 0)
-        {
-            return -1;
-        }
-        else
-        {
-            return filedescriptor;
-        }
+        return filedescriptor;
     }
 }
 
@@ -65,12 +57,12 @@ int rs485_open_port(int portnumber,int baudrate, enum RS_PARITY parity, int data
    read_data(int filedescriptor, unsigned char *buf, int size,int Timeout)
    This function Read rs485 serial link
 */
-int rs485_read_data(int filedescriptor, unsigned char *buf, int size,int Timeout)
+int rs485_read_data(int filedescriptor, unsigned char *buf, int size, int timeout)
 {
     if(filedescriptor > 0)
     {
         int usbrd;
-        usbrd = usb_read_t(filedescriptor, buf, size, Timeout);
+        usbrd = usb_read_t(filedescriptor, buf, size, timeout);
         if(usbrd < 0)
         {
             return -1;
@@ -92,13 +84,13 @@ int rs485_read_data(int filedescriptor, unsigned char *buf, int size,int Timeout
    write_data(int filedescriptor, unsigned char *RS485_buf, int size)
    This function Write rs485 serial link
 */
-bool rs485_write_data(int filedescriptor, unsigned char *RS485_buf, int size)
+bool rs485_write_data(int filedescriptor, unsigned char *buf, int size)
 {
     if(filedescriptor > 0)
     {
         int ret;
         float WAIT;
-        ret = usb_write(filedescriptor, RS485_buf, size);
+        ret = usb_write(filedescriptor, buf, size);
         if(ret < 0)
         {
             return false;
@@ -106,7 +98,7 @@ bool rs485_write_data(int filedescriptor, unsigned char *RS485_buf, int size)
         else
         {
             WAIT = (1 / (float)rs485bud) * 8 * size * 1000000+5000;
-              usleep(WAIT);
+            usleep(WAIT);
             return true;
         }
     }

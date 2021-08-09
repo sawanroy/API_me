@@ -30,11 +30,11 @@
  * @param[in] portnumber serial port number
  * @param[in] baudrate   baudrate for device
  * @param[in] parity     set the parity true or false
- * @param[in] databit    databit
- * @param[in] stopbits
+ * @param[in] databits   number of databits
+ * @param[in] stopbits   number of stopbits
  * @return filedescriptor for open port
 */
-int rs485_open_port(int portnumber,int baudrate,enum RS_PARITY parity,int dataBits, int stopBits, enum RS_FLOWCONTROL flowcontrol);
+int rs485_open_port(int portnumber, int baudrate, enum RS_PARITY parity, int databits, int stopbits, enum RS_FLOWCONTROL flowcontrol);
 
 
 /*!
@@ -43,21 +43,19 @@ int rs485_open_port(int portnumber,int baudrate,enum RS_PARITY parity,int dataBi
  * @param[out] buf   buffer needeed to store data
  * @param[in] size   size for buffer
  * @param[in] timeout timeout time to read data
- *
  * @return buffer size or -1 in case of error
 */
-int rs485_read_data(int filedescriptor, unsigned char *buf, int size,int Timeout);
+int rs485_read_data(int filedescriptor, unsigned char *buf, int size, int timeout);
 
 
 /*!
  * Write to rs485 serial link
  * @param[in] filedescriptor  FD of opened port
  * @param[in] write_buf  data to write on serial port
- * @param[in] size         write_buf buffer size
- *
+ * @param[in] size       write_buf buffer size
  * @return true or false
 */
-int rs485_write_data(int filedescriptor, unsigned char *RS485_buf, int size);
+int rs485_write_data(int filedescriptor, unsigned char *buf, int size);
 
 
 /*!
