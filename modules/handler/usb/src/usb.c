@@ -88,7 +88,6 @@ int set_tty_attribs(int fd, int baudrate)
             speed = B57600;
             break;
         case 115200:
-            printf("baudrate set\n");
             speed = B115200;
             break;
         case 230400:
@@ -234,88 +233,94 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
 
     //clear default initialization in set_tty_attribs
     tty.c_cflag &= ~CSIZE; 
-    tty.c_cflag &= ~CS8;  
+    tty.c_cflag &= ~CS8;
     switch(dataBits)
     {
         case 8:
-            printf("8 bits\n");
+            // printf("8 bits\n");
             tty.c_cflag |= CS8;                                                                       /* 8-bit characters */
             break;
 
         case 7:
-            printf("7 bits\n");
+            // printf("7 bits\n");
             tty.c_cflag |= CS7;                                                                       /* 7-bit characters */
             break;
 
         case 6:
-            printf("6 bits\n");
+            // printf("6 bits\n");
             tty.c_cflag |= CS6;                                                                       /* 6-bit characters */
             break;
 
         case 5:
-            printf("5 bits\n");
+            // printf("5 bits\n");
             tty.c_cflag |= CS5;                                                                       /* 5-bit characters */
             break;
 
         default:
-            tty.c_cflag |= CS8;                                                                       /* 8-bit characters */
+            //tty.c_cflag |= CS8;                                                                       /* 8-bit characters */
+            usb_close(fd);
+            return -1;
             break;
     }
 
     switch(parity)
     {
         case NONE:
-            printf("none parity\n");
+            //printf("none parity\n");
             tty.c_cflag &= ~PARENB;                                                                   /* no parity bit */
             break;
 
         case ODD:
-            printf("odd parity\n");
+            // printf("odd parity\n");
             tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
             tty.c_cflag |= PARODD;                                                                   /* ODD parity bit */
             tty.c_cflag &= ~CMSPAR;
             break;
 
         case EVEN:
-            printf("even parity\n");
+            // printf("even parity\n");
             tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
             tty.c_cflag &= ~PARODD;                                                                   /* EVEN parity bit */
             tty.c_cflag &= ~CMSPAR;
             break;
 
         case MARK:
-            printf("mark parity\n");
+            // printf("mark parity\n");
             tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
             tty.c_cflag |= CMSPAR;
             tty.c_cflag |= PARODD;                                                                   /* MARK parity bit */
             break;
 
         case SPACE:
-            printf("space parity\n");
+            // printf("space parity\n");
             tty.c_cflag |= PARENB;                                                                   /* enable parity bit */
             tty.c_cflag |= CMSPAR;
             tty.c_cflag &= ~PARODD;                                                                   /* SPACE parity bit */
             break;
 
         default:
-            tty.c_cflag &= ~PARENB;                                                                   /* no parity bit */
+            //tty.c_cflag &= ~PARENB;                                                                   /* no parity bit */
+            usb_close(fd);
+            return -1;
             break;
     }
 
     switch(stopBits)
     {
         case 1:
-            printf("1 bits\n");
+            // printf("1 bits\n");
             tty.c_cflag &= ~CSTOPB;                                                                   /*1 stop bit */
             break;
 
         case 2:
-            printf("2 bits\n");
+            // printf("2 bits\n");
             tty.c_cflag |= CSTOPB;                                                                    /*2 stop bit */
             break;
 
         default:
-            tty.c_cflag &= ~CSTOPB;                                                                   /*1 stop bit */
+            //tty.c_cflag &= ~CSTOPB;                                                                   /*1 stop bit */
+            usb_close(fd);
+            return -1;
             break;
     }
 
@@ -328,14 +333,14 @@ int usb_open_rs(int portnumber, int baudrate, enum RS_PARITY parity, int dataBit
             break;
 
         case SOFTWARE:
-            printf("software\n");
+            // printf("software\n");
             tty.c_cflag &= ~CRTSCTS;                                                                  /* software flowcontrol */
             tty.c_cflag |= IXON;
             tty.c_cflag |= IXOFF;
             break;
 
         default:
-            printf("none\n");
+            // printf("none\n");
             tty.c_cflag &= ~CRTSCTS;                                                                  /* NONE flowcontrol */
             // tty.c_cflag &= ~IXON;
             // tty.c_cflag &= ~IXOFF;

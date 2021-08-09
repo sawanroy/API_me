@@ -36,11 +36,16 @@ static int rs485bud;
   open_port(int portnumber,int baudrate,bool parity,int dataBits, int stopBits)
   This function Open rs485 serial link
 */
-int rs485_open_port(int portnumber, int baudrate, enum RS_PARITY parity, int dataBits, int stopBits, enum RS_FLOWCONTROL flowcontrol )
+int rs485_open_port(int portnumber, int baudrate, enum RS_PARITY parity, int databits, int stopbits, enum RS_FLOWCONTROL flowcontrol )
 {
     int filedescriptor;
     rs485bud = baudrate;
-    filedescriptor = usb_open_rs(portnumber, baudrate, parity, dataBits, stopBits, flowcontrol);
+    //FTDI allows only 7/8 databits
+    if((databits < 7) || (databits > 8))
+    {
+        return -1;
+    }
+    filedescriptor = usb_open_rs(portnumber, baudrate, parity, databits, stopbits, flowcontrol);
     if(filedescriptor < 0)
     {
         return -1;
