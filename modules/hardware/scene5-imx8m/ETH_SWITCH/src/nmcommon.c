@@ -2,6 +2,7 @@
 #include <nmcommon.h>
 #include <stdio.h>
 
+
 /*Internal function*/
 bool runcommand(const char *cmd, char *output, int size)
 {

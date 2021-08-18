@@ -107,7 +107,7 @@ bool switch_init()
             /* Wait for the connection to be added */
             g_main_loop_run(loop);
         }
-        
+
         port_reset(port);
 
     }
@@ -119,42 +119,94 @@ bool switch_init()
 
 
 
-bool port_set_config(SW_PORT port_num, port_config config)
+bool port_set_config(SW_PORT port, port_config config)
 {
     char cmd[1024];
     char ret[1024]="";
     char con[1024] = "";
+    char conname[255] = "";
+    char addresses[255] = "";
 
-    NMClient* client = getClient();
+    NMClient *client; 
+    GMainLoop *loop;
+    GError *   error = NULL;
+    NMRemoteConnection* connection;
+    
+    client = getClient();
     if(!client)
     {
         return false;
     }
 
-    sprintf(cmd, "nmcli con show | grep port%d", port_num);
-    if(!runcommand(cmd,ret,1024))
+    if(port == ETH0)
     {
-        printf("error4");
-        return -1;                         //command not run error
+        sprintf(conname, "eth0");
+    }
+    else
+    {
+        sprintf(conname, "port%d", port);
     }
 
-    switch (config.port_mode)
-    {
-        case MANUAL:
-            sprintf(cmd,"nmcli con modify port%d ipv4.addresses '%s'/'%s' ipv4.gateway '%s' ipv4.dns '%s' ipv4.method manual", port_num, config.port_ip, config.port_subnet, config.port_gateway, config.port_dns);
-            if(!runCommand(cmd,ret,1024))
-            {
-                return false;
-            }
-    }
-
-    
-    sprintf(con, "port%d", port_num);
-    NMRemoteConnection* connection = nm_client_get_connection_by_id(client, con);
+    connection = nm_client_get_connection_by_id(client, conname);
     if(!connection)
     {
         return false;
     }
-    NMSetting *setting = nm_setting_connection_new();
-    nm_connection_add_setting (connection, setting);
+
+    NMSettingIPConfig *newip4 = (NMSettingIP4Config *) nm_setting_ip4_config_new();
+
+    sprintf(addresses, "%s/%s", config.port_ip, config.port_subnet);
+    switch (config.port_mode)
+    {
+        case MANUAL:          
+            g_object_set(G_OBJECT(newip4),
+                NM_SETTING_IP_CONFIG_ADDRESSES,
+                addresses,
+                NM_SETTING_IP_CONFIG_GATEWAY,
+                config.port_gateway,
+                NM_SETTING_IP_CONFIG_DNS,
+                config.port_dns,
+                NM_SETTING_IP_CONFIG_METHOD,
+                NM_SETTING_IP4_CONFIG_METHOD_MANUAL,
+                NULL);
+            break;
+        
+        case DYNAMIC:
+            g_object_set(G_OBJECT(newip4),
+                NM_SETTING_IP_CONFIG_ADDRESSES,
+                "",
+                NM_SETTING_IP_CONFIG_GATEWAY,
+                "",
+                NM_SETTING_IP_CONFIG_DNS,
+                "",
+                NM_SETTING_IP_CONFIG_METHOD,
+                NM_SETTING_IP4_CONFIG_METHOD_AUTO,
+                NULL);
+            break;
+        
+        case SHARED:
+            g_object_set(G_OBJECT(newip4),
+                NM_SETTING_IP_CONFIG_ADDRESSES,
+                "",
+                NM_SETTING_IP_CONFIG_GATEWAY,
+                "",
+                NM_SETTING_IP_CONFIG_DNS,
+                "",
+                NM_SETTING_IP_CONFIG_METHOD,
+                NM_SETTING_IP4_CONFIG_METHOD_SHARED,
+                NULL);
+            break;
+        
+        default:
+            return false;
+            break;
+    }
+
+    nm_connection_replace_settings (connection, newip4, NULL);
+    if(!ret)
+    {
+        return false;
+    }
+
+    return port_reset(port);
 }
