@@ -27,12 +27,12 @@ typedef struct{
     //Port port_num;
     SW_MODE port_mode;
     const char *port_ip;
-    const char *port_subnet;
+    int  port_prefix;
     const char *port_gateway;
     const char *port_dns;
 }port_config;
 
 bool switch_init();
 bool switch_set_config( SW_PORT port_num, port_config config);
-bool port_get_config( SW_PORT port_num, vector *v);
+bool switch_get_config( SW_PORT port_num, port_config *config);
 bool port_reset(SW_PORT port_num);

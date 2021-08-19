@@ -166,7 +166,7 @@ bool switch_set_config(SW_PORT port, port_config config)
     switch (config.port_mode)
     {
         case MANUAL:
-            prefix = atoi(config.port_subnet);
+            prefix = (guint)config.port_prefix;
             if((nm_utils_ipaddr_valid(AF_INET, config.port_ip) &&
                 nm_utils_ipaddr_valid(AF_INET, config.port_dns) &&
                 nm_utils_ipaddr_valid(AF_INET, config.port_gateway) &&
@@ -225,6 +225,87 @@ bool switch_set_config(SW_PORT port, port_config config)
 
     return port_reset(port);
 }
+
+
+
+bool switch_get_config(SW_PORT port, port_config *config)
+{
+    char cmd[1024];
+    char ret[1024] = "";
+    char con[1024] = "";
+    char conname[255] = "";
+
+    NMClient *client; 
+    GMainLoop *loop;
+    GError *   error = NULL;
+    NMRemoteConnection* connection;
+    gboolean status;
+    NMIPAddress *addresses;
+    guint prefix;
+    NMSettingIP4Config *setting;
+    const char *str;
+
+    client = getClient();
+    if(!client)
+    {
+        return false;
+    }
+
+    if(port == ETH0)
+    {
+        sprintf(conname, "eth0");
+    }
+    else
+    {
+        sprintf(conname, "port%d", port);
+    }
+
+    connection = nm_client_get_connection_by_id(client, conname);
+    if(!connection)
+    {
+        return false;
+    }
+    
+    setting = (NMSettingIP4Config *)nm_connection_get_setting_ip4_config((NMConnection *)connection);
+    if(!setting)
+    {
+        return false;
+    }
+
+    /*Get mode*/
+    str = nm_setting_ip_config_get_method((NMSettingIPConfig *)setting);
+
+    if(strcmp(str, "auto") == 0)
+    {
+        config->port_mode = DYNAMIC;
+    }
+    else if(strcmp(str, "manual") == 0)
+    {
+        config->port_mode = MANUAL;
+    }
+    else if(strcmp(str, "shared") == 0)
+    {
+        config->port_mode = SHARED;
+    }
+    else
+    {
+        return false;
+    }
+
+    /*Get IP and subnet*/
+    addresses = nm_setting_ip_config_get_address(setting, 0);
+    config->port_ip = nm_ip_address_get_address(addresses);    
+    config->port_prefix = (int)nm_ip_address_get_prefix(addresses);
+
+    /*Get gateway*/
+    config->port_gateway = nm_setting_ip_config_get_gateway((NMSettingIPConfig *)setting);
+    
+    /*Get dns*/
+    config->port_dns = nm_setting_ip_config_get_dns ((NMSettingIPConfig *)setting, 0);
+    
+    return true;
+}
+
 
 
 void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data)
