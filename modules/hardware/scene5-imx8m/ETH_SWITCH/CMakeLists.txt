@@ -36,7 +36,6 @@ add_library(
     ${PROJECT_NAME}
     SHARED
     src/switch.c
-    src/vector.c
     src/nmcommon.c
 )
 

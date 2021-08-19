@@ -3,9 +3,7 @@
 #include <glib.h>
 #include <NetworkManager.h>
 #include <string.h>
-#include <vector.h>
 #include <nmcommon.h>
-#include <vector.h>
 #include <sys/wait.h>
 #include <switch.h>
 

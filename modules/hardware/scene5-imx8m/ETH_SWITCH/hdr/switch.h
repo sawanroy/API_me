@@ -1,6 +1,5 @@
 
 #include <stdbool.h>
-#include <vector.h>
 #include <stdio.h>
 #include <nmcommon.h>
 
