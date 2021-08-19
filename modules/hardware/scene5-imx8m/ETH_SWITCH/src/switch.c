@@ -10,6 +10,10 @@
 #include <switch.h>
 
 
+static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname);
+static void added_cb(GObject *client, GAsyncResult *result, gpointer user_data);
+static void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data);
+
 
 bool port_reset(SW_PORT port_num)
 {
@@ -119,19 +123,22 @@ bool switch_init()
 
 
 
-bool port_set_config(SW_PORT port, port_config config)
+bool switch_set_config(SW_PORT port, port_config config)
 {
     char cmd[1024];
     char ret[1024]="";
     char con[1024] = "";
     char conname[255] = "";
-    char addresses[255] = "";
+    //char addresses[255] = "";
 
     NMClient *client; 
     GMainLoop *loop;
     GError *   error = NULL;
     NMRemoteConnection* connection;
-    
+    gboolean status;
+    NMIPAddress *addresses;
+    guint prefix;
+
     client = getClient();
     if(!client)
     {
@@ -153,32 +160,41 @@ bool port_set_config(SW_PORT port, port_config config)
         return false;
     }
 
-    NMSettingIPConfig *newip4 = (NMSettingIP4Config *) nm_setting_ip4_config_new();
+    NMSettingIP4Config *newip4 = (NMSettingIP4Config *) nm_setting_ip4_config_new();
 
-    sprintf(addresses, "%s/%s", config.port_ip, config.port_subnet);
+    
     switch (config.port_mode)
     {
-        case MANUAL:          
+        case MANUAL:
+            prefix = atoi(config.port_subnet);
+            if((nm_utils_ipaddr_valid(AF_INET, config.port_ip) &&
+                nm_utils_ipaddr_valid(AF_INET, config.port_dns) &&
+                nm_utils_ipaddr_valid(AF_INET, config.port_gateway) &&
+                (prefix <= 32)) != 1)
+            {
+                return false;
+            }
+            addresses = nm_ip_address_new(AF_INET, config.port_ip, prefix, NULL);     
             g_object_set(G_OBJECT(newip4),
-                NM_SETTING_IP_CONFIG_ADDRESSES,
-                addresses,
-                NM_SETTING_IP_CONFIG_GATEWAY,
-                config.port_gateway,
-                NM_SETTING_IP_CONFIG_DNS,
-                config.port_dns,
                 NM_SETTING_IP_CONFIG_METHOD,
                 NM_SETTING_IP4_CONFIG_METHOD_MANUAL,
+                NM_SETTING_IP_CONFIG_GATEWAY,
+                config.port_gateway,
                 NULL);
+
+            if(!nm_setting_ip_config_add_address(newip4, addresses))
+            {
+                return false;
+            }
+
+            if(!nm_setting_ip_config_add_dns(newip4, config.port_dns))
+            {
+                return false;
+            }
             break;
         
         case DYNAMIC:
             g_object_set(G_OBJECT(newip4),
-                NM_SETTING_IP_CONFIG_ADDRESSES,
-                "",
-                NM_SETTING_IP_CONFIG_GATEWAY,
-                "",
-                NM_SETTING_IP_CONFIG_DNS,
-                "",
                 NM_SETTING_IP_CONFIG_METHOD,
                 NM_SETTING_IP4_CONFIG_METHOD_AUTO,
                 NULL);
@@ -186,12 +202,6 @@ bool port_set_config(SW_PORT port, port_config config)
         
         case SHARED:
             g_object_set(G_OBJECT(newip4),
-                NM_SETTING_IP_CONFIG_ADDRESSES,
-                "",
-                NM_SETTING_IP_CONFIG_GATEWAY,
-                "",
-                NM_SETTING_IP_CONFIG_DNS,
-                "",
                 NM_SETTING_IP_CONFIG_METHOD,
                 NM_SETTING_IP4_CONFIG_METHOD_SHARED,
                 NULL);
@@ -202,11 +212,112 @@ bool port_set_config(SW_PORT port, port_config config)
             break;
     }
 
-    nm_connection_replace_settings (connection, newip4, NULL);
-    if(!ret)
-    {
-        return false;
-    }
+    /*Remove existing ipv4 setting*/
+    nm_connection_remove_setting(connection, NM_TYPE_SETTING_IP4_CONFIG);
+    
+    /*Add new configured ipv4 setting*/
+    nm_connection_add_setting(connection, NM_SETTING(newip4));
+
+    /*Save connection*/
+    nm_remote_connection_commit_changes_async(connection, TRUE, NULL, mod_cb, NULL);
+
+    g_object_unref(connection);
 
     return port_reset(port);
+}
+
+
+void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data)
+{
+    GMainLoop *         loop = user_data;
+    NMRemoteConnection *remote;
+    GError *            error = NULL;
+    gboolean            status;
+    /* NM responded to our request; either handle the resulting error or
+     * print out the object path of the connection we just added.
+     */
+    status = nm_remote_connection_commit_changes_finish(connection, result, &error);
+
+    if (error) {
+        g_print("Error adding connection: %s", error->message);
+        g_error_free(error);
+    } else {
+        g_print("Added: %s\n", nm_connection_get_path(NM_CONNECTION(remote)));
+        g_object_unref(remote);
+    }
+
+    /* Tell the mainloop we're done and we can quit now */
+    //g_main_loop_quit(loop);
+}
+
+
+void added_cb(GObject *client, GAsyncResult *result, gpointer user_data)
+{
+    GMainLoop *         loop = user_data;
+    NMRemoteConnection *remote;
+    GError *            error = NULL;
+
+    /* NM responded to our request; either handle the resulting error or
+     * print out the object path of the connection we just added.
+     */
+    remote = nm_client_add_connection_finish(NM_CLIENT(client), result, &error);
+
+    if (error) {
+        g_print("Error adding connection: %s", error->message);
+        g_error_free(error);
+    } else {
+        g_print("Added: %s\n", nm_connection_get_path(NM_CONNECTION(remote)));
+        g_object_unref(remote);
+    }
+
+    /* Tell the mainloop we're done and we can quit now */
+    g_main_loop_quit(loop);
+}
+
+
+
+void nm_add_connection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname)
+{
+    NMConnection *       connection;
+    NMSettingConnection *s_con;
+    NMSettingWired *     s_wired;
+    NMSettingIP4Config * s_ip4;
+    char *               uuid;
+
+    /* Create a new connection object */
+    connection = nm_simple_connection_new();
+
+    /* Build up the 'connection' Setting */
+    s_con = (NMSettingConnection *) nm_setting_connection_new();
+    uuid  = nm_utils_uuid_generate();
+    g_object_set(G_OBJECT(s_con),
+                 NM_SETTING_CONNECTION_UUID,
+                 uuid,
+                 NM_SETTING_CONNECTION_ID,
+                 conname,
+                 NM_SETTING_CONNECTION_TYPE,
+                 "802-3-ethernet",
+                 NM_SETTING_CONNECTION_INTERFACE_NAME,
+                 ifname,
+                 NULL);
+    g_free(uuid);
+    nm_connection_add_setting(connection, NM_SETTING(s_con));
+
+    /* Build up the 'wired' Setting */
+    s_wired = (NMSettingWired *) nm_setting_wired_new();
+    nm_connection_add_setting(connection, NM_SETTING(s_wired));
+
+    /* Build up the 'ipv4' Setting */
+    s_ip4 = (NMSettingIP4Config *) nm_setting_ip4_config_new();
+    g_object_set(G_OBJECT(s_ip4),
+                 NM_SETTING_IP_CONFIG_METHOD,
+                 NM_SETTING_IP4_CONFIG_METHOD_AUTO,
+                 NULL);
+    nm_connection_add_setting(connection, NM_SETTING(s_ip4));
+
+    /* Ask the settings service to add the new connection; we'll quit the
+     * mainloop and exit when the callback is called.
+     */
+    nm_client_add_connection_async(client, connection, TRUE, NULL, added_cb, loop);
+    g_object_unref(connection);
 }

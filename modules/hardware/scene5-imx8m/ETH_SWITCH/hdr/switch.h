@@ -33,6 +33,6 @@ typedef struct{
 }port_config;
 
 bool switch_init();
-bool port_set_config( SW_PORT port_num, port_config config);
+bool switch_set_config( SW_PORT port_num, port_config config);
 bool port_get_config( SW_PORT port_num, vector *v);
 bool port_reset(SW_PORT port_num);
