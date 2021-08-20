@@ -34,4 +34,4 @@ typedef struct{
 bool switch_init();
 bool switch_set_config( SW_PORT port_num, port_config config);
 bool switch_get_config( SW_PORT port_num, port_config *config);
-bool port_reset(SW_PORT port_num);
+bool switch_port_reset(SW_PORT port_num);

@@ -13,7 +13,7 @@ static void added_cb(GObject *client, GAsyncResult *result, gpointer user_data);
 static void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data);
 
 
-bool port_reset(SW_PORT port_num)
+bool switch_port_reset(SW_PORT port_num)
 {
     char cmd[1024];
     char ret[1024]="";
@@ -104,7 +104,7 @@ bool switch_init()
             g_main_loop_run(loop);
         }
 
-        port_reset(port);
+        switch_port_reset(port);
 
     }
 
@@ -208,7 +208,7 @@ bool switch_set_config(SW_PORT port, port_config config)
 
     g_object_unref(connection);
 
-    return port_reset(port);
+    return switch_port_reset(port);
 }
 
 
