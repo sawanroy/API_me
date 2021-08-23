@@ -22,7 +22,6 @@
 static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname);
 static void added_cb(GObject *client, GAsyncResult *result, gpointer user_data);
 static void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data);
-static void deactivate_cb(GObject *client, GAsyncResult *result, gpointer user_data);
 static void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data);
 static void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data);
 static void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data);
@@ -245,12 +244,6 @@ bool switch_set_config(SW_PORT port, port_config config)
             break;
     }
 
-    // /*Deactivate current connection*/
-    // nm_client_deactivate_connection_async(client, (NMActiveConnection *)connection, NULL, deactivate_cb, loop1);
-    // /* Wait for the connection to be added */
-    // g_main_loop_run(loop1);
-
-
    // printf("deactivate success\n");
     /*Remove existing ipv4 setting*/
     nm_connection_remove_setting((NMConnection *)connection, NM_TYPE_SETTING_IP4_CONFIG);
@@ -470,34 +463,6 @@ void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data)
     g_main_loop_quit(loop);
 }
 
-void deactivate_cb(GObject *client, GAsyncResult *result, gpointer user_data)
-{
-    GError *error = NULL;
-    GMainLoop *loop = user_data;
-    /* NM responded to our request; either handle the resulting error or
-     * print out the object path of the connection we just added.
-     */
-    nm_client_deactivate_connection_finish(NM_CLIENT(client), result, &error);
-    printf("deactivate cb\n");
-    if(error)
-    {
-        g_print("Error deactivating connection: %s", error->message);
-        g_error_free(error);
-    }
-    else
-    {
-        //g_print("Added: %s\n", nm_connection_get_path(NM_CONNECTION(connection)));
-        //g_object_unref(remote);
-    }
-
-    // if(user_data)
-    // {
-    //     /* to remove the unused variable warnings*/
-    // }
-
-    /* Tell the mainloop we're done and we can quit now */
-    g_main_loop_quit(loop);
-}
 
 
 void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data)
