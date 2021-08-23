@@ -59,7 +59,18 @@ typedef struct{
     const char *port_dns;
 }port_config;
 
-bool switch_init();
-bool switch_set_config( SW_PORT port_num, port_config config);
+typedef enum
+{
+    RESET_FAILURE=0,
+    SUCCESS=1,
+    RELOAD_FAILURE=-1,
+    ADDITION_FAILURE=-2,
+    ACTIVATION_FAILURE=-3,
+    MODIFY_FAILURE=-4,
+    REAPPLY_FAILURE=-5,
+}ERROR_CODE;
+
+int switch_init();
+int switch_set_config( SW_PORT port_num, port_config config);
 bool switch_get_config( SW_PORT port_num, port_config *config);
 bool switch_port_reset(SW_PORT port_num);

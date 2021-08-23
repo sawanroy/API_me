@@ -28,6 +28,8 @@ static void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_dat
 static void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data);
 
 
+static ERROR_CODE ERROR;
+
 /**
  * bool switch_port_reset(SW_PORT port_num)
  * function to reset switch ports
@@ -90,7 +92,7 @@ bool switch_port_reset(SW_PORT port_num)
  * bool switch_init()
  * function to init switch
  * */
-bool switch_init()
+int switch_init()
 {
     char conname[255] = "";
 
@@ -100,6 +102,7 @@ bool switch_init()
     GMainLoop *loop2;
     GMainLoop *loop3;
     NMRemoteConnection *connection;
+    ERROR = SUCCESS;
 
     client = getClient();
     if(!client)
@@ -114,7 +117,7 @@ bool switch_init()
     /*Reload all connections from disk*/
     nm_client_reload_connections_async(client, NULL, reload_cb, loop1);
     g_main_loop_run(loop1);
-
+    
     for(SW_PORT port = ETH0; port <= PORT7; port++)
     {
         if(port == ETH0)
@@ -137,7 +140,6 @@ bool switch_init()
             g_main_loop_run(loop2);
              
             connection = (NMRemoteConnection *)nm_client_get_connection_by_id(client, conname);
-
         }
         
         device = nm_client_get_device_by_iface(client, conname);
@@ -146,12 +148,19 @@ bool switch_init()
         /* Wait for the connection to be added */
         g_main_loop_run(loop3);
 
-        switch_port_reset(port);
+        if(ERROR != SUCCESS)
+        {
+            switch_port_reset(port);
+        }
+        else
+        {
+            ERROR = switch_port_reset(port);
+        }
     }
 
     /* Clean up */
     g_object_unref(client);
-    return true;
+    return ERROR;
 }
 
 
@@ -160,7 +169,7 @@ bool switch_init()
  * bool switch_set_config(SW_PORT port, port_config config)
  * function to set the switch port config
  * */
-bool switch_set_config(SW_PORT port, port_config config)
+int switch_set_config(SW_PORT port, port_config config)
 {
     char conname[255] = "";
 
@@ -173,7 +182,8 @@ bool switch_set_config(SW_PORT port, port_config config)
     GMainLoop *loop1;
     GMainLoop *loop2;
     GMainLoop *loop3;
-
+    ERROR = SUCCESS;
+    
     client = getClient();
     if(!client)
     {
@@ -279,7 +289,16 @@ bool switch_set_config(SW_PORT port, port_config config)
 
     g_object_unref(connection);
 
-    return switch_port_reset(port);
+    if(ERROR != SUCCESS)
+    {
+        switch_port_reset(port);
+        return ERROR;
+    }
+    else
+    {
+        return switch_port_reset(port);
+    }
+
 }
 
 
@@ -375,6 +394,7 @@ void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data)
     
     if(error)
     {
+        ERROR = RELOAD_FAILURE;
         g_print("Error reload connection: %s", error->message);
         g_error_free(error);
     }
@@ -405,6 +425,7 @@ void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data)
     
     if(error)
     {
+        ERROR = REAPPLY_FAILURE;
         g_print("Error reapply connection: %s", error->message);
         g_error_free(error);
     }
@@ -434,6 +455,7 @@ void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data)
     
     if(error)
     {
+        ERROR = ACTIVATION_FAILURE;
         g_print("Error activating connection: %s", error->message);
         g_error_free(error);
     }
@@ -462,6 +484,7 @@ void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_
   
     if(error)
     {
+        ERROR = MODIFY_FAILURE;
         g_print("Error modifying connection: %s", error->message);
         g_error_free(error);
     }
@@ -489,6 +512,7 @@ void added_cb(GObject *client, GAsyncResult *result, gpointer user_data)
     
     if(error)
     {
+        ERROR = ADDITION_FAILURE;
         g_print("Error adding connection: %s", error->message);
         g_error_free(error);
     }
