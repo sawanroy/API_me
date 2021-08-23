@@ -17,6 +17,7 @@
 #include <nmcommon.h>
 #include <sys/wait.h>
 #include <switch.h>
+#include <unistd.h>
 
 /*Private finctions*/
 static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname);
@@ -64,7 +65,7 @@ bool switch_port_reset(SW_PORT port_num)
         {
             return false;              //command not run error
         }
-        sleep(1);
+        usleep(50000);
     }
 
     if(port_num == ETH0)
