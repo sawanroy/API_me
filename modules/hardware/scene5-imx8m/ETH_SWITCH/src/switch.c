@@ -30,10 +30,10 @@ static void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 
 static ERROR_CODE ERROR;
 
-/**
+/*
  * bool switch_port_reset(SW_PORT port_num)
  * function to reset switch ports
- * */
+ */
 bool switch_port_reset(SW_PORT port_num)
 {
     char cmd[1024];
@@ -88,10 +88,10 @@ bool switch_port_reset(SW_PORT port_num)
 
 
 
-/**
+/*
  * bool switch_init()
  * function to init switch
- * */
+ */
 int switch_init()
 {
     char conname[255] = "";
@@ -165,10 +165,10 @@ int switch_init()
 
 
 
-/**
+/*
  * bool switch_set_config(SW_PORT port, port_config config)
  * function to set the switch port config
- * */
+ */
 int switch_set_config(SW_PORT port, port_config config)
 {
     char conname[255] = "";
@@ -183,7 +183,7 @@ int switch_set_config(SW_PORT port, port_config config)
     GMainLoop *loop2;
     GMainLoop *loop3;
     ERROR = SUCCESS;
-    
+
     client = getClient();
     if(!client)
     {
@@ -303,10 +303,10 @@ int switch_set_config(SW_PORT port, port_config config)
 
 
 
-/**
+/*
  * bool switch_get_config(SW_PORT port, port_config *config)
  * function to get the switch port config
- * */
+ */
 bool switch_get_config(SW_PORT port, port_config *config)
 {
 
@@ -381,10 +381,10 @@ bool switch_get_config(SW_PORT port, port_config *config)
 
 
 
-/**
+/*
  * void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data)
  * callback function for reload api
- * */
+ */
 void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 {
     GError *error = NULL;  
@@ -411,10 +411,10 @@ void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 
 
 
-/**
+/*
  * void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data)
  * callback function for reapply api
- * */
+ */
 void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data)
 {
     GError *error = NULL;
@@ -440,10 +440,10 @@ void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data)
 
 
 
-/**
+/*
  * void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data)
  * callback function for activate api
- * */
+ */
 void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 {
     GError *error = NULL;
@@ -471,10 +471,10 @@ void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 
 
 
-/**
+/*
  * void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data)
  * callback function for save and commit api
- * */
+ */
 void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data)
 {
     GError *error = NULL;
@@ -498,10 +498,10 @@ void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_
 
 
 
-/**
+/*
  * void added_cb(GObject *client, GAsyncResult *result, gpointer user_data)
  * callback function for add connection api
- * */
+ */
 void added_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 {
     GMainLoop *loop = user_data;
@@ -528,10 +528,10 @@ void added_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 
 
 
-/**
+/*
  * static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname)
  * Internal function to handle addition of connection
- * */
+ */
 static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname)
 {
     NMConnection *connection;
