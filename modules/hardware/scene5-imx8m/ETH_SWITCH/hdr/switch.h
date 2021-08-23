@@ -1,7 +1,36 @@
+/**
+ * @file
+ * @brief APIs refernce for RS232
+*/
+/*
+***************************************************************************
+*
+* Author: Nikhil Anjane
+*
+* Copyright (C) 2021 TRUNEXA INC
+*
+* Email: nikhil.anjane@trunexa.com
+*
+***************************************************************************
+*/
+
 
 #include <stdbool.h>
 #include <stdio.h>
 #include <nmcommon.h>
+
+
+/**
+ * Enable/Disable logs
+*/
+#define ENABLE_LOGS 1
+
+#if ENABLE_LOGS
+    #define dbg_log(a) printf a
+#else
+    #define dbg_log(a) (void)0
+#endif
+
 
 typedef enum 
 { 
@@ -23,7 +52,6 @@ typedef enum
 }SW_PORT;
 
 typedef struct{
-    //Port port_num;
     SW_MODE port_mode;
     const char *port_ip;
     int  port_prefix;
