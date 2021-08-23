@@ -1,3 +1,14 @@
+/*
+***************************************************************************
+*
+* Author: Nikhil Anjane
+*
+* Copyright (C) 2021 TRUNEXA INC
+*
+* Email: nikhil.anjane@trunexa.com
+*
+***************************************************************************
+*/
 
 #include <stdio.h>
 #include <glib.h>
