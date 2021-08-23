@@ -108,8 +108,8 @@ bool switch_init()
     loop3 = g_main_loop_new(NULL, FALSE);
 
     /*Reload all connections from disk*/
-    nm_client_reload_connections_async(client, NULL, reload_cb, loop3);
-    g_main_loop_run(loop3);
+    nm_client_reload_connections_async(client, NULL, reload_cb, loop1);
+    g_main_loop_run(loop1);
 
     for(SW_PORT port = ETH0; port <= PORT7; port++)
     {
@@ -127,10 +127,10 @@ bool switch_init()
         if(!connection)
         {
             /* Ask NM to add the new connection */
-            nm_add_connection(client, loop1, conname, conname);
+            nm_add_connection(client, loop2, conname, conname);
 
             /* Wait for the connection to be added */
-            g_main_loop_run(loop1);
+            g_main_loop_run(loop2);
              
             connection = (NMRemoteConnection *)nm_client_get_connection_by_id(client, conname);
 
@@ -138,9 +138,9 @@ bool switch_init()
         
         device = nm_client_get_device_by_iface(client, conname);
         const char *path = nm_object_get_path(NM_OBJECT(connection));
-        nm_client_activate_connection_async(client, (NMConnection *)connection, device, path, NULL, activate_cb, loop2);
+        nm_client_activate_connection_async(client, (NMConnection *)connection, device, path, NULL, activate_cb, loop3);
         /* Wait for the connection to be added */
-        g_main_loop_run(loop2);
+        g_main_loop_run(loop3);
 
         switch_port_reset(port);
     }
@@ -162,10 +162,9 @@ bool switch_set_config(SW_PORT port, port_config config)
     NMSettingIP4Config *newip4;
     guint prefix;
     NMDevice *device;
-    // GMainLoop *loop1;
+    GMainLoop *loop1;
     GMainLoop *loop2;
     GMainLoop *loop3;
-    GMainLoop *loop4;
 
     client = getClient();
     if(!client)
@@ -182,10 +181,9 @@ bool switch_set_config(SW_PORT port, port_config config)
         sprintf(conname, "port%d", port);
     }
 
-    // loop1 = g_main_loop_new(NULL, FALSE);
+    loop1 = g_main_loop_new(NULL, FALSE);
     loop2 = g_main_loop_new(NULL, FALSE);
     loop3 = g_main_loop_new(NULL, FALSE);
-    loop4 = g_main_loop_new(NULL, FALSE);
 
     connection = (NMRemoteConnection *)nm_client_get_connection_by_id(client, conname);
     if(!connection)
@@ -244,7 +242,6 @@ bool switch_set_config(SW_PORT port, port_config config)
             break;
     }
 
-   // printf("deactivate success\n");
     /*Remove existing ipv4 setting*/
     nm_connection_remove_setting((NMConnection *)connection, NM_TYPE_SETTING_IP4_CONFIG);
 
@@ -252,9 +249,9 @@ bool switch_set_config(SW_PORT port, port_config config)
     nm_connection_add_setting((NMConnection *)connection, NM_SETTING(newip4));
 
     /*Save connection*/
-    nm_remote_connection_commit_changes_async(connection, TRUE, NULL, (GAsyncReadyCallback)mod_cb, loop2);
+    nm_remote_connection_commit_changes_async(connection, TRUE, NULL, (GAsyncReadyCallback)mod_cb, loop1);
     /* Wait for the connection to be added */
-    g_main_loop_run(loop2);
+    g_main_loop_run(loop1);
 
 
     /*Reapply changes to device*/
@@ -265,13 +262,13 @@ bool switch_set_config(SW_PORT port, port_config config)
     const char *path = nm_object_get_path(NM_OBJECT(connection));
     printf("path: %s\n", path);
     
-    nm_client_activate_connection_async(client, (NMConnection *)connection, device, path, NULL, activate_cb, loop3);
+    nm_client_activate_connection_async(client, (NMConnection *)connection, device, path, NULL, activate_cb, loop2);
+    /* Wait for the connection to be added */
+    g_main_loop_run(loop2);
+
+    nm_device_reapply_async(device, (NMConnection *)connection, 0, 0, NULL, (GAsyncReadyCallback)reapply_cb, loop3);
     /* Wait for the connection to be added */
     g_main_loop_run(loop3);
-
-    nm_device_reapply_async(device, (NMConnection *)connection, 0, 0, NULL, (GAsyncReadyCallback)reapply_cb, loop4);
-    /* Wait for the connection to be added */
-    g_main_loop_run(loop4);
     printf("activate success\n");
 
     g_object_unref(connection);
@@ -358,15 +355,9 @@ bool switch_get_config(SW_PORT port, port_config *config)
 
 void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 {
-    GError *error = NULL;
-    //NMActiveConnection *connection;
+    GError *error = NULL;  
     GMainLoop *loop = user_data;
-    //gboolean status;
-    /* NM responded to our request; either handle the resulting error or
-     * print out the object path of the connection we just added.
-     */
-    printf("reload cb\n");
-    //sleep(1);
+
     nm_client_reload_connections_finish(NM_CLIENT(client), result, &error);
     
     if(error)
@@ -376,15 +367,8 @@ void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data)
     }
     else
     {
-        //g_print("Addedactivate: %s\n", nm_connection_get_path((NMConnection *)connection));
         g_print("reloaded connections\n");
-        //g_object_unref(connection);
     }
-
-    // if(user_data)
-    // {
-    //     /* to remove the unused variable warnings*/
-    // }
 
     /* Tell the mainloop we're done and we can quit now */
     g_main_loop_quit(loop);
@@ -398,13 +382,8 @@ void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data)
 {
     GError *error = NULL;
-    //NMActiveConnection *connection;
     GMainLoop *loop = user_data;
-    //gboolean status;
-    /* NM responded to our request; either handle the resulting error or
-     * print out the object path of the connection we just added.
-     */
-    printf("reapply cb\n");
+   
     sleep(1);
     nm_device_reapply_finish(device, result, &error);
     
@@ -415,15 +394,8 @@ void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data)
     }
     else
     {
-        //g_print("Addedactivate: %s\n", nm_connection_get_path((NMConnection *)connection));
         g_print("reapplied connection\n");
-        //g_object_unref(connection);
     }
-
-    // if(user_data)
-    // {
-    //     /* to remove the unused variable warnings*/
-    // }
 
     /* Tell the mainloop we're done and we can quit now */
     g_main_loop_quit(loop);
@@ -435,10 +407,7 @@ void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data)
     GError *error = NULL;
     NMActiveConnection *connection;
     GMainLoop *loop = user_data;
-    /* NM responded to our request; either handle the resulting error or
-     * print out the object path of the connection we just added.
-     */
-    printf("activate cb\n");
+   
     sleep(1);
     connection = nm_client_activate_connection_finish(NM_CLIENT(client), result, &error);
     
@@ -449,15 +418,9 @@ void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data)
     }
     else
     {
-        //g_print("Addedactivate: %s\n", nm_connection_get_path((NMConnection *)connection));
         g_print("activated connection\n");
         g_object_unref(connection);
     }
-
-    // if(user_data)
-    // {
-    //     /* to remove the unused variable warnings*/
-    // }
 
     /* Tell the mainloop we're done and we can quit now */
     g_main_loop_quit(loop);
@@ -469,11 +432,9 @@ void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_
 {
     GError *error = NULL;
     GMainLoop *loop = user_data;
-    /* NM responded to our request; either handle the resulting error or
-     * print out the object path of the connection we just added.
-     */
+    
     nm_remote_connection_commit_changes_finish(connection, result, &error);
-    printf("mod cb\n");
+  
     if(error)
     {
         g_print("Error modifying connection: %s", error->message);
@@ -482,11 +443,9 @@ void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_
     else
     {
         g_print("Modified: %s\n", nm_connection_get_path(NM_CONNECTION(connection)));
-        //g_object_unref(remote);
     }
 
-    // 
-     g_main_loop_quit(loop);
+    g_main_loop_quit(loop);
 }
 
 
@@ -496,12 +455,8 @@ void added_cb(GObject *client, GAsyncResult *result, gpointer user_data)
     NMRemoteConnection *remote;
     GError *error = NULL;
 
-    /* NM responded to our request; either handle the resulting error or
-     * print out the object path of the connection we just added.
-     */
     remote = nm_client_add_connection_finish(NM_CLIENT(client), result, &error);
-    //remote = nm_client_add_and_activate_connection_finish(NM_CLIENT(client), result, &error);
-    printf("*********************************add cb\n");
+    
     if(error)
     {
         g_print("Error adding connection: %s", error->message);
@@ -513,7 +468,6 @@ void added_cb(GObject *client, GAsyncResult *result, gpointer user_data)
         g_object_unref(remote);
     }
 
-    printf("*********************************add end\n");
     /* Tell the mainloop we're done and we can quit now */
     g_main_loop_quit(loop);
 }
