@@ -26,7 +26,7 @@
 /**
  * Enable/Disable logs
 */
-#define ENABLE_LOGS 1
+#define ENABLE_LOGS 0
 
 #if ENABLE_LOGS
     #define dbg_log(a) printf a
@@ -83,7 +83,7 @@ typedef enum
 typedef struct{
     SW_MODE port_mode;          /**< SW_MODE type variable to set mode*/
     const char *port_ip;        /**< Constant character type variable for IP address*/
-    int  port_prefix;           /**< Integer type variable for subnet prefix(0-24)*/
+    const char *port_prefix;    /**< Integer type variable for subnet prefix(0-24)*/
     const char *port_gateway;   /**< Constant character type variable for gateway address*/
     const char *port_dns;       /**< Constant character type variable for DNS address*/
 }port_config;

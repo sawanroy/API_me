@@ -213,7 +213,7 @@ int switch_set_config(SW_PORT port, port_config config)
     switch (config.port_mode)
     {
         case MANUAL:
-            prefix = (guint)config.port_prefix;
+            prefix = (guint)atoi(config.port_prefix);
             if((nm_utils_ipaddr_valid(AF_INET, config.port_ip) &&
                 nm_utils_ipaddr_valid(AF_INET, config.port_dns) &&
                 nm_utils_ipaddr_valid(AF_INET, config.port_gateway) &&
@@ -314,6 +314,8 @@ bool switch_get_config(SW_PORT port, port_config *config)
     NMIPAddress *addresses;
     NMSettingIP4Config *setting;
     const char *str;
+    int prefix;
+    char prefixstr[10];
 
     client = getClient();
     if(!client)
@@ -362,16 +364,28 @@ bool switch_get_config(SW_PORT port, port_config *config)
         return false;
     }
 
-    /*Get IP and subnet*/
-    addresses = nm_setting_ip_config_get_address((NMSettingIPConfig *)setting, 0);
-    config->port_ip = nm_ip_address_get_address(addresses);
-    config->port_prefix = (int)nm_ip_address_get_prefix(addresses);
+    if(config->port_mode == MANUAL)
+    {
+        /*Get IP and subnet*/
+        addresses = nm_setting_ip_config_get_address((NMSettingIPConfig *)setting, 0);
+        config->port_ip = nm_ip_address_get_address(addresses);
+        prefix = (int)nm_ip_address_get_prefix(addresses);
+        sprintf((char *)prefixstr, "%d", prefix);
+        config->port_prefix = strdup(prefixstr);
 
-    /*Get gateway*/
-    config->port_gateway = nm_setting_ip_config_get_gateway((NMSettingIPConfig *)setting);
+        /*Get gateway*/
+        config->port_gateway = nm_setting_ip_config_get_gateway((NMSettingIPConfig *)setting);
 
-    /*Get dns*/
-    config->port_dns = nm_setting_ip_config_get_dns ((NMSettingIPConfig *)setting, 0);
+        /*Get dns*/
+        config->port_dns = nm_setting_ip_config_get_dns ((NMSettingIPConfig *)setting, 0);
+    }
+    else
+    {
+        config->port_ip = "";
+        config->port_prefix = "";
+        config->port_gateway = "";
+        config->port_dns = "";
+    }
 
     return true;
 }
