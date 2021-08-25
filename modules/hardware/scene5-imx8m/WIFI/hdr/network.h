@@ -227,6 +227,15 @@ bool wifi_use_dhcp(bool enable);
 */
 bool wifi_mode(bool mode, wifi_info apn);
 
+
+/*!
+ * Delete the ssid connection completely
+ * @param ssid ssid to be deleted
+ * @return status of function (true or false)
+*/
+bool wifi_delete_ssid(char *ssid);
+
+
 /*! @} */
 #ifdef __cplusplus
 }

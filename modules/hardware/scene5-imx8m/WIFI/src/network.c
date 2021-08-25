@@ -16,6 +16,9 @@
 static bool ssidLockCheck();
 static bool ssidAvailable(char *ssid);
 static bool clientMode();
+static void deleteCb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data);
+
+static bool ERROR;
 
 /*
     Internal function
@@ -1236,4 +1239,60 @@ bool wifi_set_ssid_lock(char *ssidlock, bool enable)
     }
 
     return true;
+}
+
+
+
+/*
+bool wifi_delete_ssid(char *ssid)
+Function to delete ssid completly
+*/
+bool wifi_delete_ssid(char *ssid)
+{
+    char cmd[1024];
+    char ret[1024];
+    NMClient *client;
+    NMRemoteConnection *connection;
+    GMainLoop *loop;
+
+    client = getClient();
+    if(!client)
+    {
+        return false;
+    }
+
+    loop = g_main_loop_new(NULL, FALSE);
+
+    connection = nm_client_get_connection_by_id(client, (const char *)ssid);
+    nm_remote_connection_delete_async(connection, NULL, (GAsyncReadyCallback)deleteCb, loop);
+
+    g_main_loop_run(loop);
+
+}
+
+
+/*
+ * void deleteCb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data)
+ * callback function for delete api
+ */
+void deleteCb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data)
+{
+    GError *error = NULL;
+    GMainLoop *loop = user_data;
+
+    nm_remote_connection_delete_finish(connection, result, &error);
+
+    if(error)
+    {
+        ERROR = false;
+        dbg_log(("Error deleting connection: %s", error->message));
+        g_error_free(error);
+    }
+    else
+    {
+        ERROR = true;
+        dbg_log(("delete sucess\n"));
+    }
+
+    g_main_loop_quit(loop);
 }
