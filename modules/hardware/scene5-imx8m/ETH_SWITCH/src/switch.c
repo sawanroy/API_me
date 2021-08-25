@@ -20,12 +20,12 @@
 #include <unistd.h>
 
 /*Private functions*/
-static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname);
-static void added_cb(GObject *client, GAsyncResult *result, gpointer user_data);
-static void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data);
-static void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data);
-static void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data);
-static void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data);
+static void nmAddConnection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname);
+static void addedCb(GObject *client, GAsyncResult *result, gpointer user_data);
+static void modCb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data);
+static void activateCb(GObject *client, GAsyncResult *result, gpointer user_data);
+static void reapplyCb(NMDevice *device, GAsyncResult *result, gpointer user_data);
+static void reloadCb(GObject *client, GAsyncResult *result, gpointer user_data);
 
 static ERROR_CODE ERROR;
 
@@ -51,7 +51,7 @@ bool switch_port_reset(SW_PORT port_num)
     {
         sprintf(cmd, "ifconfig -a | grep port%d", port_num);
     }
-    if(!runcommand(cmd, ret, 1024))
+    if(!runCommand(cmd, ret, 1024))
     {
         return false;			   //command not run error
     }
@@ -66,7 +66,7 @@ bool switch_port_reset(SW_PORT port_num)
         {
             sprintf(cmd, "ifconfig port%d down", port_num);
         }
-        if(!runcommand(cmd, ret, 1024))
+        if(!runCommand(cmd, ret, 1024))
         {
             return false;              //command not run error
         }
@@ -81,7 +81,7 @@ bool switch_port_reset(SW_PORT port_num)
     {
         sprintf(cmd, "ifconfig port%d up", port_num);
     }
-    if(!runcommand(cmd, ret, 1024))
+    if(!runCommand(cmd, ret, 1024))
     {
         return false;              //command not run error
     }
@@ -118,7 +118,7 @@ int switch_init()
     loop3 = g_main_loop_new(NULL, FALSE);
 
     /*Reload all connections from disk*/
-    nm_client_reload_connections_async(client, NULL, reload_cb, loop1);
+    nm_client_reload_connections_async(client, NULL, reloadCb, loop1);
     g_main_loop_run(loop1);
 
     for(SW_PORT port = ETH0; port <= PORT7; port++)
@@ -137,7 +137,7 @@ int switch_init()
         if(!connection)
         {
             /* Ask NM to add the new connection */
-            nm_add_connection(client, loop2, conname, conname);
+            nmAddConnection(client, loop2, conname, conname);
 
             /* Wait for the connection to be added */
             g_main_loop_run(loop2);
@@ -147,7 +147,7 @@ int switch_init()
 
         device = nm_client_get_device_by_iface(client, conname);
         const char *path = nm_object_get_path(NM_OBJECT(connection));
-        nm_client_activate_connection_async(client, (NMConnection *)connection, device, path, NULL, activate_cb, loop3);
+        nm_client_activate_connection_async(client, (NMConnection *)connection, device, path, NULL, activateCb, loop3);
         /* Wait for the connection to be added */
         g_main_loop_run(loop3);
 
@@ -275,7 +275,7 @@ int switch_set_config(SW_PORT port, port_config config)
     nm_connection_add_setting((NMConnection *)connection, NM_SETTING(newip4));
 
     /*Save connection*/
-    nm_remote_connection_commit_changes_async(connection, TRUE, NULL, (GAsyncReadyCallback)mod_cb, loop1);
+    nm_remote_connection_commit_changes_async(connection, TRUE, NULL, (GAsyncReadyCallback)modCb, loop1);
     /* Wait for the connection to be added */
     g_main_loop_run(loop1);
 
@@ -285,11 +285,11 @@ int switch_set_config(SW_PORT port, port_config config)
     /*Load new connection and reset port*/
     const char *path = nm_object_get_path(NM_OBJECT(connection));
 
-    nm_client_activate_connection_async(client, (NMConnection *)connection, device, path, NULL, activate_cb, loop2);
+    nm_client_activate_connection_async(client, (NMConnection *)connection, device, path, NULL, activateCb, loop2);
     /* Wait for the connection to be added */
     g_main_loop_run(loop2);
 
-    nm_device_reapply_async(device, (NMConnection *)connection, 0, 0, NULL, (GAsyncReadyCallback)reapply_cb, loop3);
+    nm_device_reapply_async(device, (NMConnection *)connection, 0, 0, NULL, (GAsyncReadyCallback)reapplyCb, loop3);
     /* Wait for the connection to be added */
     g_main_loop_run(loop3);
 
@@ -407,10 +407,10 @@ bool switch_get_config(SW_PORT port, port_config *config)
 
 
 /*
- * void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data)
+ * void reloadCb(GObject *client, GAsyncResult *result, gpointer user_data)
  * callback function for reload api
  */
-void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data)
+void reloadCb(GObject *client, GAsyncResult *result, gpointer user_data)
 {
     GError *error = NULL;
     GMainLoop *loop = user_data;
@@ -437,10 +437,10 @@ void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 
 
 /*
- * void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data)
+ * void reapplyCb(NMDevice *device, GAsyncResult *result, gpointer user_data)
  * callback function for reapply api
  */
-void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data)
+void reapplyCb(NMDevice *device, GAsyncResult *result, gpointer user_data)
 {
     GError *error = NULL;
     GMainLoop *loop = user_data;
@@ -466,10 +466,10 @@ void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data)
 
 
 /*
- * void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data)
+ * void activateCb(GObject *client, GAsyncResult *result, gpointer user_data)
  * callback function for activate api
  */
-void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data)
+void activateCb(GObject *client, GAsyncResult *result, gpointer user_data)
 {
     GError *error = NULL;
     NMActiveConnection *connection;
@@ -497,10 +497,10 @@ void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 
 
 /*
- * void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data)
+ * void modCb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data)
  * callback function for save and commit api
  */
-void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data)
+void modCb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data)
 {
     GError *error = NULL;
     GMainLoop *loop = user_data;
@@ -524,10 +524,10 @@ void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_
 
 
 /*
- * void added_cb(GObject *client, GAsyncResult *result, gpointer user_data)
+ * void addedCb(GObject *client, GAsyncResult *result, gpointer user_data)
  * callback function for add connection api
  */
-void added_cb(GObject *client, GAsyncResult *result, gpointer user_data)
+void addedCb(GObject *client, GAsyncResult *result, gpointer user_data)
 {
     GMainLoop *loop = user_data;
     NMRemoteConnection *remote;
@@ -554,10 +554,10 @@ void added_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 
 
 /*
- * static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname)
+ * static void nmAddConnection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname)
  * Internal function to handle addition of connection
  */
-static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname)
+static void nmAddConnection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname)
 {
     NMConnection *connection;
     NMSettingConnection *s_con;
@@ -599,7 +599,7 @@ static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *con
     /* Ask the settings service to add the new connection; we'll quit the
      * mainloop and exit when the callback is called.
      */
-    nm_client_add_connection_async(client, connection, TRUE, NULL, added_cb, loop);
+    nm_client_add_connection_async(client, connection, TRUE, NULL, addedCb, loop);
 
     g_object_unref(connection);
 }

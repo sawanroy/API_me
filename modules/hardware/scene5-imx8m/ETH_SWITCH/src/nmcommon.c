@@ -4,7 +4,7 @@
 
 
 /*Execute a command and get output*/
-bool runcommand(const char *cmd, char *output, int size)
+bool runCommand(const char *cmd, char *output, int size)
 {
     memset(output,'\0', size);
     FILE* fp = popen(cmd, "r");
