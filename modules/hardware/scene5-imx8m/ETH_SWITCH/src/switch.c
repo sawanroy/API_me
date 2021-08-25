@@ -19,14 +19,13 @@
 #include <switch.h>
 #include <unistd.h>
 
-/*Private finctions*/
+/*Private functions*/
 static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname);
 static void added_cb(GObject *client, GAsyncResult *result, gpointer user_data);
 static void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_data);
 static void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data);
 static void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data);
 static void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data);
-
 
 static ERROR_CODE ERROR;
 
@@ -37,7 +36,7 @@ static ERROR_CODE ERROR;
 bool switch_port_reset(SW_PORT port_num)
 {
     char cmd[1024];
-    char ret[1024]="";
+    char ret[1024] = "";
 
     if(port_num == ETH0)
     {
@@ -47,7 +46,7 @@ bool switch_port_reset(SW_PORT port_num)
     {
         sprintf(cmd, "ifconfig -a | grep port%d", port_num);
     }
-    if(!runcommand(cmd,ret,1024))
+    if(!runcommand(cmd, ret, 1024))
     {
         return false;			   //command not run error
     }
@@ -62,7 +61,7 @@ bool switch_port_reset(SW_PORT port_num)
         {
             sprintf(cmd, "ifconfig port%d down", port_num);
         }
-        if(!runcommand(cmd,ret,1024))
+        if(!runcommand(cmd, ret, 1024))
         {
             return false;              //command not run error
         }
@@ -77,9 +76,9 @@ bool switch_port_reset(SW_PORT port_num)
     {
         sprintf(cmd, "ifconfig port%d up", port_num);
     }
-    if(!runcommand(cmd,ret,1024))
+    if(!runcommand(cmd, ret, 1024))
     {
-            return false;              //command not run error
+        return false;              //command not run error
     }
 
     return true;
@@ -116,7 +115,7 @@ int switch_init()
     /*Reload all connections from disk*/
     nm_client_reload_connections_async(client, NULL, reload_cb, loop1);
     g_main_loop_run(loop1);
-    
+
     for(SW_PORT port = ETH0; port <= PORT7; port++)
     {
         if(port == ETH0)
@@ -137,10 +136,10 @@ int switch_init()
 
             /* Wait for the connection to be added */
             g_main_loop_run(loop2);
-             
+
             connection = (NMRemoteConnection *)nm_client_get_connection_by_id(client, conname);
         }
-        
+
         device = nm_client_get_device_by_iface(client, conname);
         const char *path = nm_object_get_path(NM_OBJECT(connection));
         nm_client_activate_connection_async(client, (NMConnection *)connection, device, path, NULL, activate_cb, loop3);
@@ -208,7 +207,7 @@ int switch_set_config(SW_PORT port, port_config config)
         return false;
     }
 
-    newip4 = (NMSettingIP4Config *) nm_setting_ip4_config_new();
+    newip4 = (NMSettingIP4Config *)nm_setting_ip4_config_new();
 
     switch (config.port_mode)
     {
@@ -272,10 +271,10 @@ int switch_set_config(SW_PORT port, port_config config)
 
     /*Reapply changes to device*/
     device = nm_client_get_device_by_iface(client, conname);
-    
+
     /*Load new connection and reset port*/
     const char *path = nm_object_get_path(NM_OBJECT(connection));
-    
+
     nm_client_activate_connection_async(client, (NMConnection *)connection, device, path, NULL, activate_cb, loop2);
     /* Wait for the connection to be added */
     g_main_loop_run(loop2);
@@ -377,7 +376,7 @@ bool switch_get_config(SW_PORT port, port_config *config)
         config->port_gateway = nm_setting_ip_config_get_gateway((NMSettingIPConfig *)setting);
 
         /*Get dns*/
-        config->port_dns = nm_setting_ip_config_get_dns ((NMSettingIPConfig *)setting, 0);
+        config->port_dns = nm_setting_ip_config_get_dns((NMSettingIPConfig *)setting, 0);
     }
     else
     {
@@ -398,11 +397,11 @@ bool switch_get_config(SW_PORT port, port_config *config)
  */
 void reload_cb(GObject *client, GAsyncResult *result, gpointer user_data)
 {
-    GError *error = NULL;  
+    GError *error = NULL;
     GMainLoop *loop = user_data;
 
     nm_client_reload_connections_finish(NM_CLIENT(client), result, &error);
-    
+
     if(error)
     {
         ERROR = RELOAD_FAILURE;
@@ -430,10 +429,10 @@ void reapply_cb(NMDevice *device, GAsyncResult *result, gpointer user_data)
 {
     GError *error = NULL;
     GMainLoop *loop = user_data;
-   
+
     sleep(1);
     nm_device_reapply_finish(device, result, &error);
-    
+
     if(error)
     {
         ERROR = REAPPLY_FAILURE;
@@ -460,10 +459,10 @@ void activate_cb(GObject *client, GAsyncResult *result, gpointer user_data)
     GError *error = NULL;
     NMActiveConnection *connection;
     GMainLoop *loop = user_data;
-   
+
     sleep(1);
     connection = nm_client_activate_connection_finish(NM_CLIENT(client), result, &error);
-    
+
     if(error)
     {
         ERROR = ACTIVATION_FAILURE;
@@ -490,9 +489,9 @@ void mod_cb(NMRemoteConnection *connection, GAsyncResult *result, gpointer user_
 {
     GError *error = NULL;
     GMainLoop *loop = user_data;
-    
+
     nm_remote_connection_commit_changes_finish(connection, result, &error);
-  
+
     if(error)
     {
         ERROR = MODIFY_FAILURE;
@@ -520,7 +519,7 @@ void added_cb(GObject *client, GAsyncResult *result, gpointer user_data)
     GError *error = NULL;
 
     remote = nm_client_add_connection_finish(NM_CLIENT(client), result, &error);
-    
+
     if(error)
     {
         ERROR = ADDITION_FAILURE;
@@ -555,7 +554,7 @@ static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *con
     connection = nm_simple_connection_new();
 
     /* Build up the 'connection' Setting */
-    s_con = (NMSettingConnection *) nm_setting_connection_new();
+    s_con = (NMSettingConnection *)nm_setting_connection_new();
     uuid  = nm_utils_uuid_generate();
     g_object_set(G_OBJECT(s_con),
                  NM_SETTING_CONNECTION_UUID,
@@ -571,11 +570,11 @@ static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *con
     nm_connection_add_setting(connection, NM_SETTING(s_con));
 
     /* Build up the 'wired' Setting */
-    s_wired = (NMSettingWired *) nm_setting_wired_new();
+    s_wired = (NMSettingWired *)nm_setting_wired_new();
     nm_connection_add_setting(connection, NM_SETTING(s_wired));
 
     /* Build up the 'ipv4' Setting */
-    s_ip4 = (NMSettingIP4Config *) nm_setting_ip4_config_new();
+    s_ip4 = (NMSettingIP4Config *)nm_setting_ip4_config_new();
     g_object_set(G_OBJECT(s_ip4),
                  NM_SETTING_IP_CONFIG_METHOD,
                  NM_SETTING_IP4_CONFIG_METHOD_AUTO,
@@ -586,6 +585,6 @@ static void nm_add_connection(NMClient *client, GMainLoop *loop, const char *con
      * mainloop and exit when the callback is called.
      */
     nm_client_add_connection_async(client, connection, TRUE, NULL, added_cb, loop);
-       
+
     g_object_unref(connection);
 }

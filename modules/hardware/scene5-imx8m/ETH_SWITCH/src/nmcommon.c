@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 
-/*Internal function*/
+/*Execute a command and get output*/
 bool runcommand(const char *cmd, char *output, int size)
 {
     memset(output,'\0', size);
@@ -34,7 +34,7 @@ bool runcommand(const char *cmd, char *output, int size)
 }
 
 
-
+/*Get network manager client*/
 NMClient* getClient()
 {
     NMClient *client = NULL;

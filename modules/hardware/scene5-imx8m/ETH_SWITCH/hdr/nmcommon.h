@@ -3,5 +3,5 @@
 
 extern NMClient* getClient();
 
+/*Function to runcommand and get the ouput*/
 bool runcommand(const char *cmd, char *output, int size);
-// void nm_add_connection(NMClient *client, GMainLoop *loop, const char *con_name, const char *ifname);

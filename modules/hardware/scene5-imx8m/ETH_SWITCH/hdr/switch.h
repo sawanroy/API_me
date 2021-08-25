@@ -36,10 +36,10 @@
 
 
 /*!
- * Enum SW_MODE 
+ * Enum SW_MODE
 */
-typedef enum 
-{ 
+typedef enum
+{
     MANUAL,     /*!<Manual configuration*/
     SHARED,     /*!<Shared configuration*/
     DYNAMIC,    /*!<Dynamic/Auto configuration*/
@@ -50,7 +50,7 @@ typedef enum
  * Enum SW_PORT
 */
 typedef enum
-{ 
+{
     ETH0=0,     /*!< iface eth0 */
     PORT1=1,    /*!< iface port1 */
     PORT2=2,    /*!< iface port2 */
@@ -78,7 +78,7 @@ typedef enum
 
 
 /**
- * Structure for port configuration  
+ * Structure for port configuration
 */
 typedef struct{
     SW_MODE port_mode;          /**< SW_MODE type variable to set mode*/
@@ -109,16 +109,16 @@ int switch_init();
  * @param[in] structure containing configuration data
  * @return error code from ERROR_CODE enum
 */
-int switch_set_config( SW_PORT port_num, port_config config);
+int switch_set_config(SW_PORT port_num, port_config config);
 
 
 /*!
  * Get config of switch port
- * @param[in] port number from SW_PORT enum
+ * @param[in] port number fromSW_PORT enum
  * @param[out] structure pointer containing configuration data
  * @return status of function(True/False)
 */
-bool switch_get_config( SW_PORT port_num, port_config *config);
+bool switch_get_config(SW_PORT port_num, port_config *config);
 
 
 /*!
