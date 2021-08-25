@@ -2,6 +2,7 @@ var modules =
 [
     [ "BLUETOOTH", "df/d09/group__BLUETOOTH.html", "df/d09/group__BLUETOOTH" ],
     [ "CAN", "d6/d6e/group__CAN.html", "d6/d6e/group__CAN" ],
+    [ "ETH_SWITCH", "d7/d11/group__ETH__SWITCH.html", "d7/d11/group__ETH__SWITCH" ],
     [ "GPIO", "de/d2b/group__GPIO.html", "de/d2b/group__GPIO" ],
     [ "GPS", "d1/d24/group__GPS.html", "d1/d24/group__GPS" ],
     [ "RS232", "da/d4e/group__RS232.html", "da/d4e/group__RS232" ],

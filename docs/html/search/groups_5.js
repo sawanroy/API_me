@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['watchdog_265',['WATCHDOG',['../da/d7d/group__WATCHDOG.html',1,'']]],
-  ['wifi_266',['WIFI',['../df/d42/group__WIFI.html',1,'']]]
+  ['sim_288',['SIM',['../d2/d3e/group__SIM.html',1,'']]]
 ];

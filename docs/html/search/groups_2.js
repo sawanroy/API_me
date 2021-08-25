@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['gpio_259',['GPIO',['../de/d2b/group__GPIO.html',1,'']]],
-  ['gps_260',['GPS',['../d1/d24/group__GPS.html',1,'']]]
+  ['eth_5fswitch_282',['ETH_SWITCH',['../d7/d11/group__ETH__SWITCH.html',1,'']]]
 ];
