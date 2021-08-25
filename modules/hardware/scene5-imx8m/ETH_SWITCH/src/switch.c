@@ -38,6 +38,11 @@ bool switch_port_reset(SW_PORT port_num)
     char cmd[1024];
     char ret[1024] = "";
 
+    if(port_num < ETH0 || port_num > PORT7)
+    {
+        return false;
+    }
+
     if(port_num == ETH0)
     {
         sprintf(cmd, "ifconfig -a | grep eth0");
@@ -182,10 +187,15 @@ int switch_set_config(SW_PORT port, port_config config)
     GMainLoop *loop3;
     ERROR = SUCCESS;
 
+    if(port < ETH0 || port > PORT7)
+    {
+        return FAILURE;
+    }
+
     client = getClient();
     if(!client)
     {
-        return false;
+        return FAILURE;
     }
 
     if(port == ETH0)
@@ -218,7 +228,7 @@ int switch_set_config(SW_PORT port, port_config config)
                 nm_utils_ipaddr_valid(AF_INET, config.port_gateway) &&
                 (prefix <= 32)) != 1)
             {
-                return false;
+                return FAILURE;
             }
             addresses = nm_ip_address_new(AF_INET, config.port_ip, prefix, NULL);
             g_object_set(G_OBJECT(newip4),
@@ -230,12 +240,12 @@ int switch_set_config(SW_PORT port, port_config config)
 
             if(!nm_setting_ip_config_add_address((NMSettingIPConfig *)newip4, addresses))
             {
-                return false;
+                return FAILURE;
             }
 
             if(!nm_setting_ip_config_add_dns((NMSettingIPConfig *)newip4, config.port_dns))
             {
-                return false;
+                return FAILURE;
             }
             break;
 
@@ -254,7 +264,7 @@ int switch_set_config(SW_PORT port, port_config config)
             break;
 
         default:
-            return false;
+            return FAILURE;
             break;
     }
 
@@ -315,6 +325,11 @@ bool switch_get_config(SW_PORT port, port_config *config)
     const char *str;
     int prefix;
     char prefixstr[10];
+
+    if(port < ETH0 || port > PORT7)
+    {
+        return false;
+    }
 
     client = getClient();
     if(!client)

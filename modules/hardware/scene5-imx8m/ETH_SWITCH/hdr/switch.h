@@ -67,7 +67,7 @@ typedef enum
 */
 typedef enum
 {
-    RESET_FAILURE=0,        /**< Port reset failure*/
+    FAILURE=0,        /**< Port reset failure*/
     SUCCESS=1,              /**< SUCCESS*/
     RELOAD_FAILURE=-1,      /**< Reload connections failure*/
     ADDITION_FAILURE=-2,    /**< Addition of connection failure*/
