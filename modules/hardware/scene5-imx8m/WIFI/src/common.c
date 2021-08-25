@@ -278,8 +278,8 @@ bool runCommand( const char* cmd, char* output,int size)
         pclose(fp);
         return false;
     }
-    int status= pclose(fp);
-    if(status<0)
+    int status = pclose(fp);
+    if(status < 0)
     {
         printf("command exist status%d\n",status);
         return false;
@@ -294,11 +294,11 @@ bool runCommand( const char* cmd, char* output,int size)
 int dbmToQuality(int dBm)
 {
     int quality;
-    if(dBm<= -100)
+    if(dBm <= -100)
     {
         quality = 0;
     }
-    else if(dBm>= -50)
+    else if(dBm >= -50)
     {
         quality = 100;
     }

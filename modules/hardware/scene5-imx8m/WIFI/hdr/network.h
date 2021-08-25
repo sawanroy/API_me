@@ -147,7 +147,7 @@ bool wifi_add_to_ssid_preferred_list(wifi_info credentials);
  * @param[out] vector typedef structure for list of wifi_info.
  * @return status of function.
 */
-bool wifi_get_ssid_preferred_list(vector* con_list);
+bool wifi_get_ssid_preferred_list(vector *con_list);
 
 
 /*!
@@ -155,7 +155,7 @@ bool wifi_get_ssid_preferred_list(vector* con_list);
  * @param[in] SSID character type variable
  * @return status of function.
 */
-int wifi_remove_from_ssid_preferred_list(char* ssid);
+int wifi_remove_from_ssid_preferred_list(char *ssid);
 
 
 /*!
@@ -171,7 +171,7 @@ bool wifi_clean_ssid_preferred_list();
  * @param[in] strength integer type variable
  * @return strenght of signal  
 */
-int wifi_get_signal_strength(char* ssid);
+int wifi_get_signal_strength(char *ssid);
 
 
 /*!
@@ -207,7 +207,7 @@ bool wifi_set_ssid_lock(char *ssid, bool enable );
  * @param[in] dns character type variable
  * @return status of function.
 */
-bool wifi_set_static(char* ipaddress, char* prefixnetmask, char* gateway, char* dns);
+bool wifi_set_static(char *ipaddress, char *prefixnetmask, char *gateway, char *dns);
 
 
 /*!
