@@ -367,6 +367,12 @@ bool wifi_add_to_ssid_preferred_list(wifi_info credentials)
         return false;
     }
 
+    //Return false if password is invalid
+    if(!nm_utils_wpa_psk_valid(credentials.password))
+    {
+        return false;
+    }
+
     //Check if given ssid exist in connection list
     NMRemoteConnection *connection = nm_client_get_connection_by_id(client, credentials.ssid);
     if(!connection)
