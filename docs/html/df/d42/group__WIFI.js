@@ -4,6 +4,7 @@ var group__WIFI =
     [ "wifi_add_to_ssid_preferred_list", "df/d42/group__WIFI.html#ga1d44656268daf13fa5abe4d37a7b0f72", null ],
     [ "wifi_clean_ssid_preferred_list", "df/d42/group__WIFI.html#ga462917e8fc2cfe15f3a0ca56a4a76a8c", null ],
     [ "wifi_connect_network", "df/d42/group__WIFI.html#ga07282ee3261a18556b1b039ab463a1b3", null ],
+    [ "wifi_delete_ssid", "df/d42/group__WIFI.html#ga11478dbde595f855d536939a7916b89d", null ],
     [ "wifi_disconnect_network", "df/d42/group__WIFI.html#ga9f74a48fb719e56648b63a753dd76c95", null ],
     [ "wifi_get_defaultpower_mode", "df/d42/group__WIFI.html#gae6365c0a0fe75ce93e5310c268c443ee", null ],
     [ "wifi_get_power_status", "df/d42/group__WIFI.html#gacd4ad97de9e9bb22768dd21238932a85", null ],
