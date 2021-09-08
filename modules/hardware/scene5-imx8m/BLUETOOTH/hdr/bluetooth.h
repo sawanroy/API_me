@@ -1,5 +1,4 @@
-
- /*!
+/*!
     @file
     @ API for bluetooth 
  */
@@ -21,55 +20,53 @@
 #include <stdbool.h>
 #include "../../WIFI/hdr/vector.h"
 
+
+
 /**
  *Structure for bluetooth scan results
  *
 */
-
 typedef struct{
     /*@{*/
 
-    int dev_numb;
-    char *dev_name;
-
+    int devnumb;
+    char *devname;
+    char *devaddress;
     /*@}*/
 
-} Bt_scanResult;
+} bt_scanResult;
+
+
 
 /**
  * Structure For authentication pin 
 */
-struct authpin{
-    /*@{*/
+typedef struct {
+    /*@{*/ 
+    
     char* target;               /**< target device */
     int pin;                    /**< pincode */
     /*@}*/
-};
-/**
- * Structure for Bluetooth devices information
-*/
+    
+} bt_authpin;
 
-struct bluetooth_devices{
-    /*@{*/
-    char* mac;                  /**< Bluetooth MAC address */
-    char* name;                 /**< Bluetooth Name */
-    char* other;                /**< Other infos */
-    /*@}*/
-};
+
 
 /**
  * Structure for bluetooth configuration 
 */
-struct bluetoothconfig{
+typedef struct {
     /* @{ */
     bool radioOn;               /**< Enable Bluetooth radio device */
     bool enabled;               /**< Enable Bluetooth connections  */
-    char* name;                 /**< Device name */   
+    char name[100];                 /**< Device name */   
     bool discoverable;          /**< Enable device discoverable for Bluetooth pairing */
-    int discoverableTimeout;    /**< Set the time in seconds after which other devices can discover this device over Bluetooth */
-    int maxPaired;              /**< Set the limit for the maximum number of Bluetooth devices that can be paired with */
+    int discoverabletimeout;    /**< Set the time in seconds after which other devices can discover this device over Bluetooth */
+    int maxpaired;              /**< Set the limit for the maximum number of Bluetooth devices that can be paired with */
     /* @} */
-};
+} bt_config;
+
+
 
 /*! \addtogroup BLUETOOTH
     Additional documentation for group 'BLUETOOTH'
@@ -77,55 +74,66 @@ struct bluetoothconfig{
 */
 
 /*!
-  
   Activate bluetooth 
   @return true and false 
  */
 bool bluetooth_on();   
+
+
 /*! 
  Disable bluetooth 
  @return true and false 
  */                                                                          
 bool bluetooth_off();
+
+
 /*!
  * Pair the device with another device
   @param[in] deviceName unsinged char type variable (bleutooth device name) 
   @param[in] size integer type variable 
   @return true and false 
  */                                                                                   
-bool bluetooth_pair_to_device(unsigned char *deviceName, int size );
+bool bluetooth_pair_device(unsigned char *devicename);
+
+
  /*!
   * Unpair from bluetooth device
   * @param[in]  devicename unsinged char type variable (bleutooth device name) 
     @param[in] size integer type variable
     @return true and false 
   */                                    
-bool bluetooth_unpair_to_device(unsigned char *deviceName, int size );    
+bool bluetooth_unpair_device(unsigned char *devicename);  
+  
+  
 /*!
  * Configure bluetooth 
  * @param[in] conf structure bluetoothconfig type variable
  * @see bluetoothconfig  
  */                             
-bool bluetooth_set_config(struct bluetoothconfig conf); 
+bool bluetooth_set_config(bt_config conf); 
+
+
 /*!
  *Get bluetooth configuration
  @return true and false 
  */                                                
-struct bluetoothconfig bluetooth_get_config();
+bt_config bluetooth_get_config();
+
+
 /*!
  * Connect to bluetooth device
    @param[in] name character type variable 
  */                                                         
 bool bluetooth_connect_to_device(char *name);  
+
+
 /*!
  *Scan for bluetooth devices 
   @param[in] v typedef type strcture variable 
   @return true and false 
  */                                                         
-int bluetooth_scan(vector* v );       
+vector bluetooth_scan();       
 
-/*! 
-   @}
-*/
 
+/*! @} */
 #endif
