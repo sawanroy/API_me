@@ -28,13 +28,11 @@
 */
 typedef struct{
     /*@{*/
-
-    int devnumb;
-    char *devname;
-    char *devaddress;
+    char *devname;             /**< Char type variable for BT device name*/
+    char *devaddress;          /**< Char type variable for MAC address of BT device*/
     /*@}*/
 
-} bt_scanResult;
+} bt_scanresult;
 
 
 
@@ -44,8 +42,8 @@ typedef struct{
 typedef struct {
     /*@{*/ 
     
-    char* target;               /**< target device */
-    int pin;                    /**< pincode */
+    char *target;               /**< target device */
+    int pin;                    /**< passkey */
     /*@}*/
     
 } bt_authpin;
@@ -57,12 +55,12 @@ typedef struct {
 */
 typedef struct {
     /* @{ */
-    bool radioOn;               /**< Enable Bluetooth radio device */
-    bool enabled;               /**< Enable Bluetooth connections  */
-    char name[100];                 /**< Device name */   
-    bool discoverable;          /**< Enable device discoverable for Bluetooth pairing */
-    int discoverabletimeout;    /**< Set the time in seconds after which other devices can discover this device over Bluetooth */
-    int maxpaired;              /**< Set the limit for the maximum number of Bluetooth devices that can be paired with */
+    bool radioOn;               /**< Bool type variable for radio status */
+    bool enabled;               /**< Bool type variable to enable BT connection*/
+    char name[100];             /**< Char type variable for BT device name */   
+    bool discoverable;          /**< Bool type variable to enable device discoverable for Bluetooth pairing */
+    int discoverabletimeout;    /**< Int type variable to set the time in seconds after which other devices cannot discover this device over Bluetooth */
+    int maxpaired;              /**< Int type variable to set the limit for the maximum number of Bluetooth devices that can be paired */
     /* @} */
 } bt_config;
 

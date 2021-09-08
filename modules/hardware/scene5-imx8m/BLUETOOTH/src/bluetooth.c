@@ -241,8 +241,7 @@ vector bluetooth_scan()
         }
         else
         {
-            bt_scanResult *res = (bt_scanResult *)malloc(sizeof(bt_scanResult));
-            res->devnumb = i;
+            bt_scanresult *res = (bt_scanresult *)malloc(sizeof(bt_scanresult));
             res->devname = strdup(name);
             res->devaddress = strdup(addr);
 
