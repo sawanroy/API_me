@@ -1,9 +1,8 @@
 var annotated_dup =
 [
-    [ "authpin", "de/d5b/structauthpin.html", "de/d5b/structauthpin" ],
-    [ "bluetooth_devices", "dd/d0d/structbluetooth__devices.html", "dd/d0d/structbluetooth__devices" ],
-    [ "bluetoothconfig", "d5/d63/structbluetoothconfig.html", "d5/d63/structbluetoothconfig" ],
-    [ "Bt_scanResult", "d3/d1e/structBt__scanResult.html", "d3/d1e/structBt__scanResult" ],
+    [ "bt_authpin", "d0/d3b/structbt__authpin.html", "d0/d3b/structbt__authpin" ],
+    [ "bt_config", "db/d13/structbt__config.html", "db/d13/structbt__config" ],
+    [ "bt_scanresult", "de/d43/structbt__scanresult.html", "de/d43/structbt__scanresult" ],
     [ "iw15_range", "d2/d4a/structiw15__range.html", "d2/d4a/structiw15__range" ],
     [ "iw_discarded", "db/d9e/structiw__discarded.html", "db/d9e/structiw__discarded" ],
     [ "iw_encode_ext", "d0/dd1/structiw__encode__ext.html", "d0/dd1/structiw__encode__ext" ],

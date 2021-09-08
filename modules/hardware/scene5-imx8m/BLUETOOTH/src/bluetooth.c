@@ -50,9 +50,8 @@ int getPaircount(void);
 
 
 
-/*!
-  Activate bluetooth
-  @return true and false
+/*
+ * bool bluetooth_on()
  */
 bool bluetooth_on()
 {
@@ -91,9 +90,8 @@ bool bluetooth_on()
 
 
 
-/*!
- Disable bluetooth
- @return true and false
+/*
+ * bool bluetooth_off()
  */
 bool bluetooth_off()
 {
@@ -110,11 +108,8 @@ bool bluetooth_off()
 
 
 
-/*!
- * Pair the device with another device
-  @param[in] deviceName unsinged char type variable (bleutooth device name)
-  @param[in] size integer type variable
-  @return true and false
+/*
+ * bool bluetooth_pair_device(unsigned char *devicename)
  */
 bool bluetooth_pair_device(unsigned char *devicename)
 {
@@ -164,11 +159,8 @@ bool bluetooth_pair_device(unsigned char *devicename)
 
 
 
- /*!
-  * Unpair from bluetooth device
-  * @param[in]  devicename unsinged char type variable (bleutooth device name)
-    @param[in] size integer type variable
-    @return true and false
+ /*
+  * bool bluetooth_unpair_device(unsigned char *devicename)
   */
 bool bluetooth_unpair_device(unsigned char *devicename)
 {
@@ -191,10 +183,8 @@ bool bluetooth_unpair_device(unsigned char *devicename)
 
 
 
-/*!
- *Scan for bluetooth devices
-  @param[in] v typedef type strcture variable
-  @return true and false
+/*
+ * vector bluetooth_scan()
  */
 vector bluetooth_scan()
 {
@@ -261,10 +251,8 @@ vector bluetooth_scan()
 
 
 
-/*!
- * Configure bluetooth
- * @param[in] conf structure bt_config type variable
- * @see bt_config
+/*
+ * bool bluetooth_set_config(bt_config conf)
  */
 bool bluetooth_set_config(bt_config conf)
 {
@@ -338,9 +326,8 @@ bool bluetooth_set_config(bt_config conf)
 
 
 
-/*!
- *Get bluetooth configuration
- @return true and false
+/*
+ * bt_config bluetooth_get_config()
  */
 bt_config bluetooth_get_config()
 {
@@ -437,9 +424,8 @@ bt_config bluetooth_get_config()
 
 
 
-/*!
- * Connect to bluetooth device
-   @param[in] name character type variable
+/*
+ * bool bluetooth_connect_to_device(char *name)
  */
 bool bluetooth_connect_to_device(char *name)
 {
@@ -467,6 +453,7 @@ bool bluetooth_connect_to_device(char *name)
 /*
 *	Private functions 
 */
+
 void writeConfig(const char *fd_conf, bt_config cfg)
 {
     FILE *f = fopen(fd_conf, "w");
@@ -509,10 +496,6 @@ bool checkIfFileExists(const char *filename)
 
 
 
-/*!
-  Set bluetooth device discovery Name
-  @return true and false
- */
 int bluetooth_setdevicename(unsigned char *devicename, int size)
 {
     int devid, sock, len;
@@ -542,10 +525,6 @@ int bluetooth_setdevicename(unsigned char *devicename, int size)
 
 
 
-/*!
-  Start bluetooth device discovery
-  @return true and false
- */
 bool bluetoothVisibilityOn()
 {
     FILE *fp;
@@ -567,10 +546,6 @@ bool bluetoothVisibilityOn()
 
 
 
-/*!
-  Stop bluetooth device discovery
-  @return true and false
- */
 bool bluetoothVisibilityOff()
 {
     FILE *fp;
@@ -620,6 +595,7 @@ bool runCommandbt(const char *cmd, char *output, int size)
     }
     return true;
 }
+
 
 
 int getPaircount(void)

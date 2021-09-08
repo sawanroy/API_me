@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['port_5fconfig_174',['port_config',['../d7/d62/structport__config.html',1,'']]],
-  ['portdata_175',['PortData',['../dc/d4e/structPortData.html',1,'']]]
+  ['sim_5fapn_174',['sim_apn',['../da/dc4/structsim__apn.html',1,'']]],
+  ['stream_5fdescr_175',['stream_descr',['../df/d2c/structstream__descr.html',1,'']]]
 ];

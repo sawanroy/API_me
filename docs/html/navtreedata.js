@@ -38,7 +38,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"da/dc4/structsim__apn.html#ae7900fdb27b037735d004497ff5263da"
+"db/d13/structbt__config.html#af2cf325f189c5d552b6efc492a2a73ea"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

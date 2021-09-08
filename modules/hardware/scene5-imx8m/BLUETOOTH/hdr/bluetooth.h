@@ -26,12 +26,12 @@
  *Structure for bluetooth scan results
  *
 */
-typedef struct{
+typedef struct
+{
     /*@{*/
     char *devname;             /**< Char type variable for BT device name*/
-    char *devaddress;          /**< Char type variable for MAC address of BT device*/
+    char *devaddress;          /**< Char type variable for harwdare address of BT device*/
     /*@}*/
-
 } bt_scanresult;
 
 
@@ -39,13 +39,12 @@ typedef struct{
 /**
  * Structure For authentication pin 
 */
-typedef struct {
-    /*@{*/ 
-    
+typedef struct 
+{
+    /*@{*/     
     char *target;               /**< target device */
     int pin;                    /**< passkey */
     /*@}*/
-    
 } bt_authpin;
 
 
@@ -53,7 +52,8 @@ typedef struct {
 /**
  * Structure for bluetooth configuration 
 */
-typedef struct {
+typedef struct
+{
     /* @{ */
     bool radioOn;               /**< Bool type variable for radio status */
     bool enabled;               /**< Bool type variable to enable BT connection*/
@@ -72,63 +72,61 @@ typedef struct {
 */
 
 /*!
-  Activate bluetooth 
-  @return true and false 
+ * Activate bluetooth 
+ * @return status of function(True/False)  
  */
 bool bluetooth_on();   
 
 
 /*! 
- Disable bluetooth 
- @return true and false 
+ * Disable bluetooth 
+ * @return status of function(True/False)  
  */                                                                          
 bool bluetooth_off();
 
 
 /*!
  * Pair the device with another device
-  @param[in] deviceName unsinged char type variable (bleutooth device name) 
-  @param[in] size integer type variable 
-  @return true and false 
+ * @param[in] devicename Hardware address of the bluetooth device
+ * @return status of function(True/False)  
  */                                                                                   
 bool bluetooth_pair_device(unsigned char *devicename);
 
 
  /*!
   * Unpair from bluetooth device
-  * @param[in]  devicename unsinged char type variable (bleutooth device name) 
-    @param[in] size integer type variable
-    @return true and false 
+  * @param[in]  devicename Hardware address of the bluetooth device 
+  * @return status of function(True/False)  
   */                                    
 bool bluetooth_unpair_device(unsigned char *devicename);  
   
   
 /*!
  * Configure bluetooth 
- * @param[in] conf structure bluetoothconfig type variable
- * @see bluetoothconfig  
+ * @param[in] conf bt_config structure having configuration data
+ * @return status of function(True/False)
  */                             
 bool bluetooth_set_config(bt_config conf); 
 
 
 /*!
- *Get bluetooth configuration
- @return true and false 
+ * Get bluetooth configuration
+ * @return bt_config structure containing configuration data 
  */                                                
 bt_config bluetooth_get_config();
 
 
 /*!
  * Connect to bluetooth device
-   @param[in] name character type variable 
+ * @param[in] name Hardware address of the bluetooth device 
+ * @return status of function(True/False)
  */                                                         
 bool bluetooth_connect_to_device(char *name);  
 
 
 /*!
- *Scan for bluetooth devices 
-  @param[in] v typedef type strcture variable 
-  @return true and false 
+ * Scan for bluetooth devices 
+ * @return vector list of bt_scanresult structure containing bluetooth device info
  */                                                         
 vector bluetooth_scan();       
 

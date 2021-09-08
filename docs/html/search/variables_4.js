@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['mac_265',['mac',['../dd/d0d/structbluetooth__devices.html#aeb0fc7118fd0899d08d951ec03e4814c',1,'bluetooth_devices']]],
-  ['maxpaired_266',['maxPaired',['../d5/d63/structbluetoothconfig.html#a52ed5608e354576b9c2c56f7a0038e82',1,'bluetoothconfig']]]
+  ['maxpaired_265',['maxpaired',['../db/d13/structbt__config.html#a85e018017baaf1ed9bac103eeace8672',1,'bt_config']]]
 ];
