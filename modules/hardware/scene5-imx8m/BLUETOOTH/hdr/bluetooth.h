@@ -21,6 +21,17 @@
 #include "../../WIFI/hdr/vector.h"
 
 
+/**
+ * Enable/Disable logs
+*/
+#define ENABLE_LOGS 1
+
+#if ENABLE_LOGS
+    #define dbg_log(a) printf a
+#else
+    #define dbg_log(a) (void)0
+#endif
+
 
 /**
  *Structure for bluetooth scan results

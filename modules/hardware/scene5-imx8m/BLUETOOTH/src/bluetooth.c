@@ -67,15 +67,13 @@ bool bluetooth_on()
         {
             conf = readConfig("/etc/cibest_bt.cfg");
             maxpairinglimit = conf.maxpaired;
-            printf("name: %s\n", conf.name);
-            printf("setting confighgjffghfghfh\n");
+            
             //bluetooth device name
             sprintf(cmd, "echo 'show' | bluetoothctl | grep Alias | awk '{print $2}'");
             if(runCommandbt(cmd, ret, 1024))
             {
                 if(strcmp(conf.name, ret))
                 {
-                    printf("setting config\n");
                     bluetooth_set_config(conf);
                 }
             }
@@ -125,7 +123,7 @@ bool bluetooth_pair_device(unsigned char *devicename)
 
     if(maxpairinglimit <= paircounts)
     {
-        printf("limit exceed\n");
+        dbg_log(("limit exceed\n"));
         return false;
     }
 
@@ -200,7 +198,7 @@ vector bluetooth_scan()
     char cmd[255];
     char ret[4096] = "";
 
-    printf("*************** BT SCAN STARTED *********************\n");
+    dbg_log(("*************** BT SCAN STARTED *********************\n"));
     devid = hci_get_route(NULL);
     sock = hci_open_dev(devid);
 
@@ -574,7 +572,7 @@ bool runCommandbt(const char *cmd, char *output, int size)
 
     if(!fp)
     {
-        printf("opening pipe failed\n");
+        dbg_log(("opening pipe failed\n"));
         return false;
     }
 
