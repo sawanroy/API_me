@@ -477,7 +477,7 @@ bool sim_list_ap(vector *aplist)
     fd = sim_open_port();
     if(fd < 0)
     {
-		sim_close_port(fd);
+        sim_close_port(fd);
         return false;
     }
 
@@ -623,7 +623,7 @@ bool sim_remove_ap(char *ap_name)
     fd = sim_open_port();
     if(fd < 0)
     {
-		sim_close_port(fd);
+        sim_close_port(fd);
         return false;
     }
 
@@ -752,12 +752,12 @@ bool sim_connect_to_internet()
     unsigned char ret[bsize];
     int len = sizeof(cmd);
     int fd;
-	char *ip = "";
+    char *ip = "";
 
     fd = sim_open_port();
     if(fd < 0)
     {
-		sim_close_port(fd);
+        sim_close_port(fd);
         return false;
     }
 
@@ -775,18 +775,18 @@ bool sim_connect_to_internet()
         }
         else
         {
-			if(strstr((const char *)ret, "ERROR") != NULL)
-			{
-				ip = sim_get_ipaddress();
-				if(strcmp(ip, "") == 0 || strstr(ip, "ERROR") != NULL)
-				{
+            if(strstr((const char *)ret, "ERROR") != NULL)
+            {
+                ip = sim_get_ipaddress();
+                if(strcmp(ip, "") == 0 || strstr(ip, "ERROR") != NULL)
+                {
                     free(ip);
-					sim_close_port(fd);
-            		return false;
-				}
+                    sim_close_port(fd);
+                    return false;
+                }
                 free(ip);
-			}
-			
+            }
+            
             sprintf((char *)cmd, "dhclient -i eth1");
             if(!runCommand((const char *)cmd, (char *)ret, 20))
             {
@@ -850,7 +850,7 @@ int sim_get_signal_strength()
     fd = sim_open_port();
     if(fd < 0)
     {
-		sim_close_port(fd);
+        sim_close_port(fd);
         return false;
     }
 
@@ -912,7 +912,7 @@ char* sim_get_imsi()
     fd = sim_open_port();
     if(fd < 0)
     {
-		sim_close_port(fd);
+        sim_close_port(fd);
         return false;
     }
 
@@ -969,7 +969,7 @@ char* sim_get_imei()
     fd = sim_open_port();
     if(fd < 0)
     {
-		sim_close_port(fd);
+        sim_close_port(fd);
         return false;
     }
 
@@ -1037,7 +1037,7 @@ bool sim_send_sms(char *phoneno, char *message)
     fd = sim_open_port();
     if(fd < 0)
     {
-		sim_close_port(fd);
+        sim_close_port(fd);
         return false;
     }
 

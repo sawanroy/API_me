@@ -32,8 +32,8 @@
 
 
 /*
-	gets the watchdog timeout
-	get_timeout()
+    gets the watchdog timeout
+    get_timeout()
 */
 int wd_get_timeout(int fd)
 {
@@ -46,10 +46,10 @@ int wd_get_timeout(int fd)
             return -1;
         }
         if(!ioctl(fd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
-	    {
-      	    return -1;
-   	    }
-    	
+        {
+              return -1;
+           }
+        
         if(timeoutint > 0)
         {							
             return timeoutint;						 
@@ -61,17 +61,17 @@ int wd_get_timeout(int fd)
     }
  
     if(write(localfd, "V", 1) < 0)				
-	{
-		close(localfd);
-		return -1;
-	}
-
-   	if(!ioctl(localfd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
-	{
+    {
         close(localfd);
-      	return -1;
-   	}
-    	
+        return -1;
+    }
+
+    if(!ioctl(localfd, WDIOC_GETTIMEOUT, &timeoutint) == 0)	
+    {
+        close(localfd);
+        return -1;
+    }
+        
     if(timeoutint > 0)
     {
         close(localfd);						
@@ -98,19 +98,19 @@ int wd_get_timer(int fd)
     {
         return -1;
     }
-	
-	if(!ioctl(fd, WDIOC_GETTIMELEFT, &timeleft))
+    
+    if(!ioctl(fd, WDIOC_GETTIMELEFT, &timeleft))
     {
         return -1;
-	}
+    }
 
-	return timeleft;
+    return timeleft;
 }
 
 
 
 /*
-	Watchdog_setTime(int interval)
+    Watchdog_setTime(int interval)
     int wd_resettime(int fd)
 */
 bool wd_resettime(int fd)
@@ -120,19 +120,19 @@ bool wd_resettime(int fd)
         return false;
     }
 
-	if(write(fd, "\0", 1) < 0)					
-	{
-		return false;
-	}
+    if(write(fd, "\0", 1) < 0)					
+    {
+        return false;
+    }
 
-	ioctl(fd, WDIOC_KEEPALIVE, NULL);								
+    ioctl(fd, WDIOC_KEEPALIVE, NULL);								
     return true;							
 }
 
 
 
 /*
-	enables the watchdog
+    enables the watchdog
     int wd_enable()
 */
  int wd_enable()
@@ -155,9 +155,9 @@ bool wd_resettime(int fd)
 bool wd_disable(int fd)
 {
     if(write(fd, "V", 1) < 0)				
-	{
-		return false;
-	}
+    {
+        return false;
+    }
 
     close(fd);
     return true;

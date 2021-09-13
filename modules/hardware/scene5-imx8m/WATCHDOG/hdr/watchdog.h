@@ -19,7 +19,7 @@
 #define libwatchdog_h__
 
 /*! \addtogroup WATCHDOG
-	Additional documentation for group 'WATCHDOG'
+    Additional documentation for group 'WATCHDOG'
       @{
 */
 
