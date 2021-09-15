@@ -15,3 +15,4 @@ target_link_libraries(
   SERIAL
 )
 
+install(TARGETS "${PROJECT_NAME}")
