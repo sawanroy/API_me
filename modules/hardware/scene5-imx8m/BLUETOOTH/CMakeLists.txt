@@ -51,7 +51,7 @@ target_include_directories(
 )
     
     target_link_libraries(${PROJECT_NAME} 
-
+    PRIVATE
     ${BLUEZ_LIBRARY}
     ${BLUETOOTH_LIBRARY}
    

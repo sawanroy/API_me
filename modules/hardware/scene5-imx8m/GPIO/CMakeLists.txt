@@ -7,12 +7,13 @@ target_include_directories(
   ${PROJECT_NAME}
   PUBLIC
   hdr
-  LIBGPIO
   PRIVATE
+  LIBGPIO
 )
 
 target_link_libraries(
   ${PROJECT_NAME}
+  PRIVATE
   LIBGPIO
 )
 

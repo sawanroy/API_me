@@ -44,6 +44,7 @@ target_include_directories(
     ${PROJECT_NAME} 
     PUBLIC
     hdr/
+    PRIVATE
     ${GLIB_INCLUDE_DIRS}
     ${NM-UTIL_INCLUDE_DIRS}
     ${LIBNM_INCLUDE_DIRS}
@@ -53,6 +54,7 @@ target_include_directories(
     
 target_link_libraries(
     ${PROJECT_NAME} 
+    PRIVATE
     IWLIB
     ${GLIB_LIBRARIES}
     ${LIBNM_LIBRARIES}

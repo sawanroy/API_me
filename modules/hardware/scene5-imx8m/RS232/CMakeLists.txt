@@ -16,5 +16,6 @@ target_include_directories(
     
 target_link_libraries(
   ${PROJECT_NAME}
+  PRIVATE
   USB
 )

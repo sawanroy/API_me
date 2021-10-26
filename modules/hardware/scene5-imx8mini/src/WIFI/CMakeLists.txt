@@ -37,8 +37,8 @@ add_library(${PROJECT_NAME} SHARED
 )
     
 target_link_libraries(${PROJECT_NAME} 
+    PRIVATE
     ${GLIB_LIBRARIES}
     ${LIBNM_LIBRARIES}
     ${LIBNM_GLIB_LIBRARIES}
-   
-    )
+)

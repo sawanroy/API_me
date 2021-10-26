@@ -11,8 +11,8 @@ include_directories(
 add_library(${PROJECT_NAME} SHARED
 	bluetooth.c
     )
-    target_link_libraries(${PROJECT_NAME} 
-
+    target_link_libraries(
+    ${PROJECT_NAME} 
+    PRIVATE
     ${BLUEZ_LIBRARY}
-   
     )
