@@ -157,6 +157,20 @@ bool bluetooth_pair_device(unsigned char *devicename)
 
 
 
+/*!
+ * Configure bluetooth pin
+ * @param[in] structure bt_authpin type variable
+ * @see bt_authpin  
+ */ 
+bool bluetooth_set_authpin(bt_authpin conf)
+{
+    system("hciconfig hci0 sspmode 0");
+    writeAuthconfig("/etc/bluetooth/bluetooth.cfg", conf);        
+    system("bt-agent -c NoInputNoOutput -p /etc/bluetooth/bluetooth.cfg &");
+}
+
+
+
  /*
   * bool bluetooth_unpair_device(unsigned char *devicename)
   */
@@ -473,6 +487,16 @@ bt_config readConfig(const char *fd_conf)
 
    fclose(fpread);
    return b;
+}
+
+
+void writeAuthconfig(const char *fd_conf, bt_authpin cfg)
+{
+    FILE *f = fopen(fd_conf, "a+");
+    char str[100];
+    sprintf((char *)str, "%s %d\n", cfg.target, cfg.pin);
+    fwrite(str, strlen(str), 1, f);
+    fclose(f);
 }
 
 

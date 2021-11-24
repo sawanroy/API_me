@@ -142,5 +142,12 @@ bool bluetooth_connect_to_device(char *name);
 vector bluetooth_scan();       
 
 
+/*!
+ * Configure bluetooth 
+ * @param[in] conf structure bluetoothconfig type variable
+ * @see bluetoothconfig  
+ */                             
+bool bluetooth_set_authpin(bt_authpin conf);
+
 /*! @} */
 #endif
