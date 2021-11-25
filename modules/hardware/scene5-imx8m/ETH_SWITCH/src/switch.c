@@ -18,6 +18,7 @@
 #include <sys/wait.h>
 #include <switch.h>
 #include <unistd.h>
+#include <arpa/inet.h>
 
 /*Private functions*/
 static void nmAddConnection(NMClient *client, GMainLoop *loop, const char *conname, const char *ifname);
@@ -257,10 +258,26 @@ int switch_set_config(SW_PORT port, port_config config)
             break;
 
         case SHARED:
+            prefix = (guint)atoi(config.port_prefix);
+            if((nm_utils_ipaddr_valid(AF_INET, config.port_ip) &&
+                nm_utils_ipaddr_valid(AF_INET, config.port_gateway) &&
+                (prefix <= 32)) != 1)
+            {
+                return FAILURE;
+            }
+            addresses = nm_ip_address_new(AF_INET, config.port_ip, prefix, NULL);
+
             g_object_set(G_OBJECT(newip4),
                 NM_SETTING_IP_CONFIG_METHOD,
                 NM_SETTING_IP4_CONFIG_METHOD_SHARED,
+                NM_SETTING_IP_CONFIG_GATEWAY,
+                config.port_gateway,
                 NULL);
+            
+            if(!nm_setting_ip_config_add_address((NMSettingIPConfig *)newip4, addresses))
+            {
+                return FAILURE;
+            }
             break;
 
         default:
@@ -322,6 +339,8 @@ bool switch_get_config(SW_PORT port, port_config *config)
     NMRemoteConnection *connection;
     NMIPAddress *addresses;
     NMSettingIP4Config *setting;
+    NMDevice *device;
+    NMDhcpConfig *dhcpconfig;
     const char *str;
     int prefix;
     char prefixstr[10];
@@ -378,8 +397,27 @@ bool switch_get_config(SW_PORT port, port_config *config)
         return false;
     }
 
-    if(config->port_mode == MANUAL)
+    if(config->port_mode == DYNAMIC)
     {
+        device = nm_client_get_device_by_iface(client, conname);
+        dhcpconfig = nm_device_get_dhcp4_config((NMDevice *)device);
+        /*Get IP*/
+        config->port_ip = nm_dhcp_config_get_one_option((NMDhcpConfig *)dhcpconfig, "ip_address");
+        
+        /*Get gateway*/
+        config->port_gateway = nm_dhcp_config_get_one_option((NMDhcpConfig *)dhcpconfig, "routers");
+        
+        /*Get DNS*/
+        config->port_dns = nm_dhcp_config_get_one_option((NMDhcpConfig *)dhcpconfig, "domain_name_servers");
+        
+        /*Get subnet prefix*/
+        const char *subnet = nm_dhcp_config_get_one_option((NMDhcpConfig *)dhcpconfig, "subnet_mask");
+        prefix = (int)nm_utils_ip4_netmask_to_prefix((guint32)inet_addr(subnet));
+        sprintf((char *)prefixstr, "%d", prefix);
+        config->port_prefix = strdup(prefixstr);
+    }
+    else
+    {  
         /*Get IP and subnet*/
         addresses = nm_setting_ip_config_get_address((NMSettingIPConfig *)setting, 0);
         config->port_ip = nm_ip_address_get_address(addresses);
@@ -393,11 +431,21 @@ bool switch_get_config(SW_PORT port, port_config *config)
         /*Get dns*/
         config->port_dns = nm_setting_ip_config_get_dns((NMSettingIPConfig *)setting, 0);
     }
-    else
+
+    if(config->port_ip == NULL)
     {
         config->port_ip = "";
+    }
+    if(config->port_prefix == NULL)
+    {
         config->port_prefix = "";
+    }
+    if(config->port_gateway == NULL)
+    {
         config->port_gateway = "";
+    }
+    if(config->port_dns == NULL)
+    {
         config->port_dns = "";
     }
 
