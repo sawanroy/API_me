@@ -117,6 +117,8 @@ Functions</h2></td></tr>
 <tr class="separator:ga7f418f407f4ba428492638581c8eb31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2247655f908c5b2ec701c04616c7d833"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d3d/structvector__.html">vector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d09/group__BLUETOOTH.html#ga2247655f908c5b2ec701c04616c7d833">bluetooth_scan</a> ()</td></tr>
 <tr class="separator:ga2247655f908c5b2ec701c04616c7d833"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaddcf2b01b984c195fc5e4a93fc79e9b7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d09/group__BLUETOOTH.html#gaddcf2b01b984c195fc5e4a93fc79e9b7">bluetooth_set_authpin</a> (<a class="el" href="../../d0/d3b/structbt__authpin.html">bt_authpin</a> conf)</td></tr>
+<tr class="separator:gaddcf2b01b984c195fc5e4a93fc79e9b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Additional documentation for group 'BLUETOOTH'</p>
@@ -255,6 +257,32 @@ Functions</h2></td></tr>
 <p>Scan for bluetooth devices </p><dl class="section return"><dt>Returns</dt><dd>vector list of <a class="el" href="../../de/d43/structbt__scanresult.html" title="Structure for bluetooth scan results.">bt_scanresult</a> structure containing bluetooth device info </dd></dl>
 
 <p class="reference">References <a class="el" href="../../de/d43/structbt__scanresult.html#a41cd4db33cfd1cb43419110a8a27c6f4">bt_scanresult::devaddress</a>, and <a class="el" href="../../de/d43/structbt__scanresult.html#a6bae254a8859cf9e50e6255b32555f9b">bt_scanresult::devname</a>.</p>
+
+</div>
+</div>
+<a id="gaddcf2b01b984c195fc5e4a93fc79e9b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaddcf2b01b984c195fc5e4a93fc79e9b7">&#9670;&nbsp;</a></span>bluetooth_set_authpin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool bluetooth_set_authpin </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/d3b/structbt__authpin.html">bt_authpin</a>&#160;</td>
+          <td class="paramname"><em>conf</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set bluetooth auth pin for pairing </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">conf</td><td>structure bluetoothconfig type variable </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d0/d3b/structbt__authpin.html" title="Structure For authentication pin.">bt_authpin</a> <br  />
+ </dd></dl>
 
 </div>
 </div>

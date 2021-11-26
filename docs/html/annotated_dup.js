@@ -27,7 +27,6 @@ var annotated_dup =
     [ "iwreq", "d6/d28/structiwreq.html", "d6/d28/structiwreq" ],
     [ "iwreq_data", "de/dc7/unioniwreq__data.html", "de/dc7/unioniwreq__data" ],
     [ "port_config", "d7/d62/structport__config.html", "d7/d62/structport__config" ],
-    [ "PortData", "dc/d4e/structPortData.html", "dc/d4e/structPortData" ],
     [ "sim_apn", "da/dc4/structsim__apn.html", "da/dc4/structsim__apn" ],
     [ "stream_descr", "df/d2c/structstream__descr.html", "df/d2c/structstream__descr" ],
     [ "vector_", "dc/d3d/structvector__.html", "dc/d3d/structvector__" ],
