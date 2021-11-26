@@ -143,9 +143,9 @@ vector bluetooth_scan();
 
 
 /*!
- * Configure bluetooth 
+ * Set bluetooth auth pin for pairing
  * @param[in] conf structure bluetoothconfig type variable
- * @see bluetoothconfig  
+ * @see bt_authpin  
  */                             
 bool bluetooth_set_authpin(bt_authpin conf);
 

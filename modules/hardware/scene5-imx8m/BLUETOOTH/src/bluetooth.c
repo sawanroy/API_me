@@ -39,8 +39,9 @@ static int discoverabletimeout = 0;
 
 
 /*Private functions*/
-static void writeConfig(const char *fd_conf, bt_config cfg);
-static bt_config readConfig(const char *fd_conf);
+static bool writeConfig(const char *fdconf, bt_config cfg);
+static bool writeAuthconfig(const char *fdconf, bt_authpin conf);
+static bt_config readConfig(const char *fdconf);
 static bool checkIfFileExists(const char *filename);
 static int bluetooth_setdevicename(unsigned char *devicename, int size);
 static bool bluetoothVisibilityOn();
@@ -67,7 +68,7 @@ bool bluetooth_on()
         {
             conf = readConfig("/etc/cibest_bt.cfg");
             maxpairinglimit = conf.maxpaired;
-            
+
             //bluetooth device name
             sprintf(cmd, "echo 'show' | bluetoothctl | grep Alias | awk '{print $2}'");
             if(runCommandbt(cmd, ret, 1024))
@@ -157,16 +158,18 @@ bool bluetooth_pair_device(unsigned char *devicename)
 
 
 
-/*!
- * Configure bluetooth pin
- * @param[in] structure bt_authpin type variable
- * @see bt_authpin  
- */ 
+/*
+ * bool bluetooth_set_authpin(bt_authpin conf)
+ */
 bool bluetooth_set_authpin(bt_authpin conf)
 {
     system("hciconfig hci0 sspmode 0");
-    writeAuthconfig("/etc/bluetooth/bluetooth.cfg", conf);        
-    system("bt-agent -c NoInputNoOutput -p /etc/bluetooth/bluetooth.cfg &");
+    if(!writeAuthconfig("/tmp/bluetooth.cfg", conf))
+    {
+        return false;
+    }
+    system("bt-agent -c NoInputNoOutput -p /tmp/bluetooth.cfg &");
+    return true;
 }
 
 
@@ -275,7 +278,10 @@ bool bluetooth_set_config(bt_config conf)
     maxpairinglimit = conf.maxpaired;
     discoverabletimeout = conf.discoverabletimeout;
 
-    writeConfig("/etc/cibest_bt.cfg", conf);
+    if(!writeConfig("/etc/cibest_bt.cfg", conf))
+    {
+        return false;
+    }
 
     if(conf.radioOn)
     {
@@ -463,14 +469,19 @@ bool bluetooth_connect_to_device(char *name)
 
 
 /*
-*	Private functions 
+*	Private functions
 */
 
-void writeConfig(const char *fd_conf, bt_config cfg)
+bool writeConfig(const char *fd_conf, bt_config cfg)
 {
     FILE *f = fopen(fd_conf, "w");
+    if(f == NULL)
+    {
+        return false;
+    }
     fwrite(&cfg, sizeof(cfg), 1, f);
     fclose(f);
+    return true;
 }
 
 
@@ -490,13 +501,18 @@ bt_config readConfig(const char *fd_conf)
 }
 
 
-void writeAuthconfig(const char *fd_conf, bt_authpin cfg)
+bool writeAuthconfig(const char *fd_conf, bt_authpin cfg)
 {
-    FILE *f = fopen(fd_conf, "a+");
+    FILE *f = fopen(fd_conf, "w");
+    if(f == NULL)
+    {
+        return false;
+    }
     char str[100];
     sprintf((char *)str, "%s %d\n", cfg.target, cfg.pin);
     fwrite(str, strlen(str), 1, f);
     fclose(f);
+    return true;
 }
 
 
