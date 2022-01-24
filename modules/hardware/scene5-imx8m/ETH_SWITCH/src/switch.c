@@ -412,9 +412,16 @@ bool switch_get_config(SW_PORT port, port_config *config)
         
         /*Get subnet prefix*/
         const char *subnet = nm_dhcp_config_get_one_option((NMDhcpConfig *)dhcpconfig, "subnet_mask");
-        prefix = (int)nm_utils_ip4_netmask_to_prefix((guint32)inet_addr(subnet));
-        sprintf((char *)prefixstr, "%d", prefix);
-        config->port_prefix = strdup(prefixstr);
+        if(subnet == NULL)
+        {
+            config->port_prefix = NULL;
+        }
+        else
+        {
+            prefix = (int)nm_utils_ip4_netmask_to_prefix((guint32)inet_addr(subnet));
+            sprintf((char *)prefixstr, "%d", prefix);
+            config->port_prefix = strdup(prefixstr);
+        }
     }
     else
     {  
